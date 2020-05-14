@@ -46,6 +46,8 @@ void Game::composeFrame() {
     Homescreen.draw();
 
     m_board.drawBoardCells();
+    std::wstring displaycoordsSONIC = std::to_wstring(m_Sonic.getPosition().x) + L", " + std::to_wstring(m_Sonic.getPosition().y);                                                         //DEBUG
+    m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, 2, { m_Sonic.getPosition().x, m_Sonic.getPosition().y - 30.0f,  m_Sonic.getPosition().x + 200.0f, m_Sonic.getPosition().y + 5.0f });  //DEBUG
     m_Sonic.draw();
     m_gfx.drawTextBox(ft.getFPS().c_str(), 1, 2, { 10.0f, 680.0f, 200.0f, 720.0f});
 }

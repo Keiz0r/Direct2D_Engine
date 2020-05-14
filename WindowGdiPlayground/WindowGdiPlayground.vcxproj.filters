@@ -106,5 +106,8 @@
     <Image Include="Sonics.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Wallpaper.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

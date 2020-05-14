@@ -16,6 +16,8 @@ public:
 	void speedUp(const bool& move);
 	void setFacing(const bool& facingright);
 	void move(const float& x, const float& y);
+	void setScalar(const float& scalar);
+	D2D1_POINT_2F getPosition() const;
 private:
 	void setState(Action action);
 	void Animate(AnimationData& Animation);
@@ -28,6 +30,7 @@ private:
 	float speed = 0.0f;
 	bool speedUP = false;
 	float speedDecay = 0.22f;
+	float m_fScalar = 1.0f;
 	ID2D1Bitmap* m_pSprite;
 	bool initialised = false;
 	bool facingRight = true;

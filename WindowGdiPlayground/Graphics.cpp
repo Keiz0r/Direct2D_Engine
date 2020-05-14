@@ -55,19 +55,27 @@ void Graphics::rotateDrawing(const float& angle, const D2D1_POINT_2F& center) co
     d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Rotation(angle, center));
 }
 
+void Graphics::scaleDrawing(const float& x, const float& y, const D2D1_POINT_2F& center) {
+    d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Scale(x, y, center));
+}
+
 void Graphics::restoreDefaultDrawingParameters() const
 {
     d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void Graphics::mirrorDrawing(const float& x, const float& y) const {
-    static const D2D1::Matrix3x2F mirrorTranslationMatrix{ -1.0f, 0.0f, 0.0f, 1.0f, x, y };
     d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F{ -1.0f, 0.0f, 0.0f, 1.0f, x, y });
     // mirrorMatrix * D2D1::Matrix3x2F::Translation(x,y)
 }
 
 void Graphics::translateDrawing(const float& x, const float& y) const {
     d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Translation(x,y));
+}
+
+void Graphics::transformTRSM(const float& Translatex, const float& Translatey, const float& RotationAngle, const D2D1_POINT_2F& ImageCenter, const float& Scalex, const float& Scaley, const bool& mirrored)
+{
+    d2d.getRenderTarget()->SetTransform(D2D1::Matrix3x2F::Translation(Translatex, Translatey) * D2D1::Matrix3x2F::Rotation(RotationAngle, ImageCenter) * D2D1::Matrix3x2F::Scale(Scalex, Scaley, ImageCenter) * D2D1::Matrix3x2F{ (static_cast<int>(!mirrored) * 2) + -1.0f, 0.0f, 0.0f, 1.0f, static_cast<int>(mirrored)* ( ImageCenter.x * 2), 0.0f });
 }
 
 HRESULT Graphics::loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap) {

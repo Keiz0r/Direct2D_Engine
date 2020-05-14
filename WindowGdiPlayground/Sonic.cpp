@@ -76,9 +76,7 @@ void Sonic::draw()
 	}
 
 	//	go back from mirrored sprites
-	if (!facingRight) {
 		m_pgfx.restoreDefaultDrawingParameters();
-	}
 }
 
 void Sonic::setAction(Action action) {
@@ -112,6 +110,14 @@ void Sonic::move(const float& x, const float& y)
 	position.y += y;
 }
 
+void Sonic::setScalar(const float& scalar) {
+	m_fScalar = scalar;
+}
+
+D2D1_POINT_2F Sonic::getPosition() const {
+	return position;
+}
+
 void Sonic::setState(Action action) {
 	if (currentState != action) {
 		currentState = action;
@@ -121,11 +127,7 @@ void Sonic::setState(Action action) {
 }
 
 void Sonic::Animate(AnimationData& Animation) {
-
-	// check facing, flip picture if necessary
-	if (!facingRight) {
-		m_pgfx.mirrorDrawing(2 * (position.x + (Animation.Width / 2)), 0.0f);
-	}
+	D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
 	if (timeFrameCounter > Animation.FrameTime&& currentFrameNum < Animation.TotalFrames) {
 		currentFrameNum++;
@@ -134,6 +136,8 @@ void Sonic::Animate(AnimationData& Animation) {
 		}
 		timeFrameCounter = 0u;
 	}
+	// Apply necessary transformations
+	m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
 	m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, { (currentFrameNum * (Animation.Width + Animation.Stride)) + Animation.BatchStartx, Animation.BatchStarty, ((currentFrameNum * (Animation.Stride + Animation.Width)) + Animation.Width) + Animation.BatchStartx, Animation.BatchStarty + Animation.Height });
 }
 
