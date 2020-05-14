@@ -7,13 +7,15 @@ GameLevel::GameLevel(Graphics& p_gfx)
 }
 
 void GameLevel::draw() {
-	m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, 1366.0f, 768.0f }, 1.0f, { 0.0f, 0.0f, 1366.0f, 768.0f });
+	m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, 1366.0f, 768.0f }, 1.0f, { 0.0f, 0.0f, m_pBackgroundSprite->GetSize().width, m_pBackgroundSprite->GetSize().height });
 
 }
 
-void GameLevel::Initialize()
-{
-	loadSprite(L"Wallpaper.jpg", m_pBackgroundSprite);
+void GameLevel::Initialize() {
+	if(!initialised) {
+		loadSprite(L"Wallpaper.jpg", m_pBackgroundSprite);
+		initialised = true;
+	}
 }
 
 void GameLevel::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {

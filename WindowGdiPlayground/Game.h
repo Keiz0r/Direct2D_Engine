@@ -5,6 +5,7 @@
 #include "Gameboard.h"
 #include "Sonic.h"
 #include "GameLevel.h"
+#include "Box.h"
 #include <string>
 
 class Game {
@@ -13,7 +14,7 @@ public:
 	~Game();
 	void gameLoop();
 private:
-	void updateModel();
+	void updateGameState();
 	void composeFrame();
 	void LoadLevel(GameLevel& level);
 private:
@@ -24,5 +25,5 @@ private:
 	GameBoard m_board;
 	Sonic m_Sonic;
 	GameLevel Homescreen;
-	GameLevel level;
+	std::vector<Box*> boxes{};
 };

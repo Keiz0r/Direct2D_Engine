@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="Direct2D.cpp" />
     <ClCompile Include="DWrite.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Background.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="Direct2D.h" />
     <ClInclude Include="Dsound.h" />
     <ClInclude Include="DWrite.h" />

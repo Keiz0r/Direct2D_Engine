@@ -11,4 +11,5 @@ private:
 private:
 	Graphics& m_pgfx;
 	ID2D1Bitmap* m_pBackgroundSprite;
+	bool initialised = false;
 };
