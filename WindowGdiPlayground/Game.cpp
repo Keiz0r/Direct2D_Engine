@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#pragma comment(lib, "winmm.lib")
+
 Game::Game(const HWND &hwnd, Keyboard& kbd)
 	:
     m_kbd(&kbd),
@@ -10,6 +12,26 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     Homescreen(m_gfx)
 {
     Homescreen.Initialize();
+
+    mciSendString(L"open \"..\\Assets\\testmusic.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
+    //To play* .mp3:
+ //   mciSendString(L"play mp3", NULL, 0, NULL);
+    //To playand wait until the* .mp3 has finished playing :
+//    mciSendString(L"play mp3 wait", NULL, 0, NULL);
+    //To replay(play again from start) the* .mp3:
+//    mciSendString(L"play mp3 from 0", NULL, 0, NULL);
+    //To replayand wait until the* .mp3 has finished playing :
+//    mciSendString(L"play mp3 from 0 wait", NULL, 0, NULL);
+    //To play the* .mp3and replay it every time it ends like a loop :
+    mciSendString(L"play mp3 repeat", NULL, 0, NULL);
+    //To pause the* .mp3 in middle :
+//    mciSendString(L"pause mp3", NULL, 0, NULL);
+    //and to resume it :
+//    mciSendString(L"resume mp3", NULL, 0, NULL);
+    //To stop it in middle :
+//    mciSendString(L"stop mp3", NULL, 0, NULL);
+    //close file
+//    mciSendString(L"close mp3", NULL, 0, NULL);
 }
 
 Game::~Game(){
