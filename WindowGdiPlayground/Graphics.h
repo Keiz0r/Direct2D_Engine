@@ -4,6 +4,8 @@
 #include "Wic.h"
 #include "DWrite.h"
 
+#define GAMESPRITE(string) L## "..\\Assets\\Sprites\\" #string
+
 template<class Interface>
 inline void SafeRelease(Interface** ppInterfaceToRelease) {
     if (*ppInterfaceToRelease != NULL) {

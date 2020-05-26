@@ -7,6 +7,9 @@
 #include "GameLevel.h"
 #include "Box.h"
 #include <string>
+#include "Sound.h"
+#include "Log.h"
+#include "GameConsole.h"
 
 class Game {
 public:
@@ -21,6 +24,8 @@ private:
 	Keyboard* m_kbd;
 	HWND m_hwnd;
 	Graphics m_gfx;
+	Log m_log;
+	GameConsole m_console;
 	FrameTimer ft;
 	GameBoard m_board;
 	Sonic m_Sonic;

@@ -13,7 +13,7 @@ void GameLevel::draw() {
 
 void GameLevel::Initialize() {
 	if(!initialised) {
-		loadSprite(L"..\\Assets\\Wallpaper.jpg", m_pBackgroundSprite);
+		loadSprite(GAMESPRITE(Wallpaper.jpg), m_pBackgroundSprite);
 		initialised = true;
 	}
 }

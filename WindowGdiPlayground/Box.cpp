@@ -22,7 +22,7 @@ void Box::draw() {
 
 void Box::Initialize() {
 	if (!initialised) {
-		loadSprite(L"..\\Assets\\Objects_Sprites.png", m_pSprite);
+		loadSprite(GAMESPRITE(Objects_Sprites.png), m_pSprite);
 		initialised = true;
 	}
 }
