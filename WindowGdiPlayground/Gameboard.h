@@ -25,5 +25,4 @@ private:
 	BoardCell boardcells[16 * 19];
 	int boardrows = 16;
 	int boardcolumns = 19;
-	IDWriteTextFormat* m_pTextFormat;
 };

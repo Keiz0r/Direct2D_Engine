@@ -10,12 +10,14 @@
 #include "Sound.h"
 #include "Log.h"
 #include "GameConsole.h"
+#include <thread>
 
 class Game {
 public:
 	Game(const HWND &hwnd, Keyboard& kbd);
 	~Game();
 	void gameLoop();
+	void commandInput();
 private:
 	void updateGameState();
 	void composeFrame();
@@ -31,4 +33,5 @@ private:
 	Sonic m_Sonic;
 	GameLevel Homescreen;
 	std::vector<Box*> boxes{};
+	std::thread cmdln;
 };

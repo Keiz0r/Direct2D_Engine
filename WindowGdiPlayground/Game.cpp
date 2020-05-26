@@ -1,4 +1,4 @@
-#include "Game.h"
+﻿#include "Game.h"
 
 Game::Game(const HWND &hwnd, Keyboard& kbd)
 	:
@@ -13,6 +13,8 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     Homescreen.Initialize();
     Sound::openMP3();
     Sound::playOnRepeatMP3();
+    cmdln = std::thread([this] {this->commandInput(); });
+    
 }
 
 Game::~Game(){
@@ -20,6 +22,7 @@ Game::~Game(){
         delete (*i);
     }
     Sound::closeMP3();
+    cmdln.join();
 }
 
 void Game::gameLoop(){
@@ -31,34 +34,7 @@ void Game::gameLoop(){
 
 void Game::updateGameState() {
     const float dt = ft.Mark();
-    if ((*m_kbd).keyIsPressed('D')) {
-        m_Sonic.speedUp(true);
-    }
-    else if ((*m_kbd).keyIsPressed('A')) {
-        m_Sonic.speedUp(false);
-    }
-    if ((*m_kbd).keyIsPressed('W')) {
-        m_Sonic.move(0.0f, -5.0f);
-    }
-    if ((*m_kbd).keyIsPressed('S')) {
-        m_Sonic.move(0.0f, 5.0f);
-    }
-
-    if ((*m_kbd).keyIsPressed('C')) {
-        m_console.activate();
-        m_log.putMessage(L"console show");
-    }
-
-    if ((*m_kbd).keyIsPressed('T')) {
-        bool flag = false;
-        D2D1_POINT_2F position{ 400.0f, 600.0f };
-        //spawns shitload of boxes LOL
-        if (!flag) {
-                Box* box1 = new Box(m_gfx, position);
-                boxes.push_back(box1);
-                m_log.putMessage(L"box emplaced");
-        }
-    }
+    
     m_Sonic.update();
 }
 
@@ -77,4 +53,38 @@ void Game::composeFrame() {
 }
 
 void Game::LoadLevel(GameLevel& level) {
+}
+
+void Game::commandInput() {
+    while (1) {
+        if ((*m_kbd).keyIsPressed('D')) {
+            m_Sonic.speedUp(true);
+        }
+        else if ((*m_kbd).keyIsPressed('A')) {
+            m_Sonic.speedUp(false);
+        }
+        if ((*m_kbd).keyIsPressed('W')) {
+            m_Sonic.move(0.0f, -5.0f);
+        }
+        if ((*m_kbd).keyIsPressed('S')) {
+            m_Sonic.move(0.0f, 5.0f);
+        }
+
+        if ((*m_kbd).keyIsPressed(VK_OEM_3)) {   // for Tilde
+            m_console.activate();
+        }
+
+        if ((*m_kbd).keyIsPressed('T')) {
+            bool flag = false;
+            D2D1_POINT_2F position{ 400.0f, 600.0f };
+            //spawns shitload of boxes LOL
+            if (!flag) {
+                Box* box1 = new Box(m_gfx, position);
+                boxes.push_back(box1);
+                m_log.putMessage(L"Писос");
+            }
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
 }
