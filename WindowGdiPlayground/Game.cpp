@@ -8,20 +8,19 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_board(m_gfx),
     m_Sonic(m_gfx, {100.0f, 50.0f}),
-    Homescreen(m_gfx)
+    Homescreen(m_gfx),
+    m_obstacles(m_gfx, m_log)
 {
     Homescreen.Initialize();
     Sound::openMP3();
     Sound::playOnRepeatMP3();
-    cmdln = std::thread([this] {this->commandInput(); });
+    cmdln = std::thread([this](){this->commandInput(); });
     
 }
 
 Game::~Game(){
-    for (std::vector<Box*>::reverse_iterator i = boxes.rbegin(); i < boxes.rend(); i++) {
-        delete (*i);
-    }
     Sound::closeMP3();
+    cmdRun = false;
     cmdln.join();
 }
 
@@ -30,24 +29,30 @@ void Game::gameLoop(){
     updateGameState();
 	composeFrame();
 	m_gfx.endFrame();
+    cmdCV.notify_all();
 }
 
 void Game::updateGameState() {
     const float dt = ft.Mark();
     
     m_Sonic.update();
+
+    m_obstacles.update(updObstacles);
 }
 
 void Game::composeFrame() {
     Homescreen.draw();
 
     m_board.drawBoardCells();
-    std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));                                                         //DEBUG
-    m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, 2, { m_Sonic.getPosition().x, m_Sonic.getPosition().y - 30.0f,  m_Sonic.getPosition().x + 200.0f, m_Sonic.getPosition().y + 5.0f });  //DEBUG
-    m_Sonic.draw();
-    for (std::vector<Box*>::iterator i = boxes.begin(); i < boxes.end(); i++) {
-        (*i)->draw();
+
+    {
+        std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG
+        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, 2, { m_Sonic.getPosition().x, m_Sonic.getPosition().y - 30.0f,  m_Sonic.getPosition().x + 200.0f, m_Sonic.getPosition().y + 5.0f });  //DEBUG
+        m_Sonic.draw();
     }
+
+    m_obstacles.draw();
+
     m_gfx.drawTextBox(ft.getFPS().c_str(), 1, 2, { 10.0f, 680.0f, 200.0f, 720.0f});
     m_console.draw();
 }
@@ -56,11 +61,13 @@ void Game::LoadLevel(GameLevel& level) {
 }
 
 void Game::commandInput() {
-    while (1) {
+    //cmd should only send commands, no work here pls
+    std::unique_lock<std::mutex> lk(cmdMutex);
+    while (cmdRun) {
         if ((*m_kbd).keyIsPressed('D')) {
             m_Sonic.speedUp(true);
         }
-        else if ((*m_kbd).keyIsPressed('A')) {
+        if ((*m_kbd).keyIsPressed('A')) {
             m_Sonic.speedUp(false);
         }
         if ((*m_kbd).keyIsPressed('W')) {
@@ -75,16 +82,9 @@ void Game::commandInput() {
         }
 
         if ((*m_kbd).keyIsPressed('T')) {
-            bool flag = false;
-            D2D1_POINT_2F position{ 400.0f, 600.0f };
-            //spawns shitload of boxes LOL
-            if (!flag) {
-                Box* box1 = new Box(m_gfx, position);
-                boxes.push_back(box1);
-                m_log.putMessage(L"Писос");
-            }
+            updObstacles = Obstacles::MakeBox;  // mek it part  of obstacles after implemented only 1 cmd per frame
         }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        auto timeout = std::chrono::system_clock::now() + std::chrono::milliseconds(100);
+        cmdCV.wait_until(lk, timeout);
     }
 }

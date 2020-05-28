@@ -2,8 +2,13 @@
 
 GameLevel::GameLevel(Graphics& p_gfx)
 	:
-	m_pgfx(p_gfx)
+	m_pgfx(p_gfx),
+	m_pBackgroundSprite(NULL)
 {
+}
+
+GameLevel::~GameLevel() {
+	SafeRelease(&m_pBackgroundSprite);
 }
 
 void GameLevel::draw() {

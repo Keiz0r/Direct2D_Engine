@@ -4,6 +4,7 @@
 class GameLevel {
 public:
 	GameLevel(Graphics& p_gfx);
+	~GameLevel();
 	void draw();
 	void Initialize();
 private:
