@@ -36,7 +36,8 @@ void Game::updateGameState() {
     const float dt = ft.Mark();
     
     m_Sonic.update();
-
+    Homescreen.rotateBckgnd(rotor);
+    rotor += 0.1f;
     m_obstacles.update(updObstacles);
 }
 

@@ -41,4 +41,6 @@ private:
 	std::thread cmdln;
 	std::mutex cmdMutex;
 	std::condition_variable cmdCV;
+
+	float rotor = 0.0f;
 };
