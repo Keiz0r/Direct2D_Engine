@@ -39,6 +39,12 @@ void Game::updateGameState() {
     Homescreen.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
+
+    if (m_board.isInside(m_Sonic.getPosition())) {
+        m_log.putMessage(L"YES");
+    }
+    else
+    m_log.putMessage(L"NO");
 }
 
 void Game::composeFrame() {

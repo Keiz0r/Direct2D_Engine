@@ -32,7 +32,7 @@ public:
     //mirror around 0.0 and translate to x,y, and scale
     void mirrorDrawing(const float& x, const float& y) const;
     void translateDrawing(const float& x, const float& y) const;
-    void transformTRSM(const float& Translatex, const float& Translatey, const float& RotationAngle, const D2D1_POINT_2F& ImageCenter, const float& Scalex, const float& Scaley, const bool& mirrored);
+    void transformTRSM(const float& Translatex, const float& Translatey, const float& RotationAngle, const D2D1_POINT_2F& ImageCenter, const float& Scalex, const float& Scaley, const bool& mirrored) const;
     HRESULT loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap);
 private:
     Direct2D d2d;
