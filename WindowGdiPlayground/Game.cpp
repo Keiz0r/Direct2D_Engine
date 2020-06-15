@@ -6,12 +6,11 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_board(m_gfx),
     m_Sonic(m_gfx, {100.0f, 50.0f}),
-    Homescreen(m_gfx),
+    m_Level(m_gfx, 20, 20),
     m_obstacles(m_gfx, m_log)
 {
-    Homescreen.Initialize();
+    m_Level.Initialize();
     Sound::openMP3();
     Sound::playOnRepeatMP3();
     cmdln = std::thread([this](){this->commandInput(); });
@@ -36,11 +35,11 @@ void Game::updateGameState() {
     const float dt = ft.Mark();
     
     m_Sonic.update();
-    Homescreen.rotateBckgnd(rotor);
+    m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
 
-    if (m_board.isInside(m_Sonic.getPosition())) {
+    if (m_Level.h_Board().isInside(m_Sonic.getPosition())) {
         m_log.putMessage(L"YES");
     }
     else
@@ -48,9 +47,9 @@ void Game::updateGameState() {
 }
 
 void Game::composeFrame() {
-    Homescreen.draw();
+    m_Level.draw();
 
-    m_board.drawBoardCells();
+    
 
     {
         std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG

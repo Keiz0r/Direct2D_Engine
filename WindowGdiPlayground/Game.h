@@ -2,7 +2,6 @@
 #include "Keyboard.h"
 #include "Graphics.h"
 #include "FrameTimer.h"
-#include "Gameboard.h"
 #include "Sonic.h"
 #include "GameLevel.h"
 #include <string>
@@ -31,9 +30,8 @@ private:
 	Log m_log;
 	GameConsole m_console;	//copies log every frame. not the best solution probably, but solves invalid access
 	FrameTimer ft;
-	GameBoard m_board;
 	Sonic m_Sonic;
-	GameLevel Homescreen;
+	GameLevel m_Level;
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;
 

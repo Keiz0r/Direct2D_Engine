@@ -1,8 +1,9 @@
 #include "GameLevel.h"
 
-GameLevel::GameLevel(Graphics& p_gfx)
+GameLevel::GameLevel(Graphics& p_gfx, const int& width, const int& height)
 	:
 	m_pgfx(p_gfx),
+	m_board(p_gfx, width, height),
 	m_pBackgroundSprite(NULL)
 {
 }
@@ -18,6 +19,7 @@ void GameLevel::draw() {
 	m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, 1366.0f, 768.0f }, 1.0f, { 0.0f, 0.0f, 1366.0f, 768.0f });
 	//	go back from mirrored sprites
 	m_pgfx.restoreDefaultDrawingParameters();
+	m_board.drawBoardCells();
 }
 
 void GameLevel::rotateBckgnd(float& angle) {
@@ -29,6 +31,10 @@ void GameLevel::Initialize() {
 		loadSprite(GAMESPRITE(Wallpaper.jpg), m_pBackgroundSprite);
 		initialised = true;
 	}
+}
+
+GameBoard& GameLevel::h_Board() {
+	return m_board;
 }
 
 void GameLevel::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
