@@ -6,7 +6,7 @@ class GameLevel {
 public:
 	GameLevel(Graphics& p_gfx, const int& width, const int& height);
 	~GameLevel();
-	void draw();
+	void draw(const D2D1_POINT_2F& CenterCoord);
 	void rotateBckgnd(float& angle);
 	void Initialize();
 	GameBoard& h_Board();

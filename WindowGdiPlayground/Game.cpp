@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_Sonic(m_gfx, {100.0f, 50.0f}),
+    m_Sonic(m_gfx, {1000.0f, 600.0f}),
     m_Level(m_gfx, 20, 20),
     m_obstacles(m_gfx, m_log)
 {
@@ -47,7 +47,7 @@ void Game::updateGameState() {
 }
 
 void Game::composeFrame() {
-    m_Level.draw();
+    m_Level.draw({0.0f, 0.0f});
 
     
 

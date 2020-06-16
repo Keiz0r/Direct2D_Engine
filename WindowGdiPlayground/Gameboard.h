@@ -13,7 +13,7 @@ public:
 	GameBoard(Graphics& p_gfx, const int& width, const int& height);
 	~GameBoard();
 	void Initialize();
-	void drawBoardCells();
+	void drawBoardCells(const D2D1_POINT_2F& CenterCoord);
 	void fillBoard();
 	bool isInside(const D2D1_POINT_2F& coord) const;
 private:
@@ -22,23 +22,20 @@ private:
 		enum tiletype {
 			White, Contour_Black, Black, ContourI_Black, Grass, Water1, Water2, Tree1_DoubleH
 		};
-		void InitCell(const D2D1_POINT_2F& coords);
-		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite) const;
+		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const;
 		void SetThickness(const float& thickness);
 		void ResetThickness();
-		void ShowCellNum(const Graphics& p_gfx) const;
+		void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const;
 		void assignCellNum(const int& num);
 		void setTileType(const tiletype& type);
-		D2D1_POINT_2F getCoords() const;
 		D2D1_POINT_2F getSize() const;
 	private:
-		D2D1_POINT_2F coords;
 		float borderThickness;
 		float defaultThickness = 0.5f;
 		int cellnum;
 		tiletype tileType;
-		static constexpr float cellwidth = 40.0f;
-		static constexpr float cellheight = 18.0f;
+		static constexpr float cellwidth = 160.0f;
+		static constexpr float cellheight = 95.0f;
 	};
 private:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
@@ -48,6 +45,8 @@ private:
 	bool initialised = false;
 	int boardWidth;
 	int boardHeight;
+	int CellsDrawnx = 7;
+	int CellsDrawny = 7;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
 	std::unordered_map<int, Borders> bordermap;
 };
