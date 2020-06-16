@@ -15,7 +15,7 @@ Dwrite::Dwrite()
     initialize();
     createTextFormat(L"Gabriola", 20.0f);
     createTextFormat(L"Times New Roman", 30.0f);
-    createTextFormat(L"Times New Roman", 20.0f);    // for console
+    createTextFormat(L"Terminal", 20.0f);    // for console
 }
 
 Dwrite::~Dwrite() {
@@ -46,7 +46,7 @@ HRESULT Dwrite::createTextFormat(const wchar_t* font, const float& fontsize)
 {
     HRESULT hr = S_OK;
     IDWriteTextFormat* Format;
-    if (FAILED(hr = Factory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontsize, L"ru-ru", &Format))) {
+    if (FAILED(hr = Factory->CreateTextFormat(font, NULL, DWRITE_FONT_WEIGHT_SEMI_BOLD, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, fontsize, L"ru-ru", &Format))) {
         return hr;
     }
     m_vTextFormatVector.push_back(Format);

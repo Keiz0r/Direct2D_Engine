@@ -23,15 +23,11 @@ private:
 			White, Contour_Black, Black, ContourI_Black, Grass, Water1, Water2, Tree1_DoubleH
 		};
 		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const;
-		void SetThickness(const float& thickness);
-		void ResetThickness();
 		void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const;
 		void assignCellNum(const int& num);
-		void setTileType(const tiletype& type);
+		void setTileType(const tiletype&& type);
 		D2D1_POINT_2F getSize() const;
 	private:
-		float borderThickness;
-		float defaultThickness = 0.5f;
 		int cellnum;
 		tiletype tileType;
 		static constexpr float cellwidth = 160.0f;
@@ -45,6 +41,9 @@ private:
 	bool initialised = false;
 	int boardWidth;
 	int boardHeight;
+	D2D1_POINT_2F worldCoordinatesSize;
+	static constexpr float amountOfspaceInCellx = 10.0f;
+	static constexpr float amountOfspaceInCelly = 10.0f;
 	int CellsDrawnx = 7;
 	int CellsDrawny = 7;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;

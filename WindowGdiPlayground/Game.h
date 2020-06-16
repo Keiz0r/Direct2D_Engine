@@ -23,6 +23,7 @@ private:
 	void updateGameState();
 	void composeFrame();
 	void LoadLevel(GameLevel& level);
+	void execCommand(std::wstring& command);
 private:
 	Keyboard* m_kbd;
 	HWND m_hwnd;
@@ -32,6 +33,7 @@ private:
 	FrameTimer ft;
 	Sonic m_Sonic;
 	GameLevel m_Level;
+	D2D1_POINT_2F CellSpaceDrawCenter;
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;
 
@@ -39,6 +41,7 @@ private:
 	std::thread cmdln;
 	std::mutex cmdMutex;
 	std::condition_variable cmdCV;
+	std::wstring str_GameCommand;
 
 	float rotor = 0.0f;
 };

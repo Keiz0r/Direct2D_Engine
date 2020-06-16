@@ -30,12 +30,12 @@ void Graphics::DrawLine(const float &x1, const float &y1, const  float &x2, cons
     );
 }
 
-void Graphics::DrawRect(const D2D1_RECT_F &rectangle, const bool &filled) const {
+void Graphics::DrawRect(const D2D1_RECT_F &rectangle, const bool &filled, const int& color) const {
     if (filled) {
-        d2d.getRenderTarget()->FillRectangle(rectangle, d2d.getSolidColorBrush(0));
+        d2d.getRenderTarget()->FillRectangle(rectangle, d2d.getSolidColorBrush(color));
     }
     else {
-        d2d.getRenderTarget()->DrawRectangle(rectangle, d2d.getSolidColorBrush(1));
+        d2d.getRenderTarget()->DrawRectangle(rectangle, d2d.getSolidColorBrush(color));
     }
 }
 

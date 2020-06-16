@@ -7,6 +7,7 @@ GameBoard::GameBoard(Graphics& p_gfx, const int& width, const int& height)
     boardWidth(width),
     boardHeight(height)
 {
+    worldCoordinatesSize = {static_cast<float>(boardWidth) * amountOfspaceInCellx, static_cast<float>(boardHeight) * amountOfspaceInCelly };
     Initialize();
 }
 
@@ -23,8 +24,12 @@ void GameBoard::Initialize() {
 }
 
 void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
-    int CellSpaceCenterCoord = 86;  //  temporary value, needs to be calculated on input to function
+    //make a translation function between coordinatespaces that returns cellspacedrawcoord
+    CenterCoord.x / amountOfspaceInCellx;
+    CenterCoord.y / amountOfspaceInCelly;
+    int CellSpaceCenterCoord = ((CenterCoord.x / amountOfspaceInCellx) * boardWidth) + CenterCoord.y / amountOfspaceInCelly;
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
+    //  TODO: transition gotta be SMOOTH, so not in entire cell. make adjustments somehow
 
     while (CellSpaceDrawCoord < 0) {
         //  Clipping to the edge of the map
@@ -139,14 +144,6 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
  //   p_gfx.DrawLine(coords.x + cellwidth, coords.y, coords.x + cellwidth, coords.y - cellheight, borderThickness);
 }
 
-void GameBoard::BoardCell::SetThickness(const float& thickness) {
-    borderThickness = thickness;
-}
-
-void GameBoard::BoardCell::ResetThickness() {
-    borderThickness = defaultThickness;
-}
-
 void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const {
     wchar_t name[4];
     swprintf_s(name, L"%d", cellnum);
@@ -157,7 +154,7 @@ void GameBoard::BoardCell::assignCellNum(const int& num) {
     cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(const tiletype& type){
+void GameBoard::BoardCell::setTileType(const tiletype&& type){
     tileType = type;
 }
 

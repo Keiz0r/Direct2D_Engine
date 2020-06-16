@@ -8,6 +8,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {1000.0f, 600.0f}),
     m_Level(m_gfx, 20, 20),
+    CellSpaceDrawCenter({ 30.0f,60.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -47,7 +48,7 @@ void Game::updateGameState() {
 }
 
 void Game::composeFrame() {
-    m_Level.draw({0.0f, 0.0f});
+    m_Level.draw(CellSpaceDrawCenter);
 
     
 
@@ -66,31 +67,81 @@ void Game::composeFrame() {
 void Game::LoadLevel(GameLevel& level) {
 }
 
+void Game::execCommand(std::wstring& command) {
+    if (command == L"$MOVE") {
+        m_log.putMessage(command.c_str());
+        CellSpaceDrawCenter.x+= 10.0f;
+    }
+
+    command = L"";
+}
+
 void Game::commandInput() {
     //cmd should only send commands, no work here pls
     std::unique_lock<std::mutex> lk(cmdMutex);
+    unsigned short consoleBlock = 0;
+    unsigned short keyboardBlock = 0;
     while (cmdRun) {
-        if ((*m_kbd).keyIsPressed('D')) {
-            m_Sonic.speedUp(true);
-        }
-        if ((*m_kbd).keyIsPressed('A')) {
-            m_Sonic.speedUp(false);
-        }
-        if ((*m_kbd).keyIsPressed('W')) {
-            m_Sonic.move(0.0f, -5.0f);
-        }
-        if ((*m_kbd).keyIsPressed('S')) {
-            m_Sonic.move(0.0f, 5.0f);
-        }
+        if (!m_console.isActiveInput()) {
 
-        if ((*m_kbd).keyIsPressed(VK_OEM_3)) {   // for Tilde
-            m_console.activate();
-        }
+            if (str_GameCommand.size()) {
+                //decypher
+                execCommand(str_GameCommand);
+            }
 
-        if ((*m_kbd).keyIsPressed('T')) {
-            updObstacles = Obstacles::MakeBox;  // mek it part  of obstacles after implemented only 1 cmd per frame
+            if ((*m_kbd).keyIsPressed('D')) {
+                m_Sonic.speedUp(true);
+            }
+            if ((*m_kbd).keyIsPressed('A')) {
+                m_Sonic.speedUp(false);
+            }
+            if ((*m_kbd).keyIsPressed('W')) {
+                m_Sonic.move(0.0f, -5.0f);
+            }
+            if ((*m_kbd).keyIsPressed('S')) {
+                m_Sonic.move(0.0f, 5.0f);
+            }
+
+            if ((*m_kbd).keyIsPressed(VK_OEM_3) && !consoleBlock) {   // for Tilde
+                m_console.activate();
+                consoleBlock += 20; 
+                keyboardBlock = 8;
+            }
+
+            if (m_console.isActive() && (*m_kbd).keyIsPressed(VK_RETURN) && !keyboardBlock) {
+                m_console.activateInput();
+                (*m_kbd).flushCharBuffer();
+                keyboardBlock = 8;
+            }
+
+            if ((*m_kbd).keyIsPressed('T')) {
+                updObstacles = Obstacles::MakeBox;  // mek it part  of obstacles after implemented only 1 cmd per frame
+            }
+
         }
+        else {
+            //case of console input
+            if (!keyboardBlock) {
+                if ((*m_kbd).keyIsPressed(VK_RETURN)) {
+                    m_console.activateInput();
+                    str_GameCommand = m_console.getInput();
+                    keyboardBlock = 8;
+                }
+                else if (!(*m_kbd).charIsEmpty()) {
+                    m_console.setInput((*m_kbd).readChar());
+                }
+            }
+        }
+        
+
         auto timeout = std::chrono::system_clock::now() + std::chrono::milliseconds(100);
         cmdCV.wait_until(lk, timeout);
+
+        if (consoleBlock) {
+            consoleBlock -= 1;
+        }
+        if (keyboardBlock) {
+            keyboardBlock -= 1;
+        }
     }
 }

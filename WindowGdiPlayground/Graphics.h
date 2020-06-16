@@ -16,13 +16,16 @@ inline void SafeRelease(Interface** ppInterfaceToRelease) {
 
 class Graphics {
 public:
+    enum D2D_SOLID_COLORS {
+        LightSlateGray, CornflowerBlue, OrangeRed, Black, Gray
+    };
     Graphics(const HWND &hwnd);
     ~Graphics();
 	void beginFrame();
 	void endFrame();
 	void drawPixel();
     void DrawLine(const float& x1, const float& y1, const  float& x2, const float& y2, const float& thickness) const;
-    void DrawRect(const D2D1_RECT_F& rectangle, const bool& filled) const;
+    void DrawRect(const D2D1_RECT_F& rectangle, const bool& filled, const int& color) const;
     void drawTextBox(const wchar_t* string, const int& fontNum, const int& brushNum, const D2D1_RECT_F& startcoords) const; // TODO : ineffective method, go to directdraw docs
     void drawTextLayout(const wchar_t* string, const wchar_t* font, const float& fontsize, IDWriteTextLayout*& textLayout, const int& brushNum, const D2D1_POINT_2F& startcoords) const ;
     void drawBitmap(ID2D1Bitmap* bitmap, const D2D1_RECT_F& outRectangle, const float& opacity, const D2D1_RECT_F& bmpOutlineRectangle) const;

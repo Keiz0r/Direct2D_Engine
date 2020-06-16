@@ -18,6 +18,8 @@ Direct2D::Direct2D(const HWND& hwnd)
     createBrush(D2D1::ColorF::LightSlateGray);
     createBrush(D2D1::ColorF::CornflowerBlue);
     createBrush(D2D1::ColorF::OrangeRed);
+    createBrush(D2D1::ColorF::Black);
+    createBrush(D2D1::ColorF::DarkGray);
 }
 
 Direct2D::~Direct2D() {
