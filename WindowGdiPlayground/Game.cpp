@@ -69,10 +69,9 @@ void Game::LoadLevel(GameLevel& level) {
 
 void Game::execCommand(std::wstring& command) {
     if (command == L"$MOVE") {
-        m_log.putMessage(command.c_str());
         CellSpaceDrawCenter.x+= 10.0f;
     }
-
+    m_log.putMessage(command.c_str());
     command = L"";
 }
 
