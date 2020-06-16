@@ -44,8 +44,8 @@ private:
 	D2D1_POINT_2F worldCoordinatesSize;
 	static constexpr float amountOfspaceInCellx = 10.0f;
 	static constexpr float amountOfspaceInCelly = 10.0f;
-	int CellsDrawnx = 7;
-	int CellsDrawny = 7;
+	int CellsDrawnx = 15;
+	int CellsDrawny = 15;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
 	std::unordered_map<int, Borders> bordermap;
 };

@@ -29,15 +29,15 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
     CenterCoord.y / amountOfspaceInCelly;
     int CellSpaceCenterCoord = ((CenterCoord.x / amountOfspaceInCellx) * boardWidth) + CenterCoord.y / amountOfspaceInCelly;
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
-    //  TODO: transition gotta be SMOOTH, so not in entire cell. make adjustments somehow
+    //  TODO: transition gotta be SMOOTH, so not in entire cell. draw a bit more cells in each direction and adjust with offsets. this way can draw part of cell
 
     while (CellSpaceDrawCoord < 0) {
         //  Clipping to the edge of the map
         CellSpaceDrawCoord += boardHeight;
     }
 
-    float offsetx = 550.0f;
-    float offsety = 150.0f;
+    float offsetx = 450.0f;
+    float offsety = -150.0f;
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
