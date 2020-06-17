@@ -24,23 +24,46 @@ void GameBoard::Initialize() {
 }
 
 void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
-    //make a translation function between coordinatespaces that returns cellspacedrawcoord
-    CenterCoord.x / amountOfspaceInCellx;
-    CenterCoord.y / amountOfspaceInCelly;
-    int CellSpaceCenterCoord = ((CenterCoord.x / amountOfspaceInCellx) * boardWidth) + CenterCoord.y / amountOfspaceInCelly;
-    int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
-    //  TODO: transition gotta be SMOOTH, so not in entire cell. draw a bit more cells in each direction and adjust with offsets. this way can draw part of cell
 
-    while (CellSpaceDrawCoord < 0) {
-        //  Clipping to the edge of the map
-        CellSpaceDrawCoord += boardHeight;
-    }
+    //only positive coords
+
+    //make a translation function between coordinatespaces that returns cellspacedrawcoord
+    int temp_clsdrwny = CellsDrawny;
+    int temp_clsdrwnx = CellsDrawnx;
+
 
     float offsetx = 450.0f;
     float offsety = -150.0f;
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
+    int CellSpaceCenterCoord = ((CenterCoord.x / amountOfspaceInCellx) * boardWidth) + CenterCoord.y / amountOfspaceInCelly;
+    int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
+
+    if (CellSpaceDrawCoord < 0) {
+        //  Clipping x to the edge of the map
+        int cancelledYLines = ((-1 * CellSpaceDrawCoord) / boardHeight);
+        CellsDrawnx -= cancelledYLines;  //  no draw "unexisting" columns
+        CellSpaceDrawCoord += cancelledYLines * boardHeight;
+        //  shifting to move map edges to center
+        offsetx += shiftx * cancelledYLines;
+        offsety += shifty * cancelledYLines;
+    }
+
+    int cancelledXLines = temp_clsdrwnx / 2 - (CellSpaceCenterCoord % boardHeight);
+    if (cancelledXLines > 0) {
+        //check if drawing will draw correctly (clipping y)
+        //don't draw that x line with y coords
+        CellsDrawny -= cancelledXLines;  //  no draw "unexisting" rows
+        CellSpaceDrawCoord += cancelledXLines;
+        //  shifting to move map edges to center
+        offsetx -= shiftx * cancelledXLines;
+        offsety += shifty * cancelledXLines;
+    }
+    //  TODO: transition gotta be SMOOTH, so not in entire cell. draw a bit more cells in each direction and adjust with offsets. this way can draw part of cell
+    
+
+    // drawing from top left (0,0) in cellspace
     for (int j = 0; j < CellsDrawnx; j++) {
         for (int i = 0; i < CellsDrawny; i++) {
             float x = offsetx - (i * shiftx + 0);
@@ -57,11 +80,9 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
         offsety += shifty;
     }
 
-
-//    for (int i = 0; i < boardWidth * boardHeight; i++) {
-//        boardcells[i].draw(m_pgfx, m_pTilesSprite);
-//        
-//    }
+    //restore initial params
+    CellsDrawny = temp_clsdrwny;
+    CellsDrawnx = temp_clsdrwnx;
 }
 
 void GameBoard::fillBoard() {

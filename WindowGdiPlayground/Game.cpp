@@ -34,17 +34,30 @@ void Game::gameLoop(){
 
 void Game::updateGameState() {
     const float dt = ft.Mark();
-    
+    //clip world coords
+    if (CellSpaceDrawCenter.x < 0.0f) {
+        CellSpaceDrawCenter.x = 0.0f;
+    }
+    else if (CellSpaceDrawCenter.x > 200.0f) {
+        CellSpaceDrawCenter.x = 200.0f;
+    }
+    if (CellSpaceDrawCenter.y < 0.0f) {
+        CellSpaceDrawCenter.y = 0.0f;
+    }
+    else if (CellSpaceDrawCenter.y > 200.0f) {
+        CellSpaceDrawCenter.y = 200.0f;
+    }
+
     m_Sonic.update();
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
 
-    if (m_Level.h_Board().isInside(m_Sonic.getPosition())) {
-        m_log.putMessage(L"YES");
-    }
-    else
-    m_log.putMessage(L"NO");
+ //   if (m_Level.h_Board().isInside(m_Sonic.getPosition())) {
+ //       m_log.putMessage(L"YES");
+ //   }
+ //   else
+ //   m_log.putMessage(L"NO");
 }
 
 void Game::composeFrame() {
@@ -68,8 +81,21 @@ void Game::LoadLevel(GameLevel& level) {
 }
 
 void Game::execCommand(std::wstring& command) {
-    if (command == L"$MOVE") {
+    if (command == L"$MOVER") {
         CellSpaceDrawCenter.x+= 10.0f;
+    }
+    if (command == L"$MOVEL") {
+        CellSpaceDrawCenter.x -= 10.0f;
+    }
+    if (command == L"$MOVEU") {
+        CellSpaceDrawCenter.y -= 10.0f;
+    }
+    if (command == L"$MOVED") {
+        CellSpaceDrawCenter.y += 10.0f;
+    }
+    if (command == L"$COORDS") {
+        std::wstring str = L"World: " + std::to_wstring(CellSpaceDrawCenter.x) + L"; " + std::to_wstring(CellSpaceDrawCenter.y) + L"|| Cell: " + std::to_wstring(CellSpaceDrawCenter.x / 10.0f * 20) + L"; " + std::to_wstring(CellSpaceDrawCenter.y / 10.0f);
+        m_log.putMessage(str.c_str());
     }
     m_log.putMessage(command.c_str());
     command = L"";
