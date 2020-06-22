@@ -8,7 +8,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {1000.0f, 600.0f}),
     m_Level(m_gfx, 20, 20),
-    CellSpaceDrawCenter({ 30.0f,60.0f }),
+    CellSpaceDrawCenter({ 70.0f,170.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -21,6 +21,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 Game::~Game(){
     Sound::closeMP3();
     cmdRun = false;
+    cmdCV.notify_all();
     cmdln.join();
 }
 
@@ -38,14 +39,14 @@ void Game::updateGameState() {
     if (CellSpaceDrawCenter.x < 0.0f) {
         CellSpaceDrawCenter.x = 0.0f;
     }
-    else if (CellSpaceDrawCenter.x > 200.0f) {
-        CellSpaceDrawCenter.x = 200.0f;
+    else if (CellSpaceDrawCenter.x > 190.0f) {
+        CellSpaceDrawCenter.x = 190.0f;
     }
     if (CellSpaceDrawCenter.y < 0.0f) {
         CellSpaceDrawCenter.y = 0.0f;
     }
-    else if (CellSpaceDrawCenter.y > 200.0f) {
-        CellSpaceDrawCenter.y = 200.0f;
+    else if (CellSpaceDrawCenter.y > 190.0f) {
+        CellSpaceDrawCenter.y = 190.0f;
     }
 
     m_Sonic.update();

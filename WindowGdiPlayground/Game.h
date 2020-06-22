@@ -12,7 +12,7 @@
 #include <memory>
 #include "Obstacles.h"
 #include <condition_variable>
-
+//Prob needs an "INPUT" class with CMDthread managing
 class Game {
 public:
 	Game(const HWND &hwnd, Keyboard& kbd);

@@ -24,13 +24,11 @@ void GameBoard::Initialize() {
 }
 
 void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
-
     //only positive coords
 
     //make a translation function between coordinatespaces that returns cellspacedrawcoord
     int temp_clsdrwny = CellsDrawny;
     int temp_clsdrwnx = CellsDrawnx;
-
 
     float offsetx = 450.0f;
     float offsety = -150.0f;
@@ -41,8 +39,8 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
 
     if (CellSpaceDrawCoord < 0) {
-        //  Clipping x to the edge of the map
-        int cancelledYLines = ((-1 * CellSpaceDrawCoord) / boardHeight);
+        //  Clipping x < 0
+        int cancelledYLines = ((-1 * CellSpaceDrawCoord) / boardHeight) + 1;
         CellsDrawnx -= cancelledYLines;  //  no draw "unexisting" columns
         CellSpaceDrawCoord += cancelledYLines * boardHeight;
         //  shifting to move map edges to center
@@ -52,7 +50,7 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
 
     int cancelledXLines = temp_clsdrwnx / 2 - (CellSpaceCenterCoord % boardHeight);
     if (cancelledXLines > 0) {
-        //check if drawing will draw correctly (clipping y)
+        //clipping y < 0
         //don't draw that x line with y coords
         CellsDrawny -= cancelledXLines;  //  no draw "unexisting" rows
         CellSpaceDrawCoord += cancelledXLines;
@@ -60,8 +58,20 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
         offsetx -= shiftx * cancelledXLines;
         offsety += shifty * cancelledXLines;
     }
+
     //  TODO: transition gotta be SMOOTH, so not in entire cell. draw a bit more cells in each direction and adjust with offsets. this way can draw part of cell
-    
+
+    int lastDrawStartColumn = (boardWidth - CellsDrawnx ) * boardHeight;
+    if (CellSpaceDrawCoord >= (lastDrawStartColumn + boardHeight)) {
+        //  Clipping x > brdW
+        CellsDrawnx -= (CellSpaceDrawCoord - lastDrawStartColumn) / boardHeight;
+    }
+
+    int lastDrawStartRow = CellSpaceDrawCoord % boardHeight;
+    if (lastDrawStartRow > boardHeight - CellsDrawny) {
+        //  Clipping y > brdH
+        CellsDrawny = boardHeight - lastDrawStartRow;
+    }
 
     // drawing from top left (0,0) in cellspace
     for (int j = 0; j < CellsDrawnx; j++) {
