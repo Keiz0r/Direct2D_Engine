@@ -30,8 +30,8 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
     int temp_clsdrwny = CellsDrawny;
     int temp_clsdrwnx = CellsDrawnx;
 
-    float offsetx = 450.0f;
-    float offsety = -150.0f;
+    float offsetx = 600.0f;
+    float offsety = -350.0f;
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
@@ -101,36 +101,11 @@ void GameBoard::fillBoard() {
         for (float i = 0.0f; i < static_cast<float>(boardWidth); i += 1.0f) {
             boardcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))));
             boardcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].setTileType(GameBoard::BoardCell::tiletype::Grass);
-            //    auto search = bordermap.find(y);
-            //    if (search != bordermap.end()) {
-            //        float lborder = bordermap[y].left;
-            //        bordermap[y] = {lborder, x + 36.0f};
-            //    }
-            //    else {
-            //        bordermap.insert({ static_cast<int>(y), {x,x + 36.0f} });
-            //    }
-            //}
-            //float lbrd = bordermap[y].left;
-            //float rbrd = bordermap[y].right;
-            //int counter = 1;
-            //for (int newy = static_cast<int>(y) - 1; newy > 700.0f - ((j+1) * 50.0f); newy--) {
-            //    bordermap.insert({ static_cast<int>(newy), {lbrd, rbrd } });
-            //    counter++;
         }
     }
     boardcells[48].setTileType(GameBoard::BoardCell::tiletype::Tree1_DoubleH);
     boardcells[63].setTileType(GameBoard::BoardCell::tiletype::Water1);
     boardcells[106].setTileType(GameBoard::BoardCell::tiletype::Water2);
-}
-
-bool GameBoard::isInside(const D2D1_POINT_2F& coord) const {
-    auto search = bordermap.find(coord.y);
-    if (search != bordermap.end()) {
-        if (coord.x >= search->second.left && coord.x <= search->second.right) {
-            return true;
-        }
-    }
-    return false;
 }
 
 void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
@@ -141,28 +116,28 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
     D2D1_RECT_F tileCoords;
     float doubleH = 1.0f;
     switch (tileType) {
-    case White:
+    case GameBoard::BoardCell::tiletype::White:
         tileCoords = { 0.0f, 0.0f, 159.0f, 90.0f };
         break;
-    case Contour_Black:
+    case GameBoard::BoardCell::tiletype::Contour_Black:
         tileCoords = { 163.0f, 0.0f, 319.0f, 90.0f };
         break;
-    case ContourI_Black:
+    case GameBoard::BoardCell::tiletype::ContourI_Black:
         tileCoords = { 484.0f, 0.0f, 639.0f, 90.0f };
         break;
-    case Black:
+    case GameBoard::BoardCell::tiletype::Black:
         tileCoords = { 323.0f, 0.0f, 477.0f, 90.0f };
         break;
-    case Grass:
+    case GameBoard::BoardCell::tiletype::Grass:
         tileCoords = { 0.0f, 100.0f, 159.0f, 190.0f };
         break;
-    case Water1:
+    case GameBoard::BoardCell::tiletype::Water1:
         tileCoords = { 160.0f, 100.0f, 318.0f, 190.0f };
         break;
-    case Water2:
+    case GameBoard::BoardCell::tiletype::Water2:
         tileCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
         break;
-    case Tree1_DoubleH:
+    case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
         tileCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
         doubleH = 2.0f;
         break;
@@ -178,14 +153,14 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
 void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const {
     wchar_t name[4];
     swprintf_s(name, L"%d", cellnum);
-    p_gfx.drawTextBox(name, 0, 2, { screencoords.x + cellwidth / 2 - 10, screencoords.y - 85.0f, screencoords.x + 150.0f, screencoords.y - 40.0f });
+    p_gfx.drawTextBox(name, 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { screencoords.x + cellwidth / 2 - 10, screencoords.y - 85.0f, screencoords.x + 150.0f, screencoords.y - 40.0f });
 }
 
 void GameBoard::BoardCell::assignCellNum(const int& num) {
     cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(const tiletype&& type){
+void GameBoard::BoardCell::setTileType(const tiletype& type){
     tileType = type;
 }
 

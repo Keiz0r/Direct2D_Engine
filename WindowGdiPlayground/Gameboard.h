@@ -1,6 +1,5 @@
 #pragma once
 #include "Graphics.h"
-#include <unordered_map>
 #include <memory>
 
 struct Borders {
@@ -15,17 +14,16 @@ public:
 	void Initialize();
 	void drawBoardCells(const D2D1_POINT_2F& CenterCoord);
 	void fillBoard();
-	bool isInside(const D2D1_POINT_2F& coord) const;
 private:
 	class BoardCell {
 	public:
-		enum tiletype {
+		enum class tiletype {
 			White, Contour_Black, Black, ContourI_Black, Grass, Water1, Water2, Tree1_DoubleH
 		};
 		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const;
 		void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const;
 		void assignCellNum(const int& num);
-		void setTileType(const tiletype&& type);
+		void setTileType(const tiletype& type);
 		D2D1_POINT_2F getSize() const;
 	private:
 		int cellnum;
@@ -44,8 +42,7 @@ private:
 	D2D1_POINT_2F worldCoordinatesSize;
 	static constexpr float amountOfspaceInCellx = 10.0f;
 	static constexpr float amountOfspaceInCelly = 10.0f;
-	int CellsDrawnx = 15;
-	int CellsDrawny = 15;
+	int CellsDrawnx = 17;
+	int CellsDrawny = 17;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
-	std::unordered_map<int, Borders> bordermap;
 };

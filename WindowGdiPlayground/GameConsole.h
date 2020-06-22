@@ -21,6 +21,6 @@ private:
 	unsigned short blinkCounter = 0;
 	std::string tempInput;
 	std::wstring input;
-	unsigned short textColor = Graphics::D2D_SOLID_COLORS::Gray;
-	unsigned short bckgndColor = Graphics::D2D_SOLID_COLORS::Black;
+	Graphics::D2D_SOLID_COLORS textColor = Graphics::D2D_SOLID_COLORS::Gray;
+	Graphics::D2D_SOLID_COLORS bckgndColor = Graphics::D2D_SOLID_COLORS::Black;
 };

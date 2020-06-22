@@ -8,7 +8,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {1000.0f, 600.0f}),
     m_Level(m_gfx, 20, 20),
-    CellSpaceDrawCenter({ 70.0f,170.0f }),
+    CellSpaceDrawCenter({ 110.0f,100.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -68,13 +68,13 @@ void Game::composeFrame() {
 
     {
         std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG
-        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, 2, { m_Sonic.getPosition().x, m_Sonic.getPosition().y - 30.0f,  m_Sonic.getPosition().x + 200.0f, m_Sonic.getPosition().y + 5.0f });  //DEBUG
+        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { m_Sonic.getPosition().x, m_Sonic.getPosition().y - 30.0f,  m_Sonic.getPosition().x + 200.0f, m_Sonic.getPosition().y + 5.0f });  //DEBUG
         m_Sonic.draw();
     }
 
     m_obstacles.draw();
 
-    m_gfx.drawTextBox(ft.getFPS().c_str(), 1, 2, { 10.0f, 680.0f, 200.0f, 720.0f});
+    m_gfx.drawTextBox(ft.getFPS().c_str(), 1, Graphics::D2D_SOLID_COLORS::OrangeRed, { 10.0f, 680.0f, 200.0f, 720.0f});
     m_console.draw();
 }
 

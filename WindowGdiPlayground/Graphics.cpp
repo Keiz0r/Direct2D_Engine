@@ -30,17 +30,17 @@ void Graphics::DrawLine(const float &x1, const float &y1, const  float &x2, cons
     );
 }
 
-void Graphics::DrawRect(const D2D1_RECT_F &rectangle, const bool &filled, const int& color) const {
+void Graphics::DrawRect(const D2D1_RECT_F &rectangle, const bool &filled, const D2D_SOLID_COLORS& color) const {
     if (filled) {
-        d2d.getRenderTarget()->FillRectangle(rectangle, d2d.getSolidColorBrush(color));
+        d2d.getRenderTarget()->FillRectangle(rectangle, d2d.getSolidColorBrush(to_underlying(color)));
     }
     else {
-        d2d.getRenderTarget()->DrawRectangle(rectangle, d2d.getSolidColorBrush(color));
+        d2d.getRenderTarget()->DrawRectangle(rectangle, d2d.getSolidColorBrush(to_underlying(color)));
     }
 }
 
-void Graphics::drawTextBox(const wchar_t* string, const int& fontNum, const int& brushNum, const D2D1_RECT_F &rectCoords) const {
-    d2d.getRenderTarget()->DrawText(string, wcslen(string), dwrite.getTextFormat(fontNum), rectCoords, d2d.getSolidColorBrush(brushNum), D2D1_DRAW_TEXT_OPTIONS_CLIP, DWRITE_MEASURING_MODE_NATURAL);
+void Graphics::drawTextBox(const wchar_t* string, const int& fontNum, const D2D_SOLID_COLORS& brushColor, const D2D1_RECT_F &rectCoords) const {
+    d2d.getRenderTarget()->DrawText(string, wcslen(string), dwrite.getTextFormat(fontNum), rectCoords, d2d.getSolidColorBrush(to_underlying(brushColor)), D2D1_DRAW_TEXT_OPTIONS_CLIP, DWRITE_MEASURING_MODE_NATURAL);
 }
 
 void Graphics::drawTextLayout(const wchar_t* string, const wchar_t* font, const float& fontsize, IDWriteTextLayout*& textLayout, const int& brushNum, const D2D1_POINT_2F& startcoords) const {
