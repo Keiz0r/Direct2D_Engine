@@ -1,5 +1,5 @@
 #pragma once
-#include "Animations.h"
+#include "Lists\Animations.h"
 
 struct AnimationData {
 	AnimationData(const float& BatchStartx, const float& BatchStarty, const float& Width, const float& Height, const float& Stride,

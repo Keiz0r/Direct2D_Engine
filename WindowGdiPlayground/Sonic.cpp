@@ -150,7 +150,7 @@ void Sonic::Initialize(const D2D1_POINT_2F& position)
 }
 
 void Sonic::loadSprite() {
-	m_pgfx.loadD2DBitmap(GAMESPRITE(Sonics.png), 0, m_pSprite);
+	m_pgfx.loadD2DBitmap(GAMESPRITE(SPRITE_SONIC), 0, m_pSprite);
 }
 
 void Sonic::clampSpeed(const float& topSpeed) {

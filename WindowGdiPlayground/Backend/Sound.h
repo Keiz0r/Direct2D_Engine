@@ -1,8 +1,8 @@
 #pragma once
 #include <Windows.h>
+#include "Lists/AssetsList.h"
 
 #pragma comment(lib, "winmm.lib")
-#define GAMESOUND(string) L## "open ..\\Assets\\Sounds\\" #string ## " type mpegvideo alias mp3"
 
 class Sound {
 public:

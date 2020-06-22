@@ -1,7 +1,7 @@
 #include "Sound.h"
 
 void Sound::openMP3() {
-    mciSendString(GAMESOUND(testmusic.mp3), NULL, 0, NULL);
+    mciSendString(GAMESOUND(SOUNDS_BACKGROUND), NULL, 0, NULL);
 }
 
 void Sound::playOnRepeatMP3() {

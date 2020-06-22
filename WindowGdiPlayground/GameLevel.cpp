@@ -28,7 +28,7 @@ void GameLevel::rotateBckgnd(float& angle) {
 
 void GameLevel::Initialize() {
 	if(!initialised) {
-		loadSprite(GAMESPRITE(Wallpaper.jpg), m_pBackgroundSprite);
+		loadSprite(GAMESPRITE(SPRITE_BACKGROUND), m_pBackgroundSprite);
 		initialised = true;
 	}
 }

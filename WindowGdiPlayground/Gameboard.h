@@ -1,5 +1,5 @@
 #pragma once
-#include "Graphics.h"
+#include "Backend\Graphics.h"
 #include <memory>
 
 struct Borders {
@@ -23,7 +23,7 @@ private:
 		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const;
 		void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const;
 		void assignCellNum(const int& num);
-		void setTileType(const tiletype& type);
+		void setTileType(tiletype&& type);
 		D2D1_POINT_2F getSize() const;
 	private:
 		int cellnum;

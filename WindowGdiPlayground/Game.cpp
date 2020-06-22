@@ -7,8 +7,8 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {1000.0f, 600.0f}),
-    m_Level(m_gfx, 20, 20),
-    CellSpaceDrawCenter({ 110.0f,100.0f }),
+    m_Level(m_gfx, LEVEL_1_SIZE),
+    CellSpaceDrawCenter({ 11.0f,10.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -54,11 +54,6 @@ void Game::updateGameState() {
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
 
- //   if (m_Level.h_Board().isInside(m_Sonic.getPosition())) {
- //       m_log.putMessage(L"YES");
- //   }
- //   else
- //   m_log.putMessage(L"NO");
 }
 
 void Game::composeFrame() {
@@ -83,19 +78,19 @@ void Game::LoadLevel(GameLevel& level) {
 
 void Game::execCommand(std::wstring& command) {
     if (command == L"$MOVER") {
-        CellSpaceDrawCenter.x+= 10.0f;
+        CellSpaceDrawCenter.x+= 1.0f;
     }
     if (command == L"$MOVEL") {
-        CellSpaceDrawCenter.x -= 10.0f;
+        CellSpaceDrawCenter.x -= 1.0f;
     }
     if (command == L"$MOVEU") {
-        CellSpaceDrawCenter.y -= 10.0f;
+        CellSpaceDrawCenter.y -= 1.0f;
     }
     if (command == L"$MOVED") {
-        CellSpaceDrawCenter.y += 10.0f;
+        CellSpaceDrawCenter.y += 1.0f;
     }
     if (command == L"$COORDS") {
-        std::wstring str = L"World: " + std::to_wstring(CellSpaceDrawCenter.x) + L"; " + std::to_wstring(CellSpaceDrawCenter.y) + L"|| Cell: " + std::to_wstring(CellSpaceDrawCenter.x / 10.0f * 20) + L"; " + std::to_wstring(CellSpaceDrawCenter.y / 10.0f);
+        std::wstring str = L"World: " + std::to_wstring(CellSpaceDrawCenter.x) + L"; " + std::to_wstring(CellSpaceDrawCenter.y) + L"|| Cell: " + std::to_wstring(static_cast<int>(CellSpaceDrawCenter.x * 20)) + L"; " + std::to_wstring(static_cast<int>(CellSpaceDrawCenter.y));
         m_log.putMessage(str.c_str());
     }
     m_log.putMessage(command.c_str());

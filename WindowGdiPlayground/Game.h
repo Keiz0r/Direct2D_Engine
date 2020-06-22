@@ -1,18 +1,20 @@
 #pragma once
 #include "Keyboard.h"
-#include "Graphics.h"
+#include "Backend\Graphics.h"
 #include "FrameTimer.h"
 #include "Sonic.h"
 #include "GameLevel.h"
 #include <string>
-#include "Sound.h"
+#include "Backend\Sound.h"
 #include "Log.h"
 #include "GameConsole.h"
 #include <thread>
 #include <memory>
 #include "Obstacles.h"
 #include <condition_variable>
+
 //Prob needs an "INPUT" class with CMDthread managing
+
 class Game {
 public:
 	Game(const HWND &hwnd, Keyboard& kbd);
@@ -33,7 +35,7 @@ private:
 	FrameTimer ft;
 	Sonic m_Sonic;
 	GameLevel m_Level;
-	D2D1_POINT_2F CellSpaceDrawCenter;
+	D2D1_POINT_2F CellSpaceDrawCenter;	//
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;
 

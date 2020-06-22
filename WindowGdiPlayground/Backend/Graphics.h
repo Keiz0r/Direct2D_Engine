@@ -1,10 +1,10 @@
 #pragma once
 #include "windows.h"
-#include ".\Backend\Direct2D.h"
-#include ".\Backend\Wic.h"
-#include ".\Backend\DWrite.h"
+#include "Direct2D.h"
+#include "Wic.h"
+#include "DWrite.h"
 #include <type_traits>
-#include ".\Lists\SpriteList.h"
+#include ".\Lists\AssetsList.h"
 
 template<class Interface>
 inline void SafeRelease(Interface** ppInterfaceToRelease) {

@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\WindowGdiPlayground</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -148,50 +148,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Backend\Direct2D.cpp" />
+    <ClCompile Include="Backend\DWrite.cpp" />
+    <ClCompile Include="Backend\Graphics.cpp" />
+    <ClCompile Include="Backend\Sound.cpp" />
+    <ClCompile Include="Backend\Wic.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="GameConsole.cpp" />
-    <ClCompile Include="Direct2D.cpp" />
-    <ClCompile Include="DWrite.cpp" />
     <ClCompile Include="FrameTimer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gameboard.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="GameLevel.cpp" />
-    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="mainWindow.cpp" />
     <ClCompile Include="Obstacles.cpp" />
     <ClCompile Include="Sonic.cpp" />
-    <ClCompile Include="Sound.cpp" />
-    <ClCompile Include="Wic.cpp" />
     <ClCompile Include="WindowGdiPlayground.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Animations.h" />
-    <ClInclude Include="Background.h" />
+    <ClInclude Include="Backend\Direct2D.h" />
+    <ClInclude Include="Backend\Dsound.h" />
+    <ClInclude Include="Backend\DWrite.h" />
+    <ClInclude Include="Backend\Graphics.h" />
+    <ClInclude Include="Backend\Sound.h" />
+    <ClInclude Include="Backend\Wic.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="GameConsole.h" />
-    <ClInclude Include="Direct2D.h" />
-    <ClInclude Include="Dsound.h" />
-    <ClInclude Include="DWrite.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gameboard.h" />
+    <ClInclude Include="Lists\Animations.h" />
+    <ClInclude Include="Lists\LevelData.h" />
+    <ClInclude Include="Lists\AssetsList.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="GameLevel.h" />
-    <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="mainWindow.h" />
     <ClInclude Include="Obstacles.h" />
     <ClInclude Include="Sonic.h" />
     <ClInclude Include="AnimationData.h" />
-    <ClInclude Include="Sound.h" />
-    <ClInclude Include="Wic.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Sonics.png" />
-    <Image Include="Sprites_Sonic_Modern.png" />
-    <Image Include="Wallpaper.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

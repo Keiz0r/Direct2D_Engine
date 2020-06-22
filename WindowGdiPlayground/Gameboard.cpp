@@ -17,7 +17,7 @@ GameBoard::~GameBoard() {
 
 void GameBoard::Initialize() {
     if (!initialised) {
-        loadSprite(GAMESPRITE(GroundSprites.png), m_pTilesSprite);
+        loadSprite(GAMESPRITE(SPRITE_WORLD_TILES), m_pTilesSprite);
         initialised = true;
     }
     fillBoard();
@@ -35,7 +35,7 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
-    int CellSpaceCenterCoord = ((CenterCoord.x / amountOfspaceInCellx) * boardWidth) + CenterCoord.y / amountOfspaceInCelly;
+    int CellSpaceCenterCoord = (CenterCoord.x * boardWidth) + CenterCoord.y;
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
 
     if (CellSpaceDrawCoord < 0) {
@@ -160,7 +160,7 @@ void GameBoard::BoardCell::assignCellNum(const int& num) {
     cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(const tiletype& type){
+void GameBoard::BoardCell::setTileType(tiletype&& type){
     tileType = type;
 }
 
