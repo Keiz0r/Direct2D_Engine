@@ -12,7 +12,7 @@ public:
 	GameBoard(Graphics& p_gfx, const int& width, const int& height);
 	~GameBoard();
 	void Initialize();
-	void drawBoardCells(const D2D1_POINT_2F& CenterCoord);
+	void drawBoardCells(const D2D1_POINT_2F& CameraCoord);
 	void fillBoard();
 private:
 	class BoardCell {

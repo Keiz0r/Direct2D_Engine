@@ -23,7 +23,7 @@ void GameBoard::Initialize() {
     fillBoard();
 }
 
-void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
+void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
     //only positive coords
 
     //make a translation function between coordinatespaces that returns cellspacedrawcoord
@@ -35,7 +35,7 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CenterCoord) {
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
-    int CellSpaceCenterCoord = (CenterCoord.x * boardWidth) + CenterCoord.y;
+    int CellSpaceCenterCoord = (CameraCoord.x * boardWidth) + CameraCoord.y;
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
 
     if (CellSpaceDrawCoord < 0) {
@@ -113,6 +113,7 @@ void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
 }
 
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
+    // draws cell unit on screen using screen's coordinates
     D2D1_RECT_F tileCoords;
     float doubleH = 1.0f;
     switch (tileType) {

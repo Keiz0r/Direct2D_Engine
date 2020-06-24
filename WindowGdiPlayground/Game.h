@@ -35,7 +35,7 @@ private:
 	FrameTimer ft;
 	Sonic m_Sonic;
 	GameLevel m_Level;
-	D2D1_POINT_2F CellSpaceDrawCenter;	//
+	D2D1_POINT_2F CameraCenter;	//
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;
 

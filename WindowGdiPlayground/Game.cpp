@@ -8,7 +8,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {1000.0f, 600.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
-    CellSpaceDrawCenter({ 11.0f,10.0f }),
+    CameraCenter({ 11.0f,10.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -36,17 +36,17 @@ void Game::gameLoop(){
 void Game::updateGameState() {
     const float dt = ft.Mark();
     //clip world coords
-    if (CellSpaceDrawCenter.x < 0.0f) {
-        CellSpaceDrawCenter.x = 0.0f;
+    if (CameraCenter.x < 0.0f) {
+        CameraCenter.x = 0.0f;
     }
-    else if (CellSpaceDrawCenter.x > 190.0f) {
-        CellSpaceDrawCenter.x = 190.0f;
+    else if (CameraCenter.x > 190.0f) {
+        CameraCenter.x = 190.0f;
     }
-    if (CellSpaceDrawCenter.y < 0.0f) {
-        CellSpaceDrawCenter.y = 0.0f;
+    if (CameraCenter.y < 0.0f) {
+        CameraCenter.y = 0.0f;
     }
-    else if (CellSpaceDrawCenter.y > 190.0f) {
-        CellSpaceDrawCenter.y = 190.0f;
+    else if (CameraCenter.y > 190.0f) {
+        CameraCenter.y = 190.0f;
     }
 
     m_Sonic.update();
@@ -57,7 +57,7 @@ void Game::updateGameState() {
 }
 
 void Game::composeFrame() {
-    m_Level.draw(CellSpaceDrawCenter);
+    m_Level.draw(CameraCenter);
 
     
 
@@ -78,19 +78,19 @@ void Game::LoadLevel(GameLevel& level) {
 
 void Game::execCommand(std::wstring& command) {
     if (command == L"$MOVER") {
-        CellSpaceDrawCenter.x+= 1.0f;
+        CameraCenter.x+= 1.0f;
     }
     if (command == L"$MOVEL") {
-        CellSpaceDrawCenter.x -= 1.0f;
+        CameraCenter.x -= 1.0f;
     }
     if (command == L"$MOVEU") {
-        CellSpaceDrawCenter.y -= 1.0f;
+        CameraCenter.y -= 1.0f;
     }
     if (command == L"$MOVED") {
-        CellSpaceDrawCenter.y += 1.0f;
+        CameraCenter.y += 1.0f;
     }
     if (command == L"$COORDS") {
-        std::wstring str = L"World: " + std::to_wstring(CellSpaceDrawCenter.x) + L"; " + std::to_wstring(CellSpaceDrawCenter.y) + L"|| Cell: " + std::to_wstring(static_cast<int>(CellSpaceDrawCenter.x * 20)) + L"; " + std::to_wstring(static_cast<int>(CellSpaceDrawCenter.y));
+        std::wstring str = L"World: " + std::to_wstring(CameraCenter.x) + L"; " + std::to_wstring(CameraCenter.y) + L"|| Cell: " + std::to_wstring(static_cast<int>(CameraCenter.x * 20)) + L"; " + std::to_wstring(static_cast<int>(CameraCenter.y));
         m_log.putMessage(str.c_str());
     }
     m_log.putMessage(command.c_str());

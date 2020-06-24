@@ -1,0 +1,30 @@
+To implement height levels, make several layers of GameGrid.
+cells would probably need height value, and some value to identify if it needs to be drawn at all (if it is not visible cuz of upper layer existence)
+Question - transitions between height levels
+
+Good time to implement UI, maybe a DEBUG UI, with coords and such, so it is not actually retarded to test
+draw UI in Photoshop? yeah, probably
+
+Learn shit - make graphics a library and compile separately - be a BIG BOI
+
+Finally implement a MOUSE FFS
+
+Make all objects as obstacles, don't draw trees as part of ground tiles, but separate objects
+
+Procedural generator class. Gets the defined [X Y] matrix of the world, and fills up cells with type, obstacles, heightlevels etc. Make it produce rivers and shit.
+Types of environment [forest/lavacave/Ice/Neon/Whatever]
+
+LAN - UDP can wait, test shits with TCP. GIMME 2 PLAYAS
+Deathmatch mode / COOP mode
+Somehow inmplement user-made assets, like spraypaints in CS. Could be models (needs standartization), sounds, levels
+
+SQL - NEXT GODDAMN BIG THING. Keepin user data/ scores/ levels
+
+Mechanics:
+Abilities should be droppable and Slottable and Upgradeable
+Certain Avatars have certain starting(maybe unique?) abilities. Make it essential to mechanics, to promote co-op
+Don't bother with complicated Loot System. way too much for this game. Maybe no loot at all, and focus on abilties
+
+
+Player class, which has class [Avatar], and stuff like HP, Ability slots, etc.
+Draw player in the cameracenter, and move world accordingly

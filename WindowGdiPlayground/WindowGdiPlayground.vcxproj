@@ -189,6 +189,9 @@
     <ClInclude Include="Sonic.h" />
     <ClInclude Include="AnimationData.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODOs.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
