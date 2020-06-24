@@ -54,6 +54,12 @@ void GameConsole::setInput(const char& c) {
 	input = (input + jo);
 }
 
+void GameConsole::removeInput() {
+	if (input.size()) {
+		input.erase(input.end() - 1);
+	}
+}
+
 std::wstring GameConsole::getInput() {
 	std::wstring temp{ input };
 	input = {};

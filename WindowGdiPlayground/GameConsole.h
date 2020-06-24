@@ -11,6 +11,7 @@ public:
 	bool isActive() const;
 	bool isActiveInput() const;
 	void setInput(const char& c);
+	void removeInput();
 	std::wstring getInput();
 private:
 	bool active = false;

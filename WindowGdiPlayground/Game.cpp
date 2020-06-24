@@ -148,6 +148,10 @@ void Game::commandInput() {
                     str_GameCommand = m_console.getInput();
                     keyboardBlock = 8;
                 }
+                else if ((*m_kbd).keyIsPressed(VK_BACK)) {
+                    m_console.removeInput();
+                    keyboardBlock = 4;
+                }
                 else if (!(*m_kbd).charIsEmpty()) {
                     m_console.setInput((*m_kbd).readChar());
                 }
