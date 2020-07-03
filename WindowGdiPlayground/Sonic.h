@@ -4,8 +4,11 @@
 
 class Sonic {
 public:
-	enum Action {
+	enum class Action {
 		Idle, RRun, LRun, Jump
+	};
+	enum class Facing {
+		N, NE, E, SE, S, SW, W, NW
 	};
 	Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position);
 	~Sonic();
@@ -34,10 +37,12 @@ private:
 	ID2D1Bitmap* m_pSprite;
 	bool initialised = false;
 	bool facingRight = true;
-	int currentState = Idle;
+	int currentState = to_underlying(Sonic::Action::Idle);
+	int currentFacing = to_underlying(Sonic::Facing::NE);
 	bool animationChanged = false;
 	unsigned int timeFrameCounter = 0u;
 	unsigned short int currentFrameNum = 0u;
 	AnimationData IdleAnimation;
-	AnimationData RunAnimation;
+	AnimationData RunAnimation_UP;
+	AnimationData RunAnimation_LR;
 };

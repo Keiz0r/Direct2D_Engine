@@ -112,15 +112,19 @@ void Game::commandInput() {
 
             if ((*m_kbd).keyIsPressed('D')) {
                 m_Sonic.speedUp(true);
+            //   m_Sonic.speedUp(Sonic::Facing::NE);
             }
             if ((*m_kbd).keyIsPressed('A')) {
                 m_Sonic.speedUp(false);
+            //    m_Sonic.speedUp(Sonic::Facing::SW);
             }
             if ((*m_kbd).keyIsPressed('W')) {
                 m_Sonic.move(0.0f, -5.0f);
+            //    m_Sonic.speedUp(Sonic::Facing::NW);
             }
             if ((*m_kbd).keyIsPressed('S')) {
                 m_Sonic.move(0.0f, 5.0f);
+            //    m_Sonic.speedUp(Sonic::Facing::SE);
             }
 
             if ((*m_kbd).keyIsPressed(VK_OEM_3) && !consoleBlock) {   // for Tilde

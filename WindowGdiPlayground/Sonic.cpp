@@ -5,7 +5,8 @@ Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
 	m_pgfx(p_gfx),
 	m_pSprite(NULL),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
-	RunAnimation(SONIC_ANIMATION_RUN)
+	RunAnimation_UP(SONIC_ANIMATION_RUN_UP),
+	RunAnimation_LR(SONIC_ANIMATION_RUN_LR)
 {
 	Initialize(position);
 }
@@ -17,34 +18,34 @@ Sonic::~Sonic() {
 void Sonic::update() {
 	move(speed, 0.0f);
 
-	if (currentState != Jump) {
+	if (currentState != to_underlying(Sonic::Action::Jump)) {
 		clampSpeed(8.0f);
 
 		// auto set state
 		if (speed > 0.0f) {
-			setState(RRun);
+			setState(Sonic::Action::RRun);
 			facingRight = true;
 		}
 		else if (speed < 0.0f) {
-			setState(LRun);
+			setState(Sonic::Action::LRun);
 			facingRight = false;
 		}
 
-		if (currentState == RRun) {
+		if (currentState == to_underlying(Sonic::Action::RRun)) {
 			if (!speedUP) {
 				speed -= speedDecay;
 				if (speed < 0.0f) {
 					speed = 0.0f;
-					setState(Idle);
+					setState(Sonic::Action::Idle);
 				}
 			}
 		}
-		else if (currentState == LRun) {
+		else if (currentState == to_underlying(Sonic::Action::LRun)) {
 			if (!speedUP) {
 				speed += speedDecay;
 				if (speed > 0.0f) {
 					speed = 0.0f;
-					setState(Idle);
+					setState(Sonic::Action::Idle);
 				}
 			}
 		}
@@ -65,19 +66,19 @@ void Sonic::update() {
 void Sonic::draw()
 {
 	//	Idle animation
-	if (currentState == Idle) {
+	if (currentState == to_underlying(Sonic::Action::Idle)) {
 		Animate(IdleAnimation);
 	}
 	// Running animation
-	else if (currentState == RRun || currentState == LRun) {
+	else if (currentState == to_underlying(Sonic::Action::RRun) || currentState == to_underlying(Sonic::Action::LRun)) {
 		//add animations depending on speed
-		Animate(RunAnimation);
+		Animate(RunAnimation_LR);
 	}
 
 }
 
-void Sonic::setAction(Action action) {
-	currentState = action;
+void Sonic::setAction(Sonic::Action action) {
+	currentState = to_underlying(action);
 }
 
 void Sonic::setPosition(const float& x, const float& y)
@@ -115,9 +116,9 @@ D2D1_POINT_2F Sonic::getPosition() const {
 	return position;
 }
 
-void Sonic::setState(Action action) {
-	if (currentState != action) {
-		currentState = action;
+void Sonic::setState(Sonic::Action action) {
+	if (currentState != to_underlying(action)) {
+		currentState = to_underlying(action);
 		animationChanged = true;
 		currentFrameNum = 0u;
 	}
@@ -126,8 +127,10 @@ void Sonic::setState(Action action) {
 void Sonic::Animate(AnimationData& Animation) {
 	D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
-	if (timeFrameCounter > Animation.FrameTime&& currentFrameNum < Animation.TotalFrames) {
+	// frame switcher
+	if (timeFrameCounter > Animation.FrameTime && currentFrameNum < Animation.TotalFrames) {
 		currentFrameNum++;
+		// frames reset
 		if (currentFrameNum == Animation.TotalFrames) {
 			currentFrameNum = 0u;
 		}
@@ -135,7 +138,7 @@ void Sonic::Animate(AnimationData& Animation) {
 	}
 	// Apply necessary transformations
 	m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
-	m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, { (currentFrameNum * (Animation.Width + Animation.Stride)) + Animation.BatchStartx, Animation.BatchStarty, ((currentFrameNum * (Animation.Stride + Animation.Width)) + Animation.Width) + Animation.BatchStartx, Animation.BatchStarty + Animation.Height });
+	m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
 	//	go back from mirrored sprites
 	m_pgfx.restoreDefaultDrawingParameters();
 }

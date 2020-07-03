@@ -28,3 +28,6 @@ Don't bother with complicated Loot System. way too much for this game. Maybe no 
 
 Player class, which has class [Avatar], and stuff like HP, Ability slots, etc.
 Draw player in the cameracenter, and move world accordingly
+
+Make sonic 8d animations, move keys -> add to directional vector value. process sonic movement inside class
+Draw him based on position, but later draw with fixed screencenter. copy position-based drawing for other players/npcs
