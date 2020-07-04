@@ -111,28 +111,16 @@ void Game::commandInput() {
             }
 
             //  movements
-            if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('W')) {
-                m_Sonic.speedUp(Sonic::Direction::N);
-            }
-            else if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('S')) {
-                m_Sonic.speedUp(Sonic::Direction::E);
-            }
-            else if((*m_kbd).keyIsPressed('D')){
+            if((*m_kbd).keyIsPressed('D')){
                 m_Sonic.speedUp(Sonic::Direction::NE);
             }
-            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('W')) {
-                m_Sonic.speedUp(Sonic::Direction::W);
-            }
-            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('S')) {
-                m_Sonic.speedUp(Sonic::Direction::S);
-            }
-            else if ((*m_kbd).keyIsPressed('A') ){
+            if ((*m_kbd).keyIsPressed('A') ){
                 m_Sonic.speedUp(Sonic::Direction::SW);
             }
-            else if ((*m_kbd).keyIsPressed('W')) {
+            if ((*m_kbd).keyIsPressed('W')) {
                 m_Sonic.speedUp(Sonic::Direction::NW);
             }
-            else if ((*m_kbd).keyIsPressed('S')) {
+            if ((*m_kbd).keyIsPressed('S')) {
                 m_Sonic.speedUp(Sonic::Direction::SE);
             }
 
