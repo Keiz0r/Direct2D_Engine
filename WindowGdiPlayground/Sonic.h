@@ -25,7 +25,7 @@ private:
 	void Animate(AnimationData& Animation);
 	void Initialize(const D2D1_POINT_2F& position);
 	void loadSprite();
-	void clampVelocity(const float& topSpeed);
+	void clampVelocity();
 private:
 	Graphics& m_pgfx;
 	D2D1_POINT_2F position;

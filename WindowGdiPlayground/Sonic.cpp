@@ -186,7 +186,7 @@ void Sonic::speedUp(Sonic::Direction direction) {
 		velocity.y -= diagonalAccel;
 		break;
 	}
-	clampVelocity(maxVelocity);
+	clampVelocity();
 	speedUP = true;
 }
 
@@ -250,8 +250,8 @@ void Sonic::loadSprite() {
 	m_pgfx.loadD2DBitmap(GAMESPRITE(SPRITE_SONIC), 0, m_pSprite);
 }
 
-void Sonic::clampVelocity(const float& maxVel) {
-	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVel * maxVel) {
+void Sonic::clampVelocity() {
+	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVelocity* maxVelocity) {
 		//calc direction, make new vel vector with same direction, but max speed scalar
 		float length = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
 		D2D1_POINT_2F DirectionVector = { velocity.x / length, velocity.y / length };
