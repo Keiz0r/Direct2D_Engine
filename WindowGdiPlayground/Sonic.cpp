@@ -265,5 +265,9 @@ void Sonic::loadSprite() {
 void Sonic::clampVelocity(const float& maxVel) {
 	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVel * maxVel) {
 		//calc direction, make new vel vector with same direction, but max speed scalar
+		float length = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+		D2D1_POINT_2F DirectionVector = { velocity.x / length, velocity.y / length };
+		velocity.x = DirectionVector.x * maxVelocity;
+		velocity.y = DirectionVector.y * maxVelocity;
 	}
 }
