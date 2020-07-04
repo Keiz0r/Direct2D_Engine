@@ -109,13 +109,13 @@ void Sonic::update() {
 
 	//count frame
 	timeFrameCounter++;
-	if (animationChanged) {
+	if (animationChanged || directionChanged) {
 		timeFrameCounter = 0u;
 		animationChanged = false;
+		directionChanged = false;
 	}
 	//reset flag
 	speedUP = false;
-	directionChanged = false;
 }
 
 void Sonic::draw()
