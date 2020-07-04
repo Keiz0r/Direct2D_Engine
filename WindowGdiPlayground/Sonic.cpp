@@ -170,96 +170,32 @@ void Sonic::speedUp(Sonic::Direction direction) {
 	float diagonalMaxVel = sqrt((maxVelocity * maxVelocity) / 2);
 	switch (direction) {
 	case Sonic::Direction::N:
-		if (velocity.y + acceleration < maxVelocity) {
-			velocity.y += acceleration;
-		}
-		else {
-			velocity.y = maxVelocity;
-		}
+		velocity.y += acceleration;
 		break;
 	case Sonic::Direction::E:
-		if (velocity.x + acceleration < maxVelocity) {
-			velocity.x += acceleration;
-		}
-		else {
-			velocity.x = maxVelocity;
-		}
+		velocity.x += acceleration;
 		break;
 	case Sonic::Direction::S:
-		if (velocity.y - acceleration > -1 * maxVelocity) {
-			velocity.y -= acceleration;
-		}
-		else {
-			velocity.y = -1* maxVelocity;
-		}
+		velocity.y -= acceleration;
 		break;
 	case Sonic::Direction::W:
-		if (velocity.x - acceleration > -1 * maxVelocity) {
-			velocity.x -= acceleration;
-		}
-		else {
-			velocity.x = -1 * maxVelocity;
-		}
+		velocity.x -= acceleration;
 		break;
 	case Sonic::Direction::NE:
 		velocity.x += diagonalAccel;
 		velocity.y += diagonalAccel;
-		if (currentDirection != direction) {
-	
-		}
-		else {
-			if (velocity.x > diagonalMaxVel) {
-				velocity.x = diagonalMaxVel;
-			}
-			if (velocity.y > diagonalMaxVel) {
-				velocity.y = diagonalMaxVel;
-			}
-		}
 		break;
 	case Sonic::Direction::SW:
 		velocity.x -= diagonalAccel;
 		velocity.y -= diagonalAccel;
-		if (currentDirection != direction) {
-	
-		}
-		else {
-			if (velocity.x < -1 * diagonalMaxVel) {
-				velocity.x = -1 * diagonalMaxVel;
-			}				  
-			if (velocity.y < -1 * diagonalMaxVel) {
-				velocity.y = -1 * diagonalMaxVel;
-			}
-		}
 		break;
 	case Sonic::Direction::NW:
 		velocity.x -= diagonalAccel;
 		velocity.y += diagonalAccel;
-		if (currentDirection != direction) {
-	
-		}
-		else {
-			if (velocity.x < -1 * diagonalMaxVel) {
-				velocity.x = -1 * diagonalMaxVel;
-			}
-			if (velocity.y > diagonalMaxVel) {
-				velocity.y = diagonalMaxVel;
-			}
-		}
 		break;
 	case Sonic::Direction::SE:
 		velocity.x += diagonalAccel;
 		velocity.y -= diagonalAccel;
-		if (currentDirection != direction) {
-	
-		}
-		else {
-			if (velocity.x > diagonalMaxVel) {
-				velocity.x = diagonalMaxVel;
-			}
-			if (velocity.y < -1 * diagonalMaxVel) {
-				velocity.y = -1 * diagonalMaxVel;
-			}
-		}
 		break;
 	}
 	clampVelocity(maxVelocity);
@@ -328,6 +264,6 @@ void Sonic::loadSprite() {
 
 void Sonic::clampVelocity(const float& maxVel) {
 	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVel * maxVel) {
-
+		//calc direction, make new vel vector with same direction, but max speed scalar
 	}
 }
