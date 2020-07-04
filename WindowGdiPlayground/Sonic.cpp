@@ -5,8 +5,13 @@ Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
 	m_pgfx(p_gfx),
 	m_pSprite(NULL),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
-	RunAnimation_UP(SONIC_ANIMATION_RUN_UP),
-	RunAnimation_LR(SONIC_ANIMATION_RUN_LR)
+	RunAnimation_N(SONIC_ANIMATION_RUN_N),
+	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),
+	RunAnimation_E(SONIC_ANIMATION_RUN_E),
+	RunAnimation_SE(SONIC_ANIMATION_RUN_SE),
+	RunAnimation_S(SONIC_ANIMATION_RUN_S),
+	RunAnimation_W(SONIC_ANIMATION_RUN_W),
+	RunAnimation_NW(SONIC_ANIMATION_RUN_NW)
 {
 	Initialize(position);
 }
@@ -16,35 +21,84 @@ Sonic::~Sonic() {
 }
 
 void Sonic::update() {
-	move(speed, 0.0f);
+	move();
 
-	if (currentState != to_underlying(Sonic::Action::Jump)) {
-		clampSpeed(8.0f);
-
-		// auto set state
-		if (speed > 0.0f) {
-			setState(Sonic::Action::RRun);
-			facingRight = true;
-		}
-		else if (speed < 0.0f) {
-			setState(Sonic::Action::LRun);
-			facingRight = false;
-		}
-
-		if (currentState == to_underlying(Sonic::Action::RRun)) {
-			if (!speedUP) {
-				speed -= speedDecay;
-				if (speed < 0.0f) {
-					speed = 0.0f;
-					setState(Sonic::Action::Idle);
+	if (currentState != Sonic::Action::Jump) {
+		if (speedUP) {
+			// auto setting one of 8 directional states based on velocity
+			// x velocity is pos
+			if (velocity.x > 0.0001f) {
+				if (velocity.y > 0.0001f) {
+					setDirection(Sonic::Direction::NE);
+				}
+				else if (velocity.y < -0.0001f) {
+					setDirection(Sonic::Direction::SE);
+				}
+				else {
+					setDirection(Sonic::Direction::E);
 				}
 			}
+			// x velocity is neg
+			else if (velocity.x < -0.0001f) {
+				if (velocity.y > 0.0001f) {
+					setDirection(Sonic::Direction::NW);
+				}
+				else if (velocity.y < -0.0001f) {
+					setDirection(Sonic::Direction::SW);
+				}
+				else {
+					setDirection(Sonic::Direction::W);
+				}
+			}
+			// if x velocity doesn't exist
+			else {
+				if (velocity.y > 0.0001f) {
+					setDirection(Sonic::Direction::N);
+				}
+				else if (velocity.y < -0.0001f) {
+					setDirection(Sonic::Direction::S);
+				}
+			}
+			setState(Sonic::Action::Run);
 		}
-		else if (currentState == to_underlying(Sonic::Action::LRun)) {
-			if (!speedUP) {
-				speed += speedDecay;
-				if (speed > 0.0f) {
-					speed = 0.0f;
+		else {
+			//speed decay, if no speedup was applied
+			if (currentState == Sonic::Action::Run) {
+				//if (velo - velodecay) doesnt change sign -> decay; else set to 0
+				if (velocity.x > 0.0001f) {
+					if (velocity.x - acceleration /2 > 0.0001f) {
+						velocity.x -= acceleration /2;
+					}
+					else {
+						velocity.x = 0.0f;
+					}
+				}
+				else if (velocity.x < -0.0001f) {
+					if (velocity.x + acceleration /2 < -0.0001f) {
+						velocity.x += acceleration /2;
+					}
+					else {
+						velocity.x = 0.0f;
+					}
+				}
+				if (velocity.y > 0.0001f) {
+					if (velocity.y - acceleration /2 > 0.0001f) {
+						velocity.y -= acceleration /2;
+					}
+					else {
+						velocity.y = 0.0f;
+					}
+				}
+				else if (velocity.y < -0.0001f) {
+					if (velocity.y + acceleration /2 < -0.0001f) {
+						velocity.y += acceleration /2;
+					}
+					else {
+						velocity.y = 0.0f;
+					}
+				}
+				//absolute velocity is around 0
+				if ( velocity.x > -0.0001f && velocity.x < 0.0001f && velocity.y > -0.0001f && velocity.y < 0.0001f) {
 					setState(Sonic::Action::Idle);
 				}
 			}
@@ -61,24 +115,48 @@ void Sonic::update() {
 	}
 	//reset flag
 	speedUP = false;
+	directionChanged = false;
 }
 
 void Sonic::draw()
 {
 	//	Idle animation
-	if (currentState == to_underlying(Sonic::Action::Idle)) {
+	if (currentState == Sonic::Action::Idle) {
 		Animate(IdleAnimation);
 	}
 	// Running animation
-	else if (currentState == to_underlying(Sonic::Action::RRun) || currentState == to_underlying(Sonic::Action::LRun)) {
+	else if (currentState == Sonic::Action::Run) {
 		//add animations depending on speed
-		Animate(RunAnimation_LR);
+		switch(currentDirection) {
+		case Sonic::Direction::N:
+			Animate(RunAnimation_N);
+			break;
+		case Sonic::Direction::NE:
+			facingRight = true;
+			Animate(RunAnimation_SW_NE);
+			break;
+		case Sonic::Direction::E:
+			Animate(RunAnimation_E);
+			break;
+		case Sonic::Direction::SE:
+			Animate(RunAnimation_SE);
+			break;
+		case Sonic::Direction::S:
+			Animate(RunAnimation_S);
+			break;
+		case Sonic::Direction::SW:
+			facingRight = false;
+			Animate(RunAnimation_SW_NE);
+			break;
+		case Sonic::Direction::W:
+			Animate(RunAnimation_W);
+			break;
+		case Sonic::Direction::NW:
+			Animate(RunAnimation_NW);
+			break;
+		}
 	}
 
-}
-
-void Sonic::setAction(Sonic::Action action) {
-	currentState = to_underlying(action);
 }
 
 void Sonic::setPosition(const float& x, const float& y)
@@ -87,25 +165,110 @@ void Sonic::setPosition(const float& x, const float& y)
 	position.y = y;
 }
 
-void Sonic::speedUp(const bool& move) {
-	if (move) {
-		speed += 0.5f;
+void Sonic::speedUp(Sonic::Direction direction) {
+	float diagonalAccel = sqrt((acceleration * acceleration) / 2);
+	float diagonalMaxVel = sqrt((maxVelocity * maxVelocity) / 2);
+	switch (direction) {
+	case Sonic::Direction::N:
+		if (velocity.y + acceleration < maxVelocity) {
+			velocity.y += acceleration;
+		}
+		else {
+			velocity.y = maxVelocity;
+		}
+		break;
+	case Sonic::Direction::E:
+		if (velocity.x + acceleration < maxVelocity) {
+			velocity.x += acceleration;
+		}
+		else {
+			velocity.x = maxVelocity;
+		}
+		break;
+	case Sonic::Direction::S:
+		if (velocity.y - acceleration > -1 * maxVelocity) {
+			velocity.y -= acceleration;
+		}
+		else {
+			velocity.y = -1* maxVelocity;
+		}
+		break;
+	case Sonic::Direction::W:
+		if (velocity.x - acceleration > -1 * maxVelocity) {
+			velocity.x -= acceleration;
+		}
+		else {
+			velocity.x = -1 * maxVelocity;
+		}
+		break;
+	case Sonic::Direction::NE:
+		velocity.x += diagonalAccel;
+		velocity.y += diagonalAccel;
+		if (currentDirection != direction) {
+	
+		}
+		else {
+			if (velocity.x > diagonalMaxVel) {
+				velocity.x = diagonalMaxVel;
+			}
+			if (velocity.y > diagonalMaxVel) {
+				velocity.y = diagonalMaxVel;
+			}
+		}
+		break;
+	case Sonic::Direction::SW:
+		velocity.x -= diagonalAccel;
+		velocity.y -= diagonalAccel;
+		if (currentDirection != direction) {
+	
+		}
+		else {
+			if (velocity.x < -1 * diagonalMaxVel) {
+				velocity.x = -1 * diagonalMaxVel;
+			}				  
+			if (velocity.y < -1 * diagonalMaxVel) {
+				velocity.y = -1 * diagonalMaxVel;
+			}
+		}
+		break;
+	case Sonic::Direction::NW:
+		velocity.x -= diagonalAccel;
+		velocity.y += diagonalAccel;
+		if (currentDirection != direction) {
+	
+		}
+		else {
+			if (velocity.x < -1 * diagonalMaxVel) {
+				velocity.x = -1 * diagonalMaxVel;
+			}
+			if (velocity.y > diagonalMaxVel) {
+				velocity.y = diagonalMaxVel;
+			}
+		}
+		break;
+	case Sonic::Direction::SE:
+		velocity.x += diagonalAccel;
+		velocity.y -= diagonalAccel;
+		if (currentDirection != direction) {
+	
+		}
+		else {
+			if (velocity.x > diagonalMaxVel) {
+				velocity.x = diagonalMaxVel;
+			}
+			if (velocity.y < -1 * diagonalMaxVel) {
+				velocity.y = -1 * diagonalMaxVel;
+			}
+		}
+		break;
 	}
-	else {
-		speed -= 0.5f;
-	}
+	clampVelocity(maxVelocity);
 	speedUP = true;
 }
 
-void Sonic::setFacing(const bool& facingright)
-{
-	facingRight = facingright;
-}
-
-void Sonic::move(const float& x, const float& y)
-{
-	position.x += x;
-	position.y += y;
+void Sonic::move() {
+	position.x += velocity.x;
+	position.y += velocity.y;
 }
 
 void Sonic::setScalar(const float& scalar) {
@@ -116,9 +279,16 @@ D2D1_POINT_2F Sonic::getPosition() const {
 	return position;
 }
 
+void Sonic::setDirection(Direction direction) {
+	if (currentDirection != direction) {
+		currentDirection = direction;
+		directionChanged = true;
+	}
+}
+
 void Sonic::setState(Sonic::Action action) {
-	if (currentState != to_underlying(action)) {
-		currentState = to_underlying(action);
+	if (currentState != action) {
+		currentState = action;
 		animationChanged = true;
 		currentFrameNum = 0u;
 	}
@@ -156,11 +326,8 @@ void Sonic::loadSprite() {
 	m_pgfx.loadD2DBitmap(GAMESPRITE(SPRITE_SONIC), 0, m_pSprite);
 }
 
-void Sonic::clampSpeed(const float& topSpeed) {
-	if (speed > topSpeed) {
-		speed = topSpeed;
-	}
-	else if (speed < (-1) * topSpeed) {
-		speed = (-1) * topSpeed;
+void Sonic::clampVelocity(const float& maxVel) {
+	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVel * maxVel) {
+
 	}
 }

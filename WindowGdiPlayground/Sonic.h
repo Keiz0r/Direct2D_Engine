@@ -5,44 +5,50 @@
 class Sonic {
 public:
 	enum class Action {
-		Idle, RRun, LRun, Jump
+		Idle, Run, Jump
 	};
-	enum class Facing {
+	enum class Direction {
 		N, NE, E, SE, S, SW, W, NW
 	};
 	Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position);
 	~Sonic();
 	void update();
 	void draw();	// TODO : add various animations depending on speed
-	void setAction(Action action);
 	void setPosition(const float& x, const float& y);
-	void speedUp(const bool& move);
-	void setFacing(const bool& facingright);
-	void move(const float& x, const float& y);
+	void speedUp(Direction direction);
+	void move();
 	void setScalar(const float& scalar);
 	D2D1_POINT_2F getPosition() const;
 private:
+	void setDirection(Direction direction);
 	void setState(Action action);
 	void Animate(AnimationData& Animation);
 	void Initialize(const D2D1_POINT_2F& position);
 	void loadSprite();
-	void clampSpeed(const float& topSpeed);
+	void clampVelocity(const float& topSpeed);
 private:
 	Graphics& m_pgfx;
 	D2D1_POINT_2F position;
-	float speed = 0.0f;
+	float acceleration = 0.5f;
+	D2D1_POINT_2F velocity = { 0.0f, 0.0f };
+	float maxVelocity = 6.0f;
 	bool speedUP = false;
-	float speedDecay = 0.22f;
 	float m_fScalar = 1.0f;
 	ID2D1Bitmap* m_pSprite;
 	bool initialised = false;
 	bool facingRight = true;
-	int currentState = to_underlying(Sonic::Action::Idle);
-	int currentFacing = to_underlying(Sonic::Facing::NE);
+	Sonic::Action currentState = Sonic::Action::Idle;
+	Sonic::Direction currentDirection = Sonic::Direction::NE;
 	bool animationChanged = false;
+	bool directionChanged = false;
 	unsigned int timeFrameCounter = 0u;
 	unsigned short int currentFrameNum = 0u;
 	AnimationData IdleAnimation;
-	AnimationData RunAnimation_UP;
-	AnimationData RunAnimation_LR;
+	AnimationData RunAnimation_N;
+	AnimationData RunAnimation_SW_NE;
+	AnimationData RunAnimation_E;
+	AnimationData RunAnimation_SE;
+	AnimationData RunAnimation_S;
+	AnimationData RunAnimation_W;
+	AnimationData RunAnimation_NW;
 };

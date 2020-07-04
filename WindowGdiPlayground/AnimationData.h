@@ -14,7 +14,7 @@ struct AnimationData {
 		float rowShift = 0.0f;
 		for (int j = 0; j < animationRows; j++) {
 			for (int i = 0; i < FramesInARow; i++) {
-				frameCoords.emplace<D2D1_RECT_F>(frameCoords.begin() + i, { (i * movingFramePoint) + BatchStartx, BatchStarty + rowShift, ((i * movingFramePoint) + Width) + BatchStartx, BatchStarty + Height + rowShift });
+				frameCoords.emplace_back<D2D1_RECT_F>({ (i * movingFramePoint) + BatchStartx, BatchStarty + rowShift, ((i * movingFramePoint) + Width) + BatchStartx, BatchStarty + Height + rowShift });
 			}
 			rowShift += Height + 1.0f;
 		}

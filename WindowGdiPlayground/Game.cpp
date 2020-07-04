@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_Sonic(m_gfx, {1000.0f, 600.0f}),
+    m_Sonic(m_gfx, {500.0f, 400.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
     CameraCenter({ 11.0f,10.0f }),
     m_obstacles(m_gfx, m_log)
@@ -110,21 +110,30 @@ void Game::commandInput() {
                 execCommand(str_GameCommand);
             }
 
-            if ((*m_kbd).keyIsPressed('D')) {
-                m_Sonic.speedUp(true);
-            //   m_Sonic.speedUp(Sonic::Facing::NE);
+            //  movements
+            if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('W')) {
+                m_Sonic.speedUp(Sonic::Direction::N);
             }
-            if ((*m_kbd).keyIsPressed('A')) {
-                m_Sonic.speedUp(false);
-            //    m_Sonic.speedUp(Sonic::Facing::SW);
+            else if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('S')) {
+                m_Sonic.speedUp(Sonic::Direction::E);
             }
-            if ((*m_kbd).keyIsPressed('W')) {
-                m_Sonic.move(0.0f, -5.0f);
-            //    m_Sonic.speedUp(Sonic::Facing::NW);
+            else if((*m_kbd).keyIsPressed('D')){
+                m_Sonic.speedUp(Sonic::Direction::NE);
             }
-            if ((*m_kbd).keyIsPressed('S')) {
-                m_Sonic.move(0.0f, 5.0f);
-            //    m_Sonic.speedUp(Sonic::Facing::SE);
+            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('W')) {
+                m_Sonic.speedUp(Sonic::Direction::W);
+            }
+            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('S')) {
+                m_Sonic.speedUp(Sonic::Direction::S);
+            }
+            else if ((*m_kbd).keyIsPressed('A') ){
+                m_Sonic.speedUp(Sonic::Direction::SW);
+            }
+            else if ((*m_kbd).keyIsPressed('W')) {
+                m_Sonic.speedUp(Sonic::Direction::NW);
+            }
+            else if ((*m_kbd).keyIsPressed('S')) {
+                m_Sonic.speedUp(Sonic::Direction::SE);
             }
 
             if ((*m_kbd).keyIsPressed(VK_OEM_3) && !consoleBlock) {   // for Tilde
