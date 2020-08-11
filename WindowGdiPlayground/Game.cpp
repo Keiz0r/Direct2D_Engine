@@ -77,6 +77,8 @@ void Game::LoadLevel(GameLevel& level) {
 }
 
 void Game::execCommand(std::wstring& command) {
+    // Console input
+    // TODO: network input
     if (command == L"$MOVER") {
         CameraCenter.x+= 1.0f;
     }
