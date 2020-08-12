@@ -5,12 +5,10 @@ Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
 	m_pgfx(p_gfx),
 	m_pSprite(NULL),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
-	RunAnimation_N(SONIC_ANIMATION_RUN_N),
+	RunAnimation_N_W(SONIC_ANIMATION_RUN_N_W),
 	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),
-	RunAnimation_E(SONIC_ANIMATION_RUN_E),
+	RunAnimation_S_E(SONIC_ANIMATION_RUN_S_E),
 	RunAnimation_SE(SONIC_ANIMATION_RUN_SE),
-	RunAnimation_S(SONIC_ANIMATION_RUN_S),
-	RunAnimation_W(SONIC_ANIMATION_RUN_W),
 	RunAnimation_NW(SONIC_ANIMATION_RUN_NW)
 {
 	Initialize(position);
@@ -129,27 +127,31 @@ void Sonic::draw()
 		//add animations depending on speed
 		switch(currentDirection) {
 		case Sonic::Direction::N:
-			Animate(RunAnimation_N);
+			facingRight = true;
+			Animate(RunAnimation_N_W);
 			break;
 		case Sonic::Direction::NE:
 			facingRight = true;
 			Animate(RunAnimation_SW_NE);
 			break;
 		case Sonic::Direction::E:
-			Animate(RunAnimation_E);
+			facingRight = true;
+			Animate(RunAnimation_S_E);
 			break;
 		case Sonic::Direction::SE:
 			Animate(RunAnimation_SE);
 			break;
 		case Sonic::Direction::S:
-			Animate(RunAnimation_S);
+			facingRight = false;
+			Animate(RunAnimation_S_E);
 			break;
 		case Sonic::Direction::SW:
 			facingRight = false;
 			Animate(RunAnimation_SW_NE);
 			break;
 		case Sonic::Direction::W:
-			Animate(RunAnimation_W);
+			facingRight = false;
+			Animate(RunAnimation_N_W);
 			break;
 		case Sonic::Direction::NW:
 			Animate(RunAnimation_NW);
@@ -264,9 +266,10 @@ void Sonic::loadSprite() {
 }
 
 void Sonic::clampVelocity() {
-	if (velocity.x * velocity.x + velocity.y * velocity.y > maxVelocity* maxVelocity) {
+	float velVectorLength = velocity.x * velocity.x + velocity.y * velocity.y;
+	if (velVectorLength > maxVelocity * maxVelocity) {
 		//calc direction, make new vel vector with same direction, but max speed scalar
-		float length = sqrt(velocity.x * velocity.x + velocity.y * velocity.y);
+		float length = sqrt(velVectorLength);
 		D2D1_POINT_2F DirectionVector = { velocity.x / length, velocity.y / length };
 		velocity.x = DirectionVector.x * maxVelocity;
 		velocity.y = DirectionVector.y * maxVelocity;

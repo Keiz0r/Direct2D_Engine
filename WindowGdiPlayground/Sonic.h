@@ -44,11 +44,9 @@ private:
 	unsigned int timeFrameCounter = 0u;
 	unsigned short int currentFrameNum = 0u;
 	AnimationData IdleAnimation;
-	AnimationData RunAnimation_N;
+	AnimationData RunAnimation_N_W;
 	AnimationData RunAnimation_SW_NE;
-	AnimationData RunAnimation_E;
+	AnimationData RunAnimation_S_E;
 	AnimationData RunAnimation_SE;
-	AnimationData RunAnimation_S;
-	AnimationData RunAnimation_W;
 	AnimationData RunAnimation_NW;
 };

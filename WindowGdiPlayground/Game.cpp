@@ -156,7 +156,7 @@ void Game::commandInput() {
 
         }
         else {
-            //case of console input
+            //case of active console input
             if (!keyboardBlock) {
                 if ((*m_kbd).keyIsPressed(VK_RETURN)) {
                     m_console.activateInput();
