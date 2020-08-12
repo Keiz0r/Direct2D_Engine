@@ -77,6 +77,8 @@ void Game::LoadLevel(GameLevel& level) {
 }
 
 void Game::execCommand(std::wstring& command) {
+    // Console input
+    // TODO: network input
     if (command == L"$MOVER") {
         CameraCenter.x+= 1.0f;
     }
@@ -111,16 +113,28 @@ void Game::commandInput() {
             }
 
             //  movements
-            if((*m_kbd).keyIsPressed('D')){
+            if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('W')) {
+                m_Sonic.speedUp(Sonic::Direction::N);
+            }
+            else if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('S')) {
+                m_Sonic.speedUp(Sonic::Direction::E);
+            }
+            else if((*m_kbd).keyIsPressed('D')) {
                 m_Sonic.speedUp(Sonic::Direction::NE);
             }
-            if ((*m_kbd).keyIsPressed('A') ){
+            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('W')) {
+                m_Sonic.speedUp(Sonic::Direction::W);
+            }
+            else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('S')) {
+                m_Sonic.speedUp(Sonic::Direction::S);
+            }
+            else if ((*m_kbd).keyIsPressed('A')) {
                 m_Sonic.speedUp(Sonic::Direction::SW);
             }
-            if ((*m_kbd).keyIsPressed('W')) {
+            else if ((*m_kbd).keyIsPressed('W')) {
                 m_Sonic.speedUp(Sonic::Direction::NW);
             }
-            if ((*m_kbd).keyIsPressed('S')) {
+            else if ((*m_kbd).keyIsPressed('S')) {
                 m_Sonic.speedUp(Sonic::Direction::SE);
             }
 
@@ -142,7 +156,7 @@ void Game::commandInput() {
 
         }
         else {
-            //case of console input
+            //case of active console input
             if (!keyboardBlock) {
                 if ((*m_kbd).keyIsPressed(VK_RETURN)) {
                     m_console.activateInput();
