@@ -170,6 +170,18 @@ void Sonic::speedUp(Sonic::Direction direction) {
 	//float diagonalAccel = sqrt((acceleration * acceleration) / 2);
 	//float diagonalMaxVel = sqrt((maxVelocity * maxVelocity) / 2);
 	switch (direction) {
+	case Sonic::Direction::N:
+		velocity.y += acceleration;
+		break;
+	case Sonic::Direction::E:
+		velocity.x += acceleration;
+		break;
+	case Sonic::Direction::W:
+		velocity.x -= acceleration;
+		break;
+	case Sonic::Direction::S:
+		velocity.y -= acceleration;
+		break;
 	case Sonic::Direction::NE:
 		velocity.x += diagonalAccel;
 		velocity.y += diagonalAccel;
