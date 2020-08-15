@@ -246,8 +246,17 @@ void Sonic::Animate(AnimationData& Animation) {
 		timeFrameCounter = 0u;
 	}
 	// Apply necessary transformations
-	m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
-	m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+	//for screen coords
+	if (ScreencenteredDrawing) {
+		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { 683.0, 384.0 }, m_fScalar, m_fScalar, !facingRight);
+		float drawrectstartX = (1366.0 - Animation.Width) / 2;
+		float drawrectstartY = (768.0 - Animation.Height) / 2;
+		m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+	}
+	else {
+		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
+		m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+	}
 	//	go back from mirrored sprites
 	m_pgfx.restoreDefaultDrawingParameters();
 }

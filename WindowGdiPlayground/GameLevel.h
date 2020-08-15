@@ -1,5 +1,4 @@
 #pragma once
-#include "Backend\Graphics.h"
 #include "Gameboard.h"
 #include "Lists\LevelData.h"
 
@@ -19,4 +18,6 @@ private:
 	ID2D1Bitmap* m_pBackgroundSprite;
 	bool initialised = false;
 	float bkgndRttnAngl = 0.0f;
+	
+	D2D1_RECT_F m_Borders;
 };

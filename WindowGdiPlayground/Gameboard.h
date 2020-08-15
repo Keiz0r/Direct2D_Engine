@@ -2,11 +2,6 @@
 #include "Backend\Graphics.h"
 #include <memory>
 
-struct Borders {
-	float left;
-	float right;
-};
-
 class GameBoard {
 public:
 	GameBoard(Graphics& p_gfx, const int& width, const int& height);
@@ -14,6 +9,7 @@ public:
 	void Initialize();
 	void drawBoardCells(const D2D1_POINT_2F& CameraCoord);
 	void fillBoard();
+	D2D1_POINT_2F getBoardSize() const;
 private:
 	class BoardCell {
 	public:
@@ -40,8 +36,8 @@ private:
 	int boardWidth;
 	int boardHeight;
 	D2D1_POINT_2F worldCoordinatesSize;
-	static constexpr float amountOfspaceInCellx = 10.0f;
-	static constexpr float amountOfspaceInCelly = 10.0f;
+	static constexpr float amountOfspaceInCellx = 50.0f;
+	static constexpr float amountOfspaceInCelly = 50.0f;
 	int CellsDrawnx = 17;
 	int CellsDrawny = 17;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;

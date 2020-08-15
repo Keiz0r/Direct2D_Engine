@@ -49,4 +49,6 @@ private:
 	AnimationData RunAnimation_S_E;
 	AnimationData RunAnimation_SE;
 	AnimationData RunAnimation_NW;
+
+	bool ScreencenteredDrawing = true;	//Swith to screen coordinates
 };

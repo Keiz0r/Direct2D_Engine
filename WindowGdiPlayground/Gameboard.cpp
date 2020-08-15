@@ -35,6 +35,11 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
     float shiftx = boardcells[0].getSize().x / 2.0f;
     float shifty = boardcells[0].getSize().y / 2.0f;
 
+    float camToCellCoordsX = ((worldCoordinatesSize.x / 2) + CameraCoord.x);    // camera to cell coords
+//    ((worldCoordinatesSize.x  / 2) + CameraCoord.x) / amountOfspaceInCellx  //determine cell¹
+    float Sdvig = camToCellCoordsX % amountOfspaceInCellx; //remainder (insidecell)
+
+
     int CellSpaceCenterCoord = (CameraCoord.x * boardWidth) + CameraCoord.y;
     int CellSpaceDrawCoord = CellSpaceCenterCoord - (CellsDrawny / 2) - ((CellsDrawnx / 2) * boardHeight);
 
@@ -96,6 +101,7 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
 }
 
 void GameBoard::fillBoard() {
+    //function to use parser from file, which describes said level
     boardcells = std::make_unique<BoardCell[]>(boardWidth * boardHeight);
     for (float j = 0.0f; j < static_cast<float>(boardHeight); j += 1.0f) {
         for (float i = 0.0f; i < static_cast<float>(boardWidth); i += 1.0f) {
@@ -106,6 +112,10 @@ void GameBoard::fillBoard() {
     boardcells[48].setTileType(GameBoard::BoardCell::tiletype::Tree1_DoubleH);
     boardcells[63].setTileType(GameBoard::BoardCell::tiletype::Water1);
     boardcells[106].setTileType(GameBoard::BoardCell::tiletype::Water2);
+}
+
+D2D1_POINT_2F GameBoard::getBoardSize() const {
+    return worldCoordinatesSize;
 }
 
 void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {

@@ -1,3 +1,3 @@
 #pragma once
-//						Level Width, Level Height (Cells)
-#define LEVEL_1_SIZE		     20,	   	   20
+//						Width (cells), Height (Cells)
+#define LEVEL_1_SIZE		       20,	   		   20
