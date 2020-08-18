@@ -34,3 +34,5 @@ Draw him based on position, but later draw with fixed screencenter. copy positio
 
 Allocate all sprite resources in a separate class and link other classes to it. (and probably sounds later)
 This is done not to allocate same png multiple times for multiple same class objects
+
+->		GameBoard::BoardCell::draw -don't calculate every frame

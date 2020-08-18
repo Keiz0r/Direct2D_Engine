@@ -30,14 +30,14 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
     int temp_clsdrwny = CellsDrawny;
     int temp_clsdrwnx = CellsDrawnx;
 
-    float offsetx = 600.0f;
-    float offsety = -350.0f;
-    float shiftx = boardcells[0].getSize().x / 2.0f;
-    float shifty = boardcells[0].getSize().y / 2.0f;
+    float offsetx = 1366.0f / 2.0f;
+    float offsety = 768.0f / -2.0f;
+    float shiftx = BoardCell::cellwidth / 2.0f;    // over /2 because they are isometric so net tile is shifted half x half y
+    float shifty = BoardCell::cellheight / 2.0f;
 
-    float camToCellCoordsX = ((worldCoordinatesSize.x / 2) + CameraCoord.x);    // camera to cell coords
+ //   float camToCellCoordsX = ((worldCoordinatesSize.x / 2) + CameraCoord.x);    // camera to cell coords
 //    ((worldCoordinatesSize.x  / 2) + CameraCoord.x) / amountOfspaceInCellx  //determine cell¹
-    float Sdvig = camToCellCoordsX % amountOfspaceInCellx; //remainder (insidecell)
+//    float indent = camToCellCoordsX % amountOfspaceInCellx; //remainder (insidecell)
 
 
     int CellSpaceCenterCoord = (CameraCoord.x * boardWidth) + CameraCoord.y;
@@ -118,12 +118,63 @@ D2D1_POINT_2F GameBoard::getBoardSize() const {
     return worldCoordinatesSize;
 }
 
+void GameBoard::draw(const D2D1_POINT_2F& position) {
+//    centralCellcoords = fucntionofCamera(const D2D1_POINT_2F & CameraCoord);  //just use return value later in next call
+//    fromToIndexes = functionThatCalculates(centralCellcoords);
+//    drawBoardCells(); proc with draw for loops where indent is take into account.. central cell in the center of the screen +- indent.
+//    remember that x and y in world and screen are different!
+    newDraw(position);
+}
+
 void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
     m_pgfx.loadD2DBitmap(name, 0, sprite);
 }
 
+D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) const {
+    //normalizing position to be within one tile, relative to bottom left corner
+    D2D1_POINT_2F normalizedAbsPosition = { fmodf((amountOfspaceInCellx / 2.0f) + position.x, amountOfspaceInCellx), fmodf((amountOfspaceInCellx / 2.0f) + position.y, amountOfspaceInCelly) };    //equivalent of % but for float
+    //reinterpreting negative values as positive (translation to another tile)
+    if (normalizedAbsPosition.x < 0.0f) {
+        normalizedAbsPosition.x = amountOfspaceInCellx + normalizedAbsPosition.x;
+    }
+    if (normalizedAbsPosition.y < 0.0f) {
+        normalizedAbsPosition.y = amountOfspaceInCelly + normalizedAbsPosition.y;
+    }
+    return normalizedAbsPosition;
+}
+
+int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
+    static D2D1_POINT_2F boardCenter = { amountOfspaceInCellx * boardWidth / 2.0f, amountOfspaceInCelly * boardHeight / 2.0f }; // coord from border (real 0  of axis)
+    return (static_cast<int>((position.x + boardCenter.x) / amountOfspaceInCellx)) * boardHeight +
+        static_cast<int>((position.y + boardCenter.y) / amountOfspaceInCelly);   //cast is floor towards 0;
+}
+
+D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& cartesianVector) const {
+    D2D1_POINT_2F isometric{ cartesianVector.x + cartesianVector.y , (cartesianVector.x - cartesianVector.y) / ((BoardCell::cellwidth / BoardCell::cellheight) / (BoardCell::cellheight / amountOfspaceInCelly))};
+    return isometric;
+}
+
+void GameBoard::newDraw(const D2D1_POINT_2F& position) {
+    static D2D1_POINT_2F baseindent = { 1366.0f / 2.0f - screenBasisVector.x, 768.0f / 2.0f - screenBasisVector.y / 2.0f }; //centering screen
+
+    //input position is relative to world center -> tile bottom left
+    D2D1_POINT_2F normalizedAbsPosition = normalizePositionToTile(position);
+
+    //calculating indentation in world coords
+
+    D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
+
+    D2D1_POINT_2F translatedIndent = toIsometric(indent);
+    D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - translatedIndent.x), (baseindent.y - translatedIndent.y) };    //rotate vector to match screen coords
+
+    //centralTileindex sees correct. problem in indentation
+
+    boardcells[getCentralTileIndex(position)].draw(m_pgfx, m_pTilesSprite, ScreenSpaceDrawCoords);
+    boardcells[getCentralTileIndex(position)].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
+}
+
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
-    // draws cell unit on screen using screen's coordinates
+    // draws cell unit on screen using screen's coordinates  From Top-left corner
     D2D1_RECT_F tileCoords;
     float doubleH = 1.0f;
     switch (tileType) {
@@ -154,7 +205,7 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
         break;
     }
 
-    p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y - cellheight * doubleH}, 1.0f, tileCoords);
+    p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight * doubleH}, 1.0f, tileCoords);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x + cellwidth, coords.y, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x, coords.y - cellheight, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y - cellheight, coords.x + cellwidth, coords.y - cellheight, borderThickness);
@@ -173,9 +224,4 @@ void GameBoard::BoardCell::assignCellNum(const int& num) {
 
 void GameBoard::BoardCell::setTileType(tiletype&& type){
     tileType = type;
-}
-
-D2D1_POINT_2F GameBoard::BoardCell::getSize() const
-{
-    return {cellwidth, cellheight};
 }

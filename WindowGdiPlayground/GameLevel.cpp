@@ -14,14 +14,15 @@ GameLevel::~GameLevel() {
 	SafeRelease(&m_pBackgroundSprite);
 }
 
-void GameLevel::draw(const D2D1_POINT_2F& CenterCoord) {
-	D2D1_POINT_2F screencenter{ 1366.0f / 2, 768.0f / 2 };
+void GameLevel::draw(const D2D1_POINT_2F& position) {
+	D2D1_POINT_2F screencenter{ 1366.0f / 2.0f, 768.0f / 2.0f };
 	// Apply necessary transformations
 	m_pgfx.transformTRSM(0.0f, 0.0f, bkgndRttnAngl, screencenter, 1.0f, 1.0f, false);
 	m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, 1366.0f, 768.0f }, 1.0f, { 0.0f, 0.0f, 1366.0f, 768.0f });
 	//	go back from mirrored sprites
 	m_pgfx.restoreDefaultDrawingParameters();
-	m_board.drawBoardCells(CenterCoord);
+//	m_board.drawBoardCells(position);
+	m_board.draw(position);
 }
 
 void GameLevel::rotateBckgnd(float& angle) {
