@@ -234,6 +234,7 @@ void Sonic::setState(Sonic::Action action) {
 }
 
 void Sonic::Animate(AnimationData& Animation) {
+	D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
 	D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
 	// frame switcher
@@ -248,9 +249,9 @@ void Sonic::Animate(AnimationData& Animation) {
 	// Apply necessary transformations
 	//for screen coords
 	if (ScreencenteredDrawing) {
-		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { 683.0, 384.0 }, m_fScalar, m_fScalar, !facingRight);
-		float drawrectstartX = (1366.0 - Animation.Width) / 2;
-		float drawrectstartY = (768.0 - Animation.Height) / 2;
+		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+		float drawrectstartX = (screensize.width - Animation.Width) / 2;
+		float drawrectstartY = (screensize.height - Animation.Height) / 2;
 		m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
 	}
 	else {

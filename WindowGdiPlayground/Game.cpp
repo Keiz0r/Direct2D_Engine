@@ -45,11 +45,9 @@ void Game::updateGameState() {
 void Game::composeFrame() {
     m_Level.draw(m_Sonic.getPosition());
 
-    
-
     {
         std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG
-        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { 1366.0f / 2.0f - 20.0f, 768.0f / 2.0f - 60.0f,  1366.0f / 2.0f + 180.0f, 768.0f / 2.0f - 25.0f });  //DEBUG
+        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { m_gfx.getScreenSize().width / 2.0f - 20.0f, m_gfx.getScreenSize().height / 2.0f - 60.0f,  m_gfx.getScreenSize().width / 2.0f + 180.0f, m_gfx.getScreenSize().height / 2.0f - 25.0f });  //DEBUG
         m_Sonic.draw();
     }
 

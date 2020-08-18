@@ -4,6 +4,7 @@ Graphics::Graphics(const HWND& hwnd)
     :
     d2d(hwnd)
 {
+    screensize = d2d.getRenderTarget()->GetSize();
 }
 
 Graphics::~Graphics() {
@@ -80,4 +81,8 @@ void Graphics::transformTRSM(const float& Translatex, const float& Translatey, c
 HRESULT Graphics::loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap) {
     HRESULT hr = d2d.getRenderTarget()->CreateBitmapFromWicBitmap(Wic.getConvertedBitmap(filename, frameNum), &pOutBitmap);
     return hr;
+}
+
+D2D1_SIZE_F Graphics::getScreenSize() const {
+    return screensize;
 }

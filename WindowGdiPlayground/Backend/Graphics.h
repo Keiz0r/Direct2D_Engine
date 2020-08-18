@@ -15,8 +15,7 @@ inline void SafeRelease(Interface** ppInterfaceToRelease) {
 };
 
 template <typename E>
-constexpr auto to_underlying(E e) noexcept
-{
+constexpr auto to_underlying(E e) noexcept {
     return static_cast<std::underlying_type_t<E>>(e);
 }
 
@@ -43,8 +42,10 @@ public:
     void translateDrawing(const float& x, const float& y) const;
     void transformTRSM(const float& Translatex, const float& Translatey, const float& RotationAngle, const D2D1_POINT_2F& ImageCenter, const float& Scalex, const float& Scaley, const bool& mirrored) const;
     HRESULT loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap);
+    D2D1_SIZE_F getScreenSize() const;
 private:
     Direct2D d2d;
     Wic Wic;
     Dwrite dwrite;
+    D2D1_SIZE_F screensize;
 };

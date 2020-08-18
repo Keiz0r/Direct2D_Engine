@@ -30,8 +30,8 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
     int temp_clsdrwny = CellsDrawny;
     int temp_clsdrwnx = CellsDrawnx;
 
-    float offsetx = 1366.0f / 2.0f;
-    float offsety = 768.0f / -2.0f;
+    float offsetx = m_pgfx.getScreenSize().width / 2.0f;
+    float offsety = m_pgfx.getScreenSize().height / -2.0f;
     float shiftx = BoardCell::cellwidth / 2.0f;    // over /2 because they are isometric so net tile is shifted half x half y
     float shifty = BoardCell::cellheight / 2.0f;
 
@@ -157,8 +157,9 @@ D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) 
 }
 
 void GameBoard::newDraw(const D2D1_POINT_2F& position) {
+    D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
     static const float playerLegOffset = 30.0f / 2.0f;
-    static D2D1_POINT_2F baseindent = { (1366.0f / 2.0f) - screenBasisVector.x, (768.0f / 2.0f) - screenBasisVector.y + playerLegOffset }; //centering screen
+    static D2D1_POINT_2F baseindent = { (screensize.width / 2.0f) - screenBasisVector.x, (screensize.height / 2.0f) - screenBasisVector.y + playerLegOffset }; //centering screen
     //input position is relative to world center -> tile bottom left
     D2D1_POINT_2F normalizedAbsPosition = normalizePositionToTile(position);
     D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
@@ -170,47 +171,20 @@ void GameBoard::newDraw(const D2D1_POINT_2F& position) {
 }
 
 void GameBoard::drawGeneratedTile() const {
+    D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
     static const float playerLegOffset = 30.0f / 2.0f;
     D2D1_RECT_F testrect{ -25.0f, 25.0f, 25.0f, -25.0f };
-    m_pgfx.transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { 1366.0f / 2.0f, 768.0f / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
-    m_pgfx.DrawRect({ 1366.0f / 2.0f + testrect.left, 768.0f / 2.0f - testrect.top, 1366.0f / 2.0f + testrect.right, 768.0f / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
+    m_pgfx.transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
+    m_pgfx.DrawRect({ screensize.width / 2.0f + testrect.left, screensize.height / 2.0f - testrect.top, screensize.width / 2.0f + testrect.right,screensize.height / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
     m_pgfx.restoreDefaultDrawingParameters();
 
 }
 
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
     // draws cell unit on screen using screen's coordinates  From Top-left corner
-    D2D1_RECT_F tileCoords;
-    float doubleH = 1.0f;
-    switch (tileType) {
-    case GameBoard::BoardCell::tiletype::White:
-        tileCoords = { 0.0f, 0.0f, 159.0f, 90.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Contour_Black:
-        tileCoords = { 163.0f, 0.0f, 319.0f, 90.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::ContourI_Black:
-        tileCoords = { 484.0f, 0.0f, 639.0f, 90.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Black:
-        tileCoords = { 323.0f, 0.0f, 477.0f, 90.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Grass:
-        tileCoords = { 0.0f, 100.0f, 159.0f, 190.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Water1:
-        tileCoords = { 160.0f, 100.0f, 318.0f, 190.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Water2:
-        tileCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
-        break;
-    case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
-        tileCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
-        doubleH = 2.0f;
-        break;
-    }
+    
 
-    p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight * doubleH}, 1.0f, tileCoords);
+    p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight * doubleTextureHeight}, 1.0f, TextureCoords);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x + cellwidth, coords.y, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x, coords.y - cellheight, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y - cellheight, coords.x + cellwidth, coords.y - cellheight, borderThickness);
@@ -229,4 +203,31 @@ void GameBoard::BoardCell::assignCellNum(const int& num) {
 
 void GameBoard::BoardCell::setTileType(tiletype&& type){
     tileType = type;
+    switch (tileType) {
+    case GameBoard::BoardCell::tiletype::White:
+        TextureCoords = { 0.0f, 0.0f, 159.0f, 90.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Contour_Black:
+        TextureCoords = { 163.0f, 0.0f, 319.0f, 90.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::ContourI_Black:
+        TextureCoords = { 484.0f, 0.0f, 639.0f, 90.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Black:
+        TextureCoords = { 323.0f, 0.0f, 477.0f, 90.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Grass:
+        TextureCoords = { 0.0f, 100.0f, 159.0f, 190.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Water1:
+        TextureCoords = { 160.0f, 100.0f, 318.0f, 190.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Water2:
+        TextureCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
+        break;
+    case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
+        TextureCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
+        doubleTextureHeight = 2.0f;
+        break;
+    }
 }

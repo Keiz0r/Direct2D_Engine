@@ -25,6 +25,8 @@ private:
 	private:
 		int cellnum;
 		tiletype tileType;
+		D2D1_RECT_F TextureCoords;
+		float doubleTextureHeight = 1.0f;
 		static constexpr float cellwidth = 160.0f;// / 1.41f;	//in pixels
 		static constexpr float cellheight = 80.0f;// / 1.41f;
 	};
