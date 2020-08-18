@@ -8,7 +8,6 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_console(m_gfx, m_log),
     m_Sonic(m_gfx, {0.0f, 0.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
-    CameraCenter({ 11.0f,10.0f }),
     m_obstacles(m_gfx, m_log)
 {
     m_Level.Initialize();
@@ -35,19 +34,6 @@ void Game::gameLoop(){
 
 void Game::updateGameState() {
     const float dt = ft.Mark();
-    //clip world coords
-    if (CameraCenter.x < 0.0f) {
-        CameraCenter.x = 0.0f;
-    }
-    else if (CameraCenter.x > 190.0f) {
-        CameraCenter.x = 190.0f;
-    }
-    if (CameraCenter.y < 0.0f) {
-        CameraCenter.y = 0.0f;
-    }
-    else if (CameraCenter.y > 190.0f) {
-        CameraCenter.y = 190.0f;
-    }
 
     m_Sonic.update();
     m_Level.rotateBckgnd(rotor);
@@ -79,20 +65,20 @@ void Game::LoadLevel(GameLevel& level) {
 void Game::execCommand(std::wstring& command) {
     // Console input
     // TODO: network input
-    if (command == L"$MOVER") {
-        CameraCenter.x+= 1.0f;
-    }
-    if (command == L"$MOVEL") {
-        CameraCenter.x -= 1.0f;
-    }
-    if (command == L"$MOVEU") {
-        CameraCenter.y -= 1.0f;
-    }
-    if (command == L"$MOVED") {
-        CameraCenter.y += 1.0f;
-    }
+//    if (command == L"$MOVER") {
+//        CameraCenter.x+= 1.0f;
+//    }
+//    if (command == L"$MOVEL") {
+//        CameraCenter.x -= 1.0f;
+//    }
+//    if (command == L"$MOVEU") {
+//        CameraCenter.y -= 1.0f;
+//    }
+//    if (command == L"$MOVED") {
+//        CameraCenter.y += 1.0f;
+//    }
     if (command == L"$COORDS") {
-        std::wstring str = L"World: " + std::to_wstring(CameraCenter.x) + L"; " + std::to_wstring(CameraCenter.y) + L"|| Cell: " + std::to_wstring(static_cast<int>(CameraCenter.x * 20)) + L"; " + std::to_wstring(static_cast<int>(CameraCenter.y));
+        std::wstring str = L"World: " + std::to_wstring(m_Sonic.getPosition().x) + L"; " + std::to_wstring(m_Sonic.getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));
         m_log.putMessage(str.c_str());
     }
     m_log.putMessage(command.c_str());

@@ -25,16 +25,17 @@ private:
 	private:
 		int cellnum;
 		tiletype tileType;
-		static constexpr float cellwidth = 160.0f;	//in pixels
-		static constexpr float cellheight = 80.0f;
+		static constexpr float cellwidth = 160.0f;// / 1.41f;	//in pixels
+		static constexpr float cellheight = 80.0f;// / 1.41f;
 	};
 private:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 private:
 	D2D1_POINT_2F normalizePositionToTile(const D2D1_POINT_2F& position) const;
 	int getCentralTileIndex(const D2D1_POINT_2F& position) const;
-	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& cartesianVector) const;
+	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const;
 	void newDraw(const D2D1_POINT_2F& position);
+	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	Graphics& m_pgfx;
 	ID2D1Bitmap* m_pTilesSprite;
 	bool initialised = false;

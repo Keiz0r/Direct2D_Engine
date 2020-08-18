@@ -149,53 +149,33 @@ int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
         static_cast<int>((position.y + boardCenter.y) / amountOfspaceInCelly);   //cast is floor towards 0;
 }
 
-D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& cartesianVector) const {
-    D2D1_POINT_2F isometric{ (cartesianVector.x + cartesianVector.y) * (1.6f) , (cartesianVector.x - cartesianVector.y) * (1.0f)};
-    //                                                                  (3.2f / 1.41f)                                              (1.6f / 1.41f)
-//    D2D1_POINT_2F isometric2 = 
+D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const {
+    static const float scalex = 1.6f; // /1.41f //tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
+    static const float scaley = 0.8f; // /1.41f
+    D2D1_POINT_2F isometric{ (VectorInRegularSpace.x + VectorInRegularSpace.y) * scalex , (VectorInRegularSpace.x - VectorInRegularSpace.y) * scaley};
     return isometric;
 }
 
 void GameBoard::newDraw(const D2D1_POINT_2F& position) {
-    static D2D1_POINT_2F baseindent = { (1366.0f / 2.0f) - screenBasisVector.x, (768.0f / 2.0f) - screenBasisVector.y + 00.0f / 2.0f }; //centering screen  //last part is sonic model height/2 to bind center point to legs
-    //                                                                                                                   30.0f / 2.0f  
+    static const float playerLegOffset = 30.0f / 2.0f;
+    static D2D1_POINT_2F baseindent = { (1366.0f / 2.0f) - screenBasisVector.x, (768.0f / 2.0f) - screenBasisVector.y + playerLegOffset }; //centering screen
     //input position is relative to world center -> tile bottom left
     D2D1_POINT_2F normalizedAbsPosition = normalizePositionToTile(position);
-
-    //calculating indentation in world coords
-
     D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
+    D2D1_POINT_2F isometricIndent = toIsometric(indent);
+    D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - isometricIndent.x), (baseindent.y - isometricIndent.y) };
+    int centraltile = getCentralTileIndex(position);
+    boardcells[centraltile].draw(m_pgfx, m_pTilesSprite, ScreenSpaceDrawCoords);
+    boardcells[centraltile].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
+}
 
-    D2D1_POINT_2F translatedIndent = toIsometric(indent);
-    D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - translatedIndent.x), (baseindent.y - translatedIndent.y) };    //rotate vector to match screen coords
-
-    //centralTileindex sees correct. problem in indentation
-//    m_pgfx.DrawLine(0.0f, baseindent.y, 1366.0f, baseindent.y, 1.0f);
-//    m_pgfx.DrawLine(baseindent.x, 0.0f, baseindent.x, 768.0f, 1.0f);
-//    m_pgfx.DrawLine(0.0f, baseindent.y + BoardCell::cellheight, 1366.0f, baseindent.y + BoardCell::cellheight, 1.0f);
-
-
-    boardcells[getCentralTileIndex(position)].draw(m_pgfx, m_pTilesSprite, ScreenSpaceDrawCoords);
-//    boardcells[getCentralTileIndex(position)].draw(m_pgfx, m_pTilesSprite, { (baseindent.x - indent.x), (baseindent.y - indent.y) });
-    boardcells[getCentralTileIndex(position)].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
-
-
-
+void GameBoard::drawGeneratedTile() const {
+    static const float playerLegOffset = 30.0f / 2.0f;
     D2D1_RECT_F testrect{ -25.0f, 25.0f, 25.0f, -25.0f };
-    D2D1_POINT_2F translatedtestx = toIsometric({-25.0f, 25.0f});
-    D2D1_POINT_2F translatedtesty = toIsometric({ 25.0f, -25.0f });
-    //origial
-//    m_pgfx.DrawRect({ 1366.0f / 2.0f + testrect.left, 768.0f / 2.0f - testrect.top, 1366.0f / 2.0f + testrect.right, 768.0f / 2.0f - testrect.bottom, }, false, Graphics::D2D_SOLID_COLORS::Black);
-    //translated
-//    m_pgfx.rotateDrawing(45.0f, { 1366.0f / 2.0f, 768.0f / 2.0f });
-//    m_pgfx.scaleDrawing( 1.0f, 0.5f, { 1366.0f / 2.0f, 768.0f / 2.0f });
-    m_pgfx.transformTRSM(0.0f, 0.0f, 45.0f, { 1366.0f / 2.0f, 768.0f / 2.0f }, 3.2f / 1.41f, 1.6f / 1.41f, false);
-    m_pgfx.DrawRect({ 1366.0f / 2.0f + testrect.left, 768.0f / 2.0f - testrect.top, 1366.0f / 2.0f + testrect.right, 768.0f / 2.0f - testrect.bottom, }, false, Graphics::D2D_SOLID_COLORS::Black);
+    m_pgfx.transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { 1366.0f / 2.0f, 768.0f / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
+    m_pgfx.DrawRect({ 1366.0f / 2.0f + testrect.left, 768.0f / 2.0f - testrect.top, 1366.0f / 2.0f + testrect.right, 768.0f / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
     m_pgfx.restoreDefaultDrawingParameters();
- //   m_pgfx.DrawRect({ 1366.0f / 2.0f + translatedtestx.x, 768.0f / 2.0f - translatedtestx.y, 1366.0f / 2.0f + translatedtesty.x, 768.0f / 2.0f - translatedtesty.y, }, false, Graphics::D2D_SOLID_COLORS::Black);
-    //crosshair
-    m_pgfx.DrawLine(0.0f, 768.0f/2.0f, 1366.0f, 768.0f / 2.0f ,1.0f);
-    m_pgfx.DrawLine(1366.0f/2.0f, 0.0f, 1366.0f / 2.0f, 768.0f, 1.0f);
+
 }
 
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
