@@ -8,19 +8,21 @@ GameBoard::GameBoard(Graphics& p_gfx, const int& width, const int& height)
     boardHeight(height)
 {
     worldCoordinatesSize = {static_cast<float>(boardWidth) * amountOfspaceInCellx, static_cast<float>(boardHeight) * amountOfspaceInCelly };
-    Initialize();
+
+    loadSprite(GAMESPRITE(SPRITE_WORLD_TILES), m_pTilesSprite);
+    fillBoard();
+
+    drawnBoardShift = { amountOfspaceInCellx / 2.0f, amountOfspaceInCelly / 2.0f };
+    if (boardWidth % 2) {
+        drawnBoardShift.x = 0.0f;
+    }
+    if (boardHeight % 2) {
+        drawnBoardShift.y = 0.0f;
+    }
 }
 
 GameBoard::~GameBoard() {
     SafeRelease(&m_pTilesSprite);
-}
-
-void GameBoard::Initialize() {
-    if (!initialised) {
-        loadSprite(GAMESPRITE(SPRITE_WORLD_TILES), m_pTilesSprite);
-        initialised = true;
-    }
-    fillBoard();
 }
 
 void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
@@ -118,6 +120,16 @@ D2D1_POINT_2F GameBoard::getBoardSize() const {
     return worldCoordinatesSize;
 }
 
+D2D1_POINT_2F GameBoard::getWorldBorders_x() const {
+    D2D1_POINT_2F borders_x{(drawnBoardShift.x - worldCoordinatesSize.x / 2.0f), worldCoordinatesSize.x / 2.0f + drawnBoardShift.x - 1.0f};
+    return borders_x;
+}
+
+D2D1_POINT_2F GameBoard::getWorldBorders_y() const {
+    D2D1_POINT_2F borders_y{ (drawnBoardShift.y - worldCoordinatesSize.y / 2.0f), worldCoordinatesSize.y / 2.0f + drawnBoardShift.y - 1.0f };
+    return borders_y;
+}
+
 void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
     m_pgfx.loadD2DBitmap(name, 0, sprite);
 }
@@ -136,9 +148,10 @@ D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) 
 }
 
 int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
-    static D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
-    return (static_cast<int>((position.x + boardCenter.x - amountOfspaceInCellx / 2.0f) / amountOfspaceInCellx)) * boardHeight +
-        static_cast<int>((position.y + boardCenter.y - amountOfspaceInCelly / 2.0f) / amountOfspaceInCelly);   //cast is floor towards 0;
+    static const D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
+    return (static_cast<int>((position.x + boardCenter.x - drawnBoardShift.x) / amountOfspaceInCellx)) * boardHeight +
+        static_cast<int>((position.y + boardCenter.y - drawnBoardShift.y) / amountOfspaceInCelly);   //cast is floor towards 0;
+    //here I account that 20x20 or any odd number of tiles has center of board in a cross. so in order to compensate do this - amountOfspaceInCellx / 2.0f
 }
 
 D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const {

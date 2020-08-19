@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_Sonic(m_gfx, {0.0f, 0.0f}), //-475,-475--border--524;524  //why is it shifted? works anyway
+    m_Sonic(m_gfx, {0.0f, 0.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx, m_log)
 {
@@ -86,17 +86,19 @@ void Game::execCommand(std::wstring& command) {
 }
 
 void Game::clampCoordinates(Sonic& sonic) {
-    if (sonic.getPosition().x > 524.0f) {
-        sonic.setPosition(524.0f, sonic.getPosition().y);
+    D2D1_POINT_2F borders_x = m_Level.h_Board().getWorldBorders_x();
+    D2D1_POINT_2F borders_y = m_Level.h_Board().getWorldBorders_y();
+    if (sonic.getPosition().x > borders_x.y) {
+        sonic.setPosition(borders_x.y, sonic.getPosition().y);
     }
-    else if (sonic.getPosition().x < -474.0f) {
-        sonic.setPosition(-474.0f, sonic.getPosition().y);
+    else if (sonic.getPosition().x < borders_x.x) {
+        sonic.setPosition(borders_x.x, sonic.getPosition().y);
     }
-    if (sonic.getPosition().y > 524.0f) {
-        sonic.setPosition(sonic.getPosition().x, 524.0f);
+    if (sonic.getPosition().y > borders_y.y) {
+        sonic.setPosition(sonic.getPosition().x, borders_y.y);
     }
-    else if (sonic.getPosition().y < -474.0f) {
-        sonic.setPosition(sonic.getPosition().x, -474.0f);
+    else if (sonic.getPosition().y < borders_y.x) {
+        sonic.setPosition(sonic.getPosition().x, borders_y.x);
     }
     
 }

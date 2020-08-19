@@ -6,10 +6,11 @@ class GameBoard {
 public:
 	GameBoard(Graphics& p_gfx, const int& width, const int& height);
 	~GameBoard();
-	void Initialize();
 	void drawBoardCells(const D2D1_POINT_2F& CameraCoord);
 	void fillBoard();
 	D2D1_POINT_2F getBoardSize() const;
+	D2D1_POINT_2F getWorldBorders_x() const;
+	D2D1_POINT_2F getWorldBorders_y() const;
 	void newDraw(const D2D1_POINT_2F& position);
 private:
 	class BoardCell {
@@ -39,7 +40,6 @@ private:
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	Graphics& m_pgfx;
 	ID2D1Bitmap* m_pTilesSprite;
-	bool initialised = false;
 	int boardWidth;
 	int boardHeight;
 	D2D1_POINT_2F worldCoordinatesSize;
@@ -49,4 +49,5 @@ private:
 	int CellsDrawnx = 17;
 	int CellsDrawny = 17;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
+	D2D1_POINT_2F drawnBoardShift;
 };
