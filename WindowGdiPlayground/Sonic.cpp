@@ -218,6 +218,10 @@ D2D1_POINT_2F Sonic::getPosition() const {
 	return position;
 }
 
+void Sonic::setMaxVelocity(const float& maxVel) {
+	maxVelocity = maxVel;
+}
+
 void Sonic::setDirection(Direction direction) {
 	if (currentDirection != direction) {
 		currentDirection = direction;

@@ -22,7 +22,7 @@ void GameLevel::draw(const D2D1_POINT_2F& position) {
 	//	go back from mirrored sprites
 	m_pgfx.restoreDefaultDrawingParameters();
 //	m_board.drawBoardCells(position);
-	m_board.draw(position);
+	m_board.newDraw(position);
 }
 
 void GameLevel::rotateBckgnd(float& angle) {

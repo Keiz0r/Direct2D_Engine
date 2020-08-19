@@ -27,12 +27,10 @@ Don't bother with complicated Loot System. way too much for this game. Maybe no 
 GOOD IDEA - Contra clone in isometry!
 
 Player class, which has class [Avatar], and stuff like HP, Ability slots, etc.
-Draw player in the cameracenter, and move world accordingly
 
-Make sonic 8d animations, move keys -> add to directional vector value. process sonic movement inside class
-Draw him based on position, but later draw with fixed screencenter. copy position-based drawing for other players/npcs
+copy position-based drawing of sonic for other players/npcs
 
 Allocate all sprite resources in a separate class and link other classes to it. (and probably sounds later)
 This is done not to allocate same png multiple times for multiple same class objects
 
-->		GameBoard::BoardCell::draw -don't calculate every frame
+camera class that does all the drawing

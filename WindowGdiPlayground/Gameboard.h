@@ -10,7 +10,7 @@ public:
 	void drawBoardCells(const D2D1_POINT_2F& CameraCoord);
 	void fillBoard();
 	D2D1_POINT_2F getBoardSize() const;
-	void draw(const D2D1_POINT_2F& position);
+	void newDraw(const D2D1_POINT_2F& position);
 private:
 	class BoardCell {
 		friend GameBoard;
@@ -21,7 +21,7 @@ private:
 		void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const;
 		void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const;
 		void assignCellNum(const int& num);
-		void setTileType(tiletype&& type);
+		void setTileType(tiletype type);
 	private:
 		int cellnum;
 		tiletype tileType;
@@ -36,7 +36,6 @@ private:
 	D2D1_POINT_2F normalizePositionToTile(const D2D1_POINT_2F& position) const;
 	int getCentralTileIndex(const D2D1_POINT_2F& position) const;
 	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const;
-	void newDraw(const D2D1_POINT_2F& position);
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	Graphics& m_pgfx;
 	ID2D1Bitmap* m_pTilesSprite;

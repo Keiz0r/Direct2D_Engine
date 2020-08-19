@@ -118,14 +118,6 @@ D2D1_POINT_2F GameBoard::getBoardSize() const {
     return worldCoordinatesSize;
 }
 
-void GameBoard::draw(const D2D1_POINT_2F& position) {
-//    centralCellcoords = fucntionofCamera(const D2D1_POINT_2F & CameraCoord);  //just use return value later in next call
-//    fromToIndexes = functionThatCalculates(centralCellcoords);
-//    drawBoardCells(); proc with draw for loops where indent is take into account.. central cell in the center of the screen +- indent.
-//    remember that x and y in world and screen are different!
-    newDraw(position);
-}
-
 void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
     m_pgfx.loadD2DBitmap(name, 0, sprite);
 }
@@ -144,9 +136,9 @@ D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) 
 }
 
 int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
-    static D2D1_POINT_2F boardCenter = { amountOfspaceInCellx * boardWidth / 2.0f, amountOfspaceInCelly * boardHeight / 2.0f }; // coord from border (real 0  of axis)
-    return (static_cast<int>((position.x + boardCenter.x) / amountOfspaceInCellx)) * boardHeight +
-        static_cast<int>((position.y + boardCenter.y) / amountOfspaceInCelly);   //cast is floor towards 0;
+    static D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
+    return (static_cast<int>((position.x + boardCenter.x - amountOfspaceInCellx / 2.0f) / amountOfspaceInCellx)) * boardHeight +
+        static_cast<int>((position.y + boardCenter.y - amountOfspaceInCelly / 2.0f) / amountOfspaceInCelly);   //cast is floor towards 0;
 }
 
 D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const {
@@ -166,6 +158,7 @@ void GameBoard::newDraw(const D2D1_POINT_2F& position) {
     D2D1_POINT_2F isometricIndent = toIsometric(indent);
     D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - isometricIndent.x), (baseindent.y - isometricIndent.y) };
     int centraltile = getCentralTileIndex(position);
+    //loop of drawsaround
     boardcells[centraltile].draw(m_pgfx, m_pTilesSprite, ScreenSpaceDrawCoords);
     boardcells[centraltile].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
 }
@@ -182,8 +175,6 @@ void GameBoard::drawGeneratedTile() const {
 
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
     // draws cell unit on screen using screen's coordinates  From Top-left corner
-    
-
     p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight * doubleTextureHeight}, 1.0f, TextureCoords);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x + cellwidth, coords.y, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x, coords.y - cellheight, borderThickness);
@@ -201,7 +192,7 @@ void GameBoard::BoardCell::assignCellNum(const int& num) {
     cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(tiletype&& type){
+void GameBoard::BoardCell::setTileType(tiletype type){
     tileType = type;
     switch (tileType) {
     case GameBoard::BoardCell::tiletype::White:

@@ -26,6 +26,7 @@ private:
 	void composeFrame();
 	void LoadLevel(GameLevel& level);
 	void execCommand(std::wstring& command);
+	void clampCoordinates(Sonic& sonic);
 private:
 	Keyboard* m_kbd;
 	HWND m_hwnd;

@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_Sonic(m_gfx, {0.0f, 0.0f}),
+    m_Sonic(m_gfx, {0.0f, 0.0f}), //-475,-475--border--524;524  //why is it shifted? works anyway
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx, m_log)
 {
@@ -36,6 +36,8 @@ void Game::updateGameState() {
     const float dt = ft.Mark();
 
     m_Sonic.update();
+    clampCoordinates(m_Sonic);
+
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
@@ -81,6 +83,22 @@ void Game::execCommand(std::wstring& command) {
     }
     m_log.putMessage(command.c_str());
     command = L"";
+}
+
+void Game::clampCoordinates(Sonic& sonic) {
+    if (sonic.getPosition().x > 524.0f) {
+        sonic.setPosition(524.0f, sonic.getPosition().y);
+    }
+    else if (sonic.getPosition().x < -474.0f) {
+        sonic.setPosition(-474.0f, sonic.getPosition().y);
+    }
+    if (sonic.getPosition().y > 524.0f) {
+        sonic.setPosition(sonic.getPosition().x, 524.0f);
+    }
+    else if (sonic.getPosition().y < -474.0f) {
+        sonic.setPosition(sonic.getPosition().x, -474.0f);
+    }
+    
 }
 
 void Game::commandInput() {

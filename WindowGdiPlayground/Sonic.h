@@ -19,6 +19,7 @@ public:
 	void move();
 	void setScalar(const float& scalar);
 	D2D1_POINT_2F getPosition() const;
+	void setMaxVelocity(const float& maxVel);
 private:
 	void setDirection(Direction direction);
 	void setState(Action action);
