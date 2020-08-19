@@ -14,6 +14,7 @@ public:
 	~Sonic();
 	void update();
 	void draw();	// TODO : add various animations depending on speed
+	void setPosition(const D2D1_POINT_2F& pos);
 	void setPosition(const float& x, const float& y);
 	void speedUp(Direction direction);
 	void move();
@@ -24,8 +25,7 @@ private:
 	void setDirection(Direction direction);
 	void setState(Action action);
 	void Animate(AnimationData& Animation);
-	void Initialize(const D2D1_POINT_2F& position);
-	void loadSprite();
+	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 	void clampVelocity();
 private:
 	Graphics& m_pgfx;
@@ -36,7 +36,6 @@ private:
 	bool speedUP = false;
 	float m_fScalar = 1.0f;
 	ID2D1Bitmap* m_pSprite;
-	bool initialised = false;
 	bool facingRight = true;
 	Sonic::Action currentState = Sonic::Action::Idle;
 	Sonic::Direction currentDirection = Sonic::Direction::NE;

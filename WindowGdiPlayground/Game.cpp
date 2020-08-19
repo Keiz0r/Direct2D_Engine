@@ -10,7 +10,6 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx, m_log)
 {
-    m_Level.Initialize();
     Sound::openMP3();
     Sound::playOnRepeatMP3();
     cmdln = std::thread([this](){this->commandInput(); });

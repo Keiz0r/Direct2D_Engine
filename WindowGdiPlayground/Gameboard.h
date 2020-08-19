@@ -6,12 +6,11 @@ class GameBoard {
 public:
 	GameBoard(Graphics& p_gfx, const int& width, const int& height);
 	~GameBoard();
-	void drawBoardCells(const D2D1_POINT_2F& CameraCoord);
 	void fillBoard();
 	D2D1_POINT_2F getBoardSize() const;
 	D2D1_POINT_2F getWorldBorders_x() const;
 	D2D1_POINT_2F getWorldBorders_y() const;
-	void newDraw(const D2D1_POINT_2F& position);
+	void Draw(const D2D1_POINT_2F& position);
 private:
 	class BoardCell {
 		friend GameBoard;
@@ -37,6 +36,7 @@ private:
 	D2D1_POINT_2F normalizePositionToTile(const D2D1_POINT_2F& position) const;
 	unsigned int getCentralTileIndex(const D2D1_POINT_2F& position) const;
 	D2D1_POINT_2U clampTileDrawingRadius(const unsigned int& centertile) const;
+	void drawBoard(unsigned int& center, D2D1_POINT_2U& drawStartEnd, D2D1_POINT_2F& centerDrawCoords) const;
 	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const;
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	Graphics& m_pgfx;
@@ -47,8 +47,8 @@ private:
 	static constexpr float amountOfspaceInCellx = 50.0f;	//world coords
 	static constexpr float amountOfspaceInCelly = 50.0f;
 	const D2D1_POINT_2F screenBasisVector = { (BoardCell::cellwidth / 2.0f), (BoardCell::cellheight / 2.0f) };
-	int tileDrawingRadius_x = 1;
-	int tileDrawingRadius_y = 1;
+	unsigned int tileDrawingRadius_x = 9;
+	unsigned int tileDrawingRadius_y = 9;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
 	D2D1_POINT_2F drawnBoardShift;
 };

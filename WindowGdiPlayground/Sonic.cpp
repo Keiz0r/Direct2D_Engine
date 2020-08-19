@@ -11,7 +11,8 @@ Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
 	RunAnimation_SE(SONIC_ANIMATION_RUN_SE),
 	RunAnimation_NW(SONIC_ANIMATION_RUN_NW)
 {
-	Initialize(position);
+	setPosition(position);
+	loadSprite(GAMESPRITE(SPRITE_SONIC), m_pSprite);
 }
 
 Sonic::~Sonic() {
@@ -116,8 +117,7 @@ void Sonic::update() {
 	speedUP = false;
 }
 
-void Sonic::draw()
-{
+void Sonic::draw() {
 	//	Idle animation
 	if (currentState == Sonic::Action::Idle) {
 		Animate(IdleAnimation);
@@ -161,8 +161,12 @@ void Sonic::draw()
 
 }
 
-void Sonic::setPosition(const float& x, const float& y)
-{
+void Sonic::setPosition(const D2D1_POINT_2F& pos) {
+	position.x = pos.x;
+	position.y = pos.y;
+}
+
+void Sonic::setPosition(const float& x, const float& y) {
 	position.x = x;
 	position.y = y;
 }
@@ -238,45 +242,38 @@ void Sonic::setState(Sonic::Action action) {
 }
 
 void Sonic::Animate(AnimationData& Animation) {
-	D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
-	D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
+	if (m_pSprite != NULL) {
+		D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
+		D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
-	// frame switcher
-	if (timeFrameCounter > Animation.FrameTime && currentFrameNum < Animation.TotalFrames) {
-		currentFrameNum++;
-		// frames reset
-		if (currentFrameNum == Animation.TotalFrames) {
-			currentFrameNum = 0u;
+		// frame switcher
+		if (timeFrameCounter > Animation.FrameTime && currentFrameNum < Animation.TotalFrames) {
+			currentFrameNum++;
+			// frames reset
+			if (currentFrameNum == Animation.TotalFrames) {
+				currentFrameNum = 0u;
+			}
+			timeFrameCounter = 0u;
 		}
-		timeFrameCounter = 0u;
-	}
-	// Apply necessary transformations
-	//for screen coords
-	if (ScreencenteredDrawing) {
-		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
-		float drawrectstartX = (screensize.width - Animation.Width) / 2;
-		float drawrectstartY = (screensize.height - Animation.Height) / 2;
-		m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
-	}
-	else {
-		m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
-		m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
-	}
-	//	go back from mirrored sprites
-	m_pgfx.restoreDefaultDrawingParameters();
-}
-
-void Sonic::Initialize(const D2D1_POINT_2F& position)
-{
-	if (!initialised) {
-	setPosition(position.x, position.y);
-	loadSprite();
-	initialised = true;
+		// Apply necessary transformations
+		//for screen coords
+		if (ScreencenteredDrawing) {
+			m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+			float drawrectstartX = (screensize.width - Animation.Width) / 2;
+			float drawrectstartY = (screensize.height - Animation.Height) / 2;
+			m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+		}
+		else {
+			m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
+			m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+		}
+		//	go back from mirrored sprites
+		m_pgfx.restoreDefaultDrawingParameters();
 	}
 }
 
-void Sonic::loadSprite() {
-	m_pgfx.loadD2DBitmap(GAMESPRITE(SPRITE_SONIC), 0, m_pSprite);
+void Sonic::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
+	m_pgfx.loadD2DBitmap(name, 0, sprite);
 }
 
 void Sonic::clampVelocity() {
