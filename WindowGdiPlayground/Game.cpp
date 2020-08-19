@@ -141,6 +141,10 @@ void Game::commandInput() {
                 m_Sonic.speedUp(Sonic::Direction::SE);
             }
 
+            if ((*m_kbd).keyIsPressed('R')) {
+                m_Sonic.blink(10);
+            }
+
             if ((*m_kbd).keyIsPressed(VK_OEM_3) && !consoleBlock) {   // for Tilde
                 m_console.activate();
                 consoleBlock += 20; 

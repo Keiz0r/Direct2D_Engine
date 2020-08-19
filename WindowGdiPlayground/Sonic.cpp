@@ -226,6 +226,10 @@ void Sonic::setMaxVelocity(const float& maxVel) {
 	maxVelocity = maxVel;
 }
 
+void Sonic::blink(const unsigned int& frames) {
+	m_blinkframes = frames;
+}
+
 void Sonic::setDirection(Direction direction) {
 	if (currentDirection != direction) {
 		currentDirection = direction;
@@ -255,20 +259,26 @@ void Sonic::Animate(AnimationData& Animation) {
 			}
 			timeFrameCounter = 0u;
 		}
-		// Apply necessary transformations
-		//for screen coords
-		if (ScreencenteredDrawing) {
-			m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
-			float drawrectstartX = (screensize.width - Animation.Width) / 2;
-			float drawrectstartY = (screensize.height - Animation.Height) / 2;
-			m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+
+		if(m_blinkframes == 0) {
+			// Apply necessary transformations
+			//for screen coords
+			if (ScreencenteredDrawing) {
+				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+				float drawrectstartX = (screensize.width - Animation.Width) / 2;
+				float drawrectstartY = (screensize.height - Animation.Height) / 2;
+				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+			}
+			else {
+				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
+				m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+			}
+			//	go back from mirrored sprites
+			m_pgfx.restoreDefaultDrawingParameters();
 		}
 		else {
-			m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
-			m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+			m_blinkframes--;
 		}
-		//	go back from mirrored sprites
-		m_pgfx.restoreDefaultDrawingParameters();
 	}
 }
 

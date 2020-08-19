@@ -21,6 +21,7 @@ public:
 	void setScalar(const float& scalar);
 	D2D1_POINT_2F getPosition() const;
 	void setMaxVelocity(const float& maxVel);
+	void blink(const unsigned int& frames);
 private:
 	void setDirection(Direction direction);
 	void setState(Action action);
@@ -41,8 +42,9 @@ private:
 	Sonic::Direction currentDirection = Sonic::Direction::NE;
 	bool animationChanged = false;
 	bool directionChanged = false;
-	unsigned int timeFrameCounter = 0u;
+	unsigned short int timeFrameCounter = 0u;
 	unsigned short int currentFrameNum = 0u;
+	unsigned short int m_blinkframes = 0;
 	AnimationData IdleAnimation;
 	AnimationData RunAnimation_N_W;
 	AnimationData RunAnimation_SW_NE;
