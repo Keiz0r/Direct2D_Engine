@@ -29,6 +29,9 @@ void GameBoard::drawBoardCells(const D2D1_POINT_2F& CameraCoord) {
     //only positive coords
 
     //make a translation function between coordinatespaces that returns cellspacedrawcoord
+   int CellsDrawny = 17;
+   int CellsDrawnx = 17;
+
     int temp_clsdrwny = CellsDrawny;
     int temp_clsdrwnx = CellsDrawnx;
 
@@ -147,11 +150,34 @@ D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) 
     return normalizedAbsPosition;
 }
 
-int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
+unsigned int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const{
     static const D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
     return (static_cast<int>((position.x + boardCenter.x - drawnBoardShift.x) / amountOfspaceInCellx)) * boardHeight +
         static_cast<int>((position.y + boardCenter.y - drawnBoardShift.y) / amountOfspaceInCelly);   //cast is floor towards 0;
     //here I account that 20x20 or any odd number of tiles has center of board in a cross. so in order to compensate do this - amountOfspaceInCellx / 2.0f
+}
+
+D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const unsigned int& centertile) const {
+    //calculate drawable indexes around central
+    D2D1_POINT_2U drawStartEnd { centertile + tileDrawingRadius_y - boardHeight * tileDrawingRadius_x, centertile - tileDrawingRadius_y + boardHeight * tileDrawingRadius_x };
+    //start topleft end bottom right (grid)
+    unsigned int availableTilesDownwards = centertile % boardHeight;
+    unsigned int availableTilesUpwards = boardHeight - availableTilesDownwards - 1;
+    unsigned int availableTilesLeftwards = centertile / boardHeight;
+    unsigned int availableTilesRightwards = boardWidth - availableTilesLeftwards - 1;
+    if (availableTilesDownwards < tileDrawingRadius_y) {
+        drawStartEnd.y += tileDrawingRadius_y - availableTilesDownwards;
+    }
+    if (availableTilesLeftwards < tileDrawingRadius_x) {    //
+        drawStartEnd.x += (tileDrawingRadius_x - availableTilesLeftwards) * boardWidth;
+    }
+    if (availableTilesUpwards < tileDrawingRadius_y) {  
+        drawStartEnd.x -= tileDrawingRadius_y - availableTilesUpwards;
+    }
+    if (availableTilesRightwards < tileDrawingRadius_x) {  
+        drawStartEnd.y -= (tileDrawingRadius_x - availableTilesRightwards) * boardWidth;
+    }
+    return drawStartEnd;
 }
 
 D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const {
@@ -170,10 +196,20 @@ void GameBoard::newDraw(const D2D1_POINT_2F& position) {
     D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
     D2D1_POINT_2F isometricIndent = toIsometric(indent);
     D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - isometricIndent.x), (baseindent.y - isometricIndent.y) };
-    int centraltile = getCentralTileIndex(position);
+    unsigned int centraltile = getCentralTileIndex(position);
     //loop of drawsaround
+
     boardcells[centraltile].draw(m_pgfx, m_pTilesSprite, ScreenSpaceDrawCoords);
     boardcells[centraltile].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
+
+    D2D1_POINT_2U drawStartEnd = clampTileDrawingRadius(centraltile);
+
+//    int shigto = (centraltile - drawStartEnd.x);
+//    for (unsigned int i = drawStartEnd.x; i <= drawStartEnd.y; i++) {
+//        D2D1_POINT_2F shift {-screenBasisVector.x * shigto, -screenBasisVector.y * shigto };
+//        boardcells[i].draw(m_pgfx, m_pTilesSprite, { ScreenSpaceDrawCoords.x + shift.x, ScreenSpaceDrawCoords.y + shift.x });
+//        boardcells[i].ShowCellNum(m_pgfx, ScreenSpaceDrawCoords);
+//    }
 }
 
 void GameBoard::drawGeneratedTile() const {

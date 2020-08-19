@@ -35,7 +35,8 @@ private:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 private:
 	D2D1_POINT_2F normalizePositionToTile(const D2D1_POINT_2F& position) const;
-	int getCentralTileIndex(const D2D1_POINT_2F& position) const;
+	unsigned int getCentralTileIndex(const D2D1_POINT_2F& position) const;
+	D2D1_POINT_2U clampTileDrawingRadius(const unsigned int& centertile) const;
 	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const;
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	Graphics& m_pgfx;
@@ -46,8 +47,8 @@ private:
 	static constexpr float amountOfspaceInCellx = 50.0f;	//world coords
 	static constexpr float amountOfspaceInCelly = 50.0f;
 	const D2D1_POINT_2F screenBasisVector = { (BoardCell::cellwidth / 2.0f), (BoardCell::cellheight / 2.0f) };
-	int CellsDrawnx = 17;
-	int CellsDrawny = 17;
+	int tileDrawingRadius_x = 1;
+	int tileDrawingRadius_y = 1;
 	std::unique_ptr<BoardCell[], std::default_delete<BoardCell[]>> boardcells;
 	D2D1_POINT_2F drawnBoardShift;
 };
