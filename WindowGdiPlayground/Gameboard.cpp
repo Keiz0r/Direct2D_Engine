@@ -23,20 +23,26 @@ GameBoard::GameBoard(Graphics& p_gfx, const int& width, const int& height)
 
 GameBoard::~GameBoard() {
     SafeRelease(&m_pTilesSprite);
+    delete[] brdcells;
 }
 
 void GameBoard::fillBoard() {
     //function to use parser from file, which describes said level
-    boardcells = std::make_unique<BoardCell[]>(boardWidth * boardHeight);
+    brdcells = new BoardCell[boardWidth * boardHeight];//reinterpret_cast<BoardCell*>(_alloca(sizeof(BoardCell) * boardWidth * boardHeight));
     for (float j = 0.0f; j < static_cast<float>(boardHeight); j += 1.0f) {
         for (float i = 0.0f; i < static_cast<float>(boardWidth); i += 1.0f) {
-            boardcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))));
-            boardcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].setTileType(GameBoard::BoardCell::tiletype::Grass);
+            brdcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))));
+            brdcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].setTileType(GameBoard::BoardCell::tiletype::Grass);
         }
     }
-    boardcells[48].setTileType(GameBoard::BoardCell::tiletype::Tree1_DoubleH);
-    boardcells[63].setTileType(GameBoard::BoardCell::tiletype::Water1);
-    boardcells[106].setTileType(GameBoard::BoardCell::tiletype::Water2);
+    //randomize cells
+    std::random_device seed;
+    std::mt19937 rng(seed());
+    std::uniform_int_distribution<std::mt19937::result_type> distribution(to_underlying(GameBoard::BoardCell::tiletype::White), to_underlying(GameBoard::BoardCell::tiletype::Count) - 1);
+    for (unsigned int i = 0; i < boardWidth * boardHeight; i++) {
+        brdcells[i].setTileType(static_cast<GameBoard::BoardCell::tiletype>(distribution(rng)));
+    }
+
 }
 
 D2D1_POINT_2F GameBoard::getBoardSize() const {
@@ -114,7 +120,7 @@ void GameBoard::drawBoard(unsigned int& center, D2D1_POINT_2U& drawStartEnd, D2D
         while (i <= rowsToDraw) {
             int counter = 0;
             while (counter <= columnHeight) {
-                boardcells[columnDrawingIndex].draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
+                brdcells[columnDrawingIndex].draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
                     shiftedCoords.y + screenBasisVector.y * (counter + i) });
                 //    boardcells[columnDrawingIndex].ShowCellNum(m_pgfx, { shiftedCoords.x - screenBasisVector.x * counter + screenBasisVector.x * i,
                 //        shiftedCoords.y + screenBasisVector.y * counter + screenBasisVector.y * i + BoardCell::cellheight });
