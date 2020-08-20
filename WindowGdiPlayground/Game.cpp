@@ -85,8 +85,8 @@ void Game::execCommand(std::wstring& command) {
 }
 
 void Game::clampCoordinates(Sonic& sonic) {
-    D2D1_POINT_2F borders_x = m_Level.h_Board().getWorldBorders_x();
-    D2D1_POINT_2F borders_y = m_Level.h_Board().getWorldBorders_y();
+    D2D1_POINT_2F borders_x = m_Level.h_Board()->getWorldBorders_x();
+    D2D1_POINT_2F borders_y = m_Level.h_Board()->getWorldBorders_y();
     if (sonic.getPosition().x > borders_x.y) {
         sonic.setPosition(borders_x.y, sonic.getPosition().y);
     }

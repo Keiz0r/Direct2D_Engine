@@ -8,7 +8,7 @@ public:
 	~GameLevel();
 	void draw(const D2D1_POINT_2F& position);
 	void rotateBckgnd(float& angle);
-	GameBoard& h_Board();
+	GameBoard* h_Board();
 private:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 private:

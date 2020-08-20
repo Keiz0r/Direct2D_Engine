@@ -34,8 +34,8 @@ void GameLevel::rotateBckgnd(float& angle) {
 	bkgndRttnAngl = angle;
 }
 
-GameBoard& GameLevel::h_Board() {
-	return m_board;
+GameBoard* GameLevel::h_Board() {
+	return &m_board;
 }
 
 void GameLevel::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
