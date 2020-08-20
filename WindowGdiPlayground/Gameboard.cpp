@@ -31,8 +31,9 @@ void GameBoard::fillBoard() {
     brdcells = new BoardCell[boardWidth * boardHeight];//reinterpret_cast<BoardCell*>(_alloca(sizeof(BoardCell) * boardWidth * boardHeight));
     for (float j = 0.0f; j < static_cast<float>(boardHeight); j += 1.0f) {
         for (float i = 0.0f; i < static_cast<float>(boardWidth); i += 1.0f) {
-            brdcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))));
-            brdcells[static_cast<int>(i + (j * static_cast<float>(boardWidth)))].setTileType(GameBoard::BoardCell::tiletype::Grass);
+            unsigned int index = static_cast<int>(i + (j * static_cast<float>(boardWidth)));
+            GameBoard::BoardCell::assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))), &brdcells[index]);
+            GameBoard::BoardCell::setTileType(GameBoard::BoardCell::tiletype::Grass, &brdcells[index]);
         }
     }
     //randomize cells
@@ -40,9 +41,8 @@ void GameBoard::fillBoard() {
     std::mt19937 rng(seed());
     std::uniform_int_distribution<std::mt19937::result_type> distribution(to_underlying(GameBoard::BoardCell::tiletype::White), to_underlying(GameBoard::BoardCell::tiletype::Count) - 1);
     for (unsigned int i = 0; i < boardWidth * boardHeight; i++) {
-        brdcells[i].setTileType(static_cast<GameBoard::BoardCell::tiletype>(distribution(rng)));
+        GameBoard::BoardCell::setTileType(static_cast<GameBoard::BoardCell::tiletype>(distribution(rng)), &brdcells[i]);
     }
-
 }
 
 D2D1_POINT_2F GameBoard::getBoardSize() const {
@@ -106,7 +106,7 @@ D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const unsigned int& centertile) 
     return drawStartEnd;
 }
 
-void GameBoard::drawBoard(unsigned int& center, D2D1_POINT_2U& drawStartEnd, D2D1_POINT_2F& centerDrawCoords) const {
+void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawStartEnd, const D2D1_POINT_2F& centerDrawCoords) const {
     if (m_pTilesSprite != NULL) {
         unsigned short int amountOfShifts_x = center / boardHeight - drawStartEnd.x / boardHeight;
         unsigned short int amountOfShifts_y = drawStartEnd.x % boardHeight - center % boardHeight;
@@ -120,8 +120,8 @@ void GameBoard::drawBoard(unsigned int& center, D2D1_POINT_2U& drawStartEnd, D2D
         while (i <= rowsToDraw) {
             int counter = 0;
             while (counter <= columnHeight) {
-                brdcells[columnDrawingIndex].draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
-                    shiftedCoords.y + screenBasisVector.y * (counter + i) });
+                GameBoard::BoardCell::draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
+                    shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
                 //    boardcells[columnDrawingIndex].ShowCellNum(m_pgfx, { shiftedCoords.x - screenBasisVector.x * counter + screenBasisVector.x * i,
                 //        shiftedCoords.y + screenBasisVector.y * counter + screenBasisVector.y * i + BoardCell::cellheight });
                 columnDrawingIndex--;
@@ -165,13 +165,13 @@ void GameBoard::drawGeneratedTile() const {
 
 }
 
-void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords) const {
+void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords, BoardCell* cell) {
     // draws cell unit on screen using screen's coordinates  From Top-left corner
-    if (doubleTextureHeight > 1.1f) {
-        p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y - cellheight, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, TextureCoords);
+    if (cell->doubleTextureHeight > 1.1f) {
+        p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y - cellheight, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, cell->TextureCoords);
     }
     else {
-        p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, TextureCoords);
+        p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, cell->TextureCoords);
     }
     
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x + cellwidth, coords.y, borderThickness);
@@ -180,43 +180,43 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
  //   p_gfx.DrawLine(coords.x + cellwidth, coords.y, coords.x + cellwidth, coords.y - cellheight, borderThickness);
 }
 
-void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords) const {
+void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords, BoardCell* cell) {
     wchar_t name[4];
-    swprintf_s(name, L"%d", cellnum);
+    swprintf_s(name, L"%d", cell->cellnum);
     p_gfx.drawTextBox(name, 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { screencoords.x + cellwidth / 2 - 10, screencoords.y - 85.0f, screencoords.x + 150.0f, screencoords.y - 40.0f });
 }
 
-void GameBoard::BoardCell::assignCellNum(const int& num) {
-    cellnum = num;
+void GameBoard::BoardCell::assignCellNum(const int& num, BoardCell* cell) {
+    cell->cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(tiletype type){
-    tileType = type;
-    switch (tileType) {
+void GameBoard::BoardCell::setTileType(tiletype type, BoardCell* cell){
+    cell->tileType = type;
+    switch (type) {
     case GameBoard::BoardCell::tiletype::White:
-        TextureCoords = { 0.0f, 0.0f, 159.0f, 90.0f };
+        cell->TextureCoords = { 0.0f, 0.0f, 159.0f, 90.0f };
         break;
     case GameBoard::BoardCell::tiletype::Contour_Black:
-        TextureCoords = { 163.0f, 0.0f, 319.0f, 90.0f };
+        cell->TextureCoords = { 163.0f, 0.0f, 319.0f, 90.0f };
         break;
     case GameBoard::BoardCell::tiletype::ContourI_Black:
-        TextureCoords = { 484.0f, 0.0f, 639.0f, 90.0f };
+        cell->TextureCoords = { 484.0f, 0.0f, 639.0f, 90.0f };
         break;
     case GameBoard::BoardCell::tiletype::Black:
-        TextureCoords = { 323.0f, 0.0f, 477.0f, 90.0f };
+        cell->TextureCoords = { 323.0f, 0.0f, 477.0f, 90.0f };
         break;
     case GameBoard::BoardCell::tiletype::Grass:
-        TextureCoords = { 0.0f, 100.0f, 159.0f, 190.0f };
+        cell->TextureCoords = { 0.0f, 100.0f, 159.0f, 190.0f };
         break;
     case GameBoard::BoardCell::tiletype::Water1:
-        TextureCoords = { 160.0f, 100.0f, 318.0f, 190.0f };
+        cell->TextureCoords = { 160.0f, 100.0f, 318.0f, 190.0f };
         break;
     case GameBoard::BoardCell::tiletype::Water2:
-        TextureCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
+        cell->TextureCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
         break;
     case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
-        TextureCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
-        doubleTextureHeight = 2.0f;
+        cell->TextureCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
+        cell->doubleTextureHeight = 2.0f;
         break;
     }
 }

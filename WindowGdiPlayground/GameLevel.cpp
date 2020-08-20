@@ -18,11 +18,12 @@ GameLevel::~GameLevel() {
 
 void GameLevel::draw(const D2D1_POINT_2F& position) {
 	if (m_pBackgroundSprite != NULL) {
-		D2D1_POINT_2F screencenter{ 1366.0f / 2.0f, 768.0f / 2.0f };
-		// Apply necessary transformations
+		D2D1_SIZE_U imageSize = m_pBackgroundSprite->GetPixelSize();
+		D2D1_SIZE_F screenSize = m_pgfx.getScreenSize();
+		D2D1_POINT_2F screencenter{ screenSize.width / 2.0f, screenSize.height / 2.0f };
+
 		m_pgfx.transformTRSM(0.0f, 0.0f, bkgndRttnAngl, screencenter, 1.0f, 1.0f, false);
-		m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, 1366.0f, 768.0f }, 1.0f, { 0.0f, 0.0f, 1366.0f, 768.0f });
-		//	go back from mirrored sprites
+		m_pgfx.drawBitmap(m_pBackgroundSprite, { 0.0f, 0.0f, screenSize.width, screenSize.height }, 1.0f, { 0.0f, 0.0f, static_cast<float>(imageSize.width), static_cast<float>(imageSize.height) });
 		m_pgfx.restoreDefaultDrawingParameters();
 	}
 
