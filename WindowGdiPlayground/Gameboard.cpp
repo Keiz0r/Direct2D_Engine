@@ -1,6 +1,6 @@
 #include "Gameboard.h"
 
-GameBoard::GameBoard(Graphics& p_gfx, const int& width, const int& height)
+GameBoard::GameBoard(const int& width, const int& height)
 {
     boardWidth = width;
     boardHeight = height;
@@ -61,7 +61,7 @@ void GameBoard::initialize(const wchar_t* name, Graphics* p_gfx) {
         m_pgfx->loadD2DBitmap(name, 0, m_pTilesSprite);
     }
     else {
-        Log::putMessage(L"WARNING: GameBoard reinitialization attempt");
+        Log::putError(L"WARNING: GameBoard reinitialization attempt");
     }
 }
 

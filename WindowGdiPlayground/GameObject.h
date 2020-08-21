@@ -11,7 +11,8 @@ private:
 	static void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 private:
 //	static const Graphics& m_pgfx;
-	ID2D1Bitmap* m_pSprite;
+	ID2D1Bitmap* m_pSprite;	// static inline for end object type. maybe not inline?
 	D2D1_POINT_2F position;
 	float m_fScalar = 1.0f;
+	static inline uint32_t objectcounter = 0; // static inline for end object type
 };

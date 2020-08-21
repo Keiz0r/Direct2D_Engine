@@ -37,3 +37,7 @@ camera class that does all the drawing
 {
 	all objects contain reference to graphics, sprites etc; only camera will have those (solved with static)
 }
+
+make graphics object static inline like log?
+
+modify log::puterror to make error file and log errors there

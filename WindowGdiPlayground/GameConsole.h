@@ -18,7 +18,7 @@ private:
 	Graphics& m_pgfx;
 	bool activeinput = false;
 	std::wstring blink = L"_";
-	unsigned short blinkCounter = 0;
+	uint8_t blinkCounter = 0;
 	std::string tempInput;
 	std::wstring input;
 	Graphics::D2D_SOLID_COLORS textColor = Graphics::D2D_SOLID_COLORS::Gray;

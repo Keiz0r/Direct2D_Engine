@@ -3,7 +3,7 @@
 GameLevel::GameLevel(Graphics& p_gfx, const int& width, const int& height)
 	:
 	m_pgfx(p_gfx),
-	m_board(p_gfx, width, height),
+	m_board(width, height),
 	m_pBackgroundSprite(NULL)
 {
 	m_Borders = { m_board.getBoardSize().y / -2.0f, m_board.getBoardSize().x / -2.0f, m_board.getBoardSize().x / 2.0f,

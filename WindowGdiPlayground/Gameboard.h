@@ -6,7 +6,7 @@
 
 class GameBoard {
 public:
-	GameBoard(Graphics& p_gfx, const int& width, const int& height);
+	GameBoard(const int& width, const int& height);
 	~GameBoard();
 	void fillBoard();
 	D2D1_POINT_2F getBoardSize() const;
@@ -26,7 +26,7 @@ private:
 		static void assignCellNum(const int& num, BoardCell* cell);
 		static void setTileType(tiletype type, BoardCell* cell);
 	private:
-		int cellnum = 0;
+		uint32_t cellnum = 0;
 		tiletype tileType = tiletype::White;
 		D2D1_RECT_F TextureCoords {0.0f, 0.0f, 0.0f, 0.0f};
 		float doubleTextureHeight = 1.0f;
@@ -42,13 +42,13 @@ private:
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
 	inline static Graphics* m_pgfx = nullptr;
 	inline static ID2D1Bitmap* m_pTilesSprite = nullptr;
-	inline static unsigned int boardWidth = 0;
-	inline static unsigned int boardHeight;
+	inline static uint32_t boardWidth = 0;
+	inline static uint32_t boardHeight = 0;
 	inline static D2D1_POINT_2F worldCoordinatesSize { 0.0f, 0.0f };
 	static constexpr float amountOfspaceInCellx = 50.0f;	//world coords
 	static constexpr float amountOfspaceInCelly = 50.0f;
-	inline static unsigned int tileDrawingRadius_x = 9;
-	inline static unsigned int tileDrawingRadius_y = 9;
+	inline static uint8_t tileDrawingRadius_x = 9;
+	inline static uint8_t tileDrawingRadius_y = 9;
 	BoardCell* brdcells = nullptr;
 	inline static D2D1_POINT_2F drawnBoardShift { 0.0f, 0.0f };
 };
