@@ -1,9 +1,8 @@
 ﻿#include "Obstacles.h"
 
-Obstacles::Obstacles(Graphics& p_gfx, Log& p_log)
+Obstacles::Obstacles(Graphics& p_gfx)
     :
-    m_pgfx(p_gfx),
-    m_plog(p_log)
+    m_pgfx(p_gfx)
 {
 }
 
@@ -17,7 +16,7 @@ void Obstacles::draw() const {
 void Obstacles::addBox(D2D1_POINT_2F& position) {
     std::shared_ptr<Box> box = std::make_shared<Box>(m_pgfx, position);
     boxes.push_back(box);
-    m_plog.putMessage(L"Писос");
+    Log::putMessage(L"Писос");
 }
 
 void Obstacles::update(unsigned int& obstacleType) {

@@ -10,6 +10,8 @@ GameLevel::GameLevel(Graphics& p_gfx, const int& width, const int& height)
 		m_board.getBoardSize().y / 2.0f, };
 
 	loadSprite(GAMESPRITE(SPRITE_BACKGROUND), m_pBackgroundSprite);
+
+	GameBoard::initialize(GAMESPRITE(SPRITE_WORLD_TILES), &m_pgfx);
 }
 
 GameLevel::~GameLevel() {

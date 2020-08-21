@@ -31,7 +31,6 @@ private:
 	Keyboard* m_kbd;
 	HWND m_hwnd;
 	Graphics m_gfx;
-	Log m_log;
 	GameConsole m_console;	//copies log every frame. not the best solution probably, but solves invalid access
 	FrameTimer ft;
 	Sonic m_Sonic;

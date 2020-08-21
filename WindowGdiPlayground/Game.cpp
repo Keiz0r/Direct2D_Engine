@@ -5,10 +5,10 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_kbd(&kbd),
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
-    m_console(m_gfx, m_log),
+    m_console(m_gfx),
     m_Sonic(m_gfx, {0.0f, 0.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
-    m_obstacles(m_gfx, m_log)
+    m_obstacles(m_gfx)
 {
     Sound::openMP3();
     Sound::playOnRepeatMP3();
@@ -78,9 +78,9 @@ void Game::execCommand(std::wstring& command) {
 //    }
     if (command == L"$COORDS") {
         std::wstring str = L"World: " + std::to_wstring(m_Sonic.getPosition().x) + L"; " + std::to_wstring(m_Sonic.getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));
-        m_log.putMessage(str.c_str());
+        Log::putMessage(str.c_str());
     }
-    m_log.putMessage(command.c_str());
+    Log::putMessage(command.c_str());
     command = L"";
 }
 

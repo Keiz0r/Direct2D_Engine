@@ -4,7 +4,7 @@
 
 class GameConsole {
 public:
-	GameConsole(Graphics& p_gfx, Log& p_log);
+	GameConsole(Graphics& p_gfx);
 	void draw();
 	void activate();
 	void activateInput();
@@ -16,7 +16,6 @@ public:
 private:
 	bool active = false;
 	Graphics& m_pgfx;
-	Log& m_plog;
 	bool activeinput = false;
 	std::wstring blink = L"_";
 	unsigned short blinkCounter = 0;

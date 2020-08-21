@@ -3,8 +3,8 @@
 #include "Direct2D.h"
 #include "Wic.h"
 #include "DWrite.h"
-#include <type_traits>
 #include ".\Lists\AssetsList.h"
+#include <type_traits>
 
 template<class Interface>
 inline void SafeRelease(Interface** ppInterfaceToRelease) {

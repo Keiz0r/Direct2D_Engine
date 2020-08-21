@@ -1,5 +1,6 @@
 #pragma once
 #include "Backend\Graphics.h"
+#include "Log.h"
 #include <memory>
 #include <random>
 
@@ -12,6 +13,7 @@ public:
 	D2D1_POINT_2F getWorldBorders_x() const;
 	D2D1_POINT_2F getWorldBorders_y() const;
 	void Draw(const D2D1_POINT_2F& position);
+	static void initialize(const wchar_t* name, Graphics* p_gfx);
 private:
 	class BoardCell {
 		friend GameBoard;
@@ -32,22 +34,21 @@ private:
 		static constexpr float cellheight = 80.0f;// / 1.41f;
 	};
 private:
-	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 	D2D1_POINT_2F normalizePositionToTile(const D2D1_POINT_2F& position) const;
 	unsigned int getCentralTileIndex(const D2D1_POINT_2F& position) const;
 	D2D1_POINT_2U clampTileDrawingRadius(const unsigned int& centertile) const;
 	void drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawStartEnd, const D2D1_POINT_2F& centerDrawCoords) const;
 	D2D1_POINT_2F toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const;
 	void drawGeneratedTile() const;	// debugging or TODO: procedural generation
-	Graphics& m_pgfx;
-	ID2D1Bitmap* m_pTilesSprite;
-	int boardWidth = 0;
-	int boardHeight = 0;
-	D2D1_POINT_2F worldCoordinatesSize {0.0f, 0.0f};
+	inline static Graphics* m_pgfx = nullptr;
+	inline static ID2D1Bitmap* m_pTilesSprite = nullptr;
+	inline static unsigned int boardWidth = 0;
+	inline static unsigned int boardHeight;
+	inline static D2D1_POINT_2F worldCoordinatesSize { 0.0f, 0.0f };
 	static constexpr float amountOfspaceInCellx = 50.0f;	//world coords
 	static constexpr float amountOfspaceInCelly = 50.0f;
-	unsigned int tileDrawingRadius_x = 9;
-	unsigned int tileDrawingRadius_y = 9;
+	inline static unsigned int tileDrawingRadius_x = 9;
+	inline static unsigned int tileDrawingRadius_y = 9;
 	BoardCell* brdcells = nullptr;
-	D2D1_POINT_2F drawnBoardShift { 0.0f, 0.0f };
+	inline static D2D1_POINT_2F drawnBoardShift { 0.0f, 0.0f };
 };

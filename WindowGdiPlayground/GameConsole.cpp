@@ -1,16 +1,15 @@
 #include "GameConsole.h"
 
-GameConsole::GameConsole(Graphics& p_gfx, Log& p_log)
+GameConsole::GameConsole(Graphics& p_gfx)
 :
-	m_pgfx(p_gfx),
-	m_plog(p_log)
+	m_pgfx(p_gfx)
 {
 }
 
 void GameConsole::draw() {
 	if (active) {
 		m_pgfx.DrawRect({ 0.0f, 0.0f, 1366.0f, 200.0f }, true, bckgndColor);
-		std::deque<std::wstring> out = m_plog.commands;
+		std::deque<std::wstring> out = Log::commands;
 		for (int i = 0; i < 7 && i < out.size(); i++) {
 			float msgOffset = static_cast<float>(i) * 24.0f;
 			m_pgfx.drawTextBox(out.at(i).c_str(), 2, textColor, { 5.0f, 146.0f - msgOffset, 1361.0f, 170.0f - msgOffset });

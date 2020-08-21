@@ -1,15 +1,11 @@
 #include "Gameboard.h"
 
 GameBoard::GameBoard(Graphics& p_gfx, const int& width, const int& height)
-    :
-    m_pgfx(p_gfx),
-    m_pTilesSprite(NULL),
-    boardWidth(width),
-    boardHeight(height)
 {
+    boardWidth = width;
+    boardHeight = height;
     worldCoordinatesSize = {static_cast<float>(boardWidth) * amountOfspaceInCellx, static_cast<float>(boardHeight) * amountOfspaceInCelly };
-
-    loadSprite(GAMESPRITE(SPRITE_WORLD_TILES), m_pTilesSprite);
+    
     fillBoard();
 
     drawnBoardShift = { amountOfspaceInCellx / 2.0f, amountOfspaceInCelly / 2.0f };
@@ -59,8 +55,14 @@ D2D1_POINT_2F GameBoard::getWorldBorders_y() const {
     return borders_y;
 }
 
-void GameBoard::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
-    m_pgfx.loadD2DBitmap(name, 0, sprite);
+void GameBoard::initialize(const wchar_t* name, Graphics* p_gfx) {
+    if (m_pgfx == nullptr) {
+        m_pgfx = p_gfx;
+        m_pgfx->loadD2DBitmap(name, 0, m_pTilesSprite);
+    }
+    else {
+        Log::putMessage(L"WARNING: GameBoard reinitialization attempt");
+    }
 }
 
 D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) const {
@@ -121,10 +123,10 @@ void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawS
         while (i <= rowsToDraw) {
             int counter = 0;
             while (counter <= columnHeight) {
-                GameBoard::BoardCell::draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
+                GameBoard::BoardCell::draw(*m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
                     shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
-                    GameBoard::BoardCell::ShowCellNum(m_pgfx, { shiftedCoords.x + screenBasisVector.x * (i - counter), 
-                        shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
+                //    GameBoard::BoardCell::ShowCellNum(*m_pgfx, { shiftedCoords.x + screenBasisVector.x * (i - counter), 
+                //        shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
                 columnDrawingIndex--;
                 counter++;
             }
@@ -142,7 +144,7 @@ D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) 
 }
 
 void GameBoard::Draw(const D2D1_POINT_2F& position) {
-    D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
+    D2D1_SIZE_F screensize = m_pgfx->getScreenSize();
 //    static const float playerLegOffset = 00.0f / 2.0f;
     static D2D1_POINT_2F baseindent = { (screensize.width / 2.0f) - (BoardCell::cellwidth / 2.0f), (screensize.height / 2.0f) - (BoardCell::cellheight / 2.0f) };// + playerLegOffset}; //centering screen
     //input position is relative to world center -> tile bottom left
@@ -157,12 +159,12 @@ void GameBoard::Draw(const D2D1_POINT_2F& position) {
 }
 
 void GameBoard::drawGeneratedTile() const {
-    D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
+    D2D1_SIZE_F screensize = m_pgfx->getScreenSize();
     static float playerLegOffset = 30.0f / 2.0f;
     D2D1_RECT_F testrect{ -25.0f, 25.0f, 25.0f, -25.0f };
-    m_pgfx.transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
-    m_pgfx.DrawRect({ screensize.width / 2.0f + testrect.left, screensize.height / 2.0f - testrect.top, screensize.width / 2.0f + testrect.right,screensize.height / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
-    m_pgfx.restoreDefaultDrawingParameters();
+    m_pgfx->transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
+    m_pgfx->DrawRect({ screensize.width / 2.0f + testrect.left, screensize.height / 2.0f - testrect.top, screensize.width / 2.0f + testrect.right,screensize.height / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
+    m_pgfx->restoreDefaultDrawingParameters();
 
 }
 
