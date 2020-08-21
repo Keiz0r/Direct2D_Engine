@@ -247,6 +247,7 @@ void Sonic::setState(Sonic::Action action) {
 
 void Sonic::Animate(AnimationData& Animation) {
 	if (m_pSprite != NULL) {
+		static float LegOffset = 30.0 / 2.0f;
 		D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
 		D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
@@ -267,7 +268,7 @@ void Sonic::Animate(AnimationData& Animation) {
 				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
 				float drawrectstartX = (screensize.width - Animation.Width) / 2;
 				float drawrectstartY = (screensize.height - Animation.Height) / 2;
-				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY - LegOffset, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height - LegOffset }, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			else {
 				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);

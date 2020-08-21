@@ -46,7 +46,6 @@ private:
 	D2D1_POINT_2F worldCoordinatesSize {0.0f, 0.0f};
 	static constexpr float amountOfspaceInCellx = 50.0f;	//world coords
 	static constexpr float amountOfspaceInCelly = 50.0f;
-	const D2D1_POINT_2F screenBasisVector { (BoardCell::cellwidth / 2.0f), (BoardCell::cellheight / 2.0f) };
 	unsigned int tileDrawingRadius_x = 9;
 	unsigned int tileDrawingRadius_y = 9;
 	BoardCell* brdcells = nullptr;

@@ -50,12 +50,12 @@ D2D1_POINT_2F GameBoard::getBoardSize() const {
 }
 
 D2D1_POINT_2F GameBoard::getWorldBorders_x() const {
-    D2D1_POINT_2F borders_x{(drawnBoardShift.x - worldCoordinatesSize.x / 2.0f), worldCoordinatesSize.x / 2.0f + drawnBoardShift.x - 1.0f};
+    static D2D1_POINT_2F borders_x{(drawnBoardShift.x - worldCoordinatesSize.x / 2.0f), worldCoordinatesSize.x / 2.0f + drawnBoardShift.x - 1.0f};
     return borders_x;
 }
 
 D2D1_POINT_2F GameBoard::getWorldBorders_y() const {
-    D2D1_POINT_2F borders_y{ (drawnBoardShift.y - worldCoordinatesSize.y / 2.0f), worldCoordinatesSize.y / 2.0f + drawnBoardShift.y - 1.0f };
+    static D2D1_POINT_2F borders_y{ (drawnBoardShift.y - worldCoordinatesSize.y / 2.0f), worldCoordinatesSize.y / 2.0f + drawnBoardShift.y - 1.0f };
     return borders_y;
 }
 
@@ -77,7 +77,7 @@ D2D1_POINT_2F GameBoard::normalizePositionToTile(const D2D1_POINT_2F& position) 
 }
 
 unsigned int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const {
-    static const D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
+    static D2D1_POINT_2F boardCenter = { worldCoordinatesSize.x / 2.0f, worldCoordinatesSize.y / 2.0f }; // coord from border (real 0  of axis)
     return (static_cast<int>((position.x + boardCenter.x - drawnBoardShift.x) / amountOfspaceInCellx)) * boardHeight +
         static_cast<int>((position.y + boardCenter.y - drawnBoardShift.y) / amountOfspaceInCelly);   //cast is floor towards 0;
     //here I account that 20x20 or any odd number of tiles has center of board in a cross. so in order to compensate do this - amountOfspaceInCellx / 2.0f
@@ -108,11 +108,12 @@ D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const unsigned int& centertile) 
 
 void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawStartEnd, const D2D1_POINT_2F& centerDrawCoords) const {
     if (m_pTilesSprite != NULL) {
+        static D2D1_POINT_2F screenBasisVector{ (BoardCell::cellwidth / 2.0f), (BoardCell::cellheight / 2.0f) };
         unsigned short int amountOfShifts_x = center / boardHeight - drawStartEnd.x / boardHeight;
         unsigned short int amountOfShifts_y = drawStartEnd.x % boardHeight - center % boardHeight;
         D2D1_POINT_2F shiftedCoords{ centerDrawCoords.x + screenBasisVector.x * (amountOfShifts_y - amountOfShifts_x),
             centerDrawCoords.y - screenBasisVector.y * (amountOfShifts_x + amountOfShifts_y) };
-
+        //drawing row top to bottom from leftmost
         int columnDrawingIndex = drawStartEnd.x;
         int columnHeight = drawStartEnd.x % boardHeight - drawStartEnd.y % boardHeight;
         int i = 0;
@@ -122,8 +123,8 @@ void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawS
             while (counter <= columnHeight) {
                 GameBoard::BoardCell::draw(m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
                     shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
-                //    boardcells[columnDrawingIndex].ShowCellNum(m_pgfx, { shiftedCoords.x - screenBasisVector.x * counter + screenBasisVector.x * i,
-                //        shiftedCoords.y + screenBasisVector.y * counter + screenBasisVector.y * i + BoardCell::cellheight });
+                    GameBoard::BoardCell::ShowCellNum(m_pgfx, { shiftedCoords.x + screenBasisVector.x * (i - counter), 
+                        shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
                 columnDrawingIndex--;
                 counter++;
             }
@@ -142,8 +143,8 @@ D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) 
 
 void GameBoard::Draw(const D2D1_POINT_2F& position) {
     D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
-    static const float playerLegOffset = 30.0f / 2.0f;
-    static D2D1_POINT_2F baseindent = { (screensize.width / 2.0f) - screenBasisVector.x, (screensize.height / 2.0f) - screenBasisVector.y + playerLegOffset }; //centering screen
+//    static const float playerLegOffset = 00.0f / 2.0f;
+    static D2D1_POINT_2F baseindent = { (screensize.width / 2.0f) - (BoardCell::cellwidth / 2.0f), (screensize.height / 2.0f) - (BoardCell::cellheight / 2.0f) };// + playerLegOffset}; //centering screen
     //input position is relative to world center -> tile bottom left
     D2D1_POINT_2F normalizedAbsPosition = normalizePositionToTile(position);
     D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
@@ -157,7 +158,7 @@ void GameBoard::Draw(const D2D1_POINT_2F& position) {
 
 void GameBoard::drawGeneratedTile() const {
     D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
-    static const float playerLegOffset = 30.0f / 2.0f;
+    static float playerLegOffset = 30.0f / 2.0f;
     D2D1_RECT_F testrect{ -25.0f, 25.0f, 25.0f, -25.0f };
     m_pgfx.transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
     m_pgfx.DrawRect({ screensize.width / 2.0f + testrect.left, screensize.height / 2.0f - testrect.top, screensize.width / 2.0f + testrect.right,screensize.height / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
@@ -181,9 +182,8 @@ void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite
 }
 
 void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords, BoardCell* cell) {
-    wchar_t name[4];
-    swprintf_s(name, L"%d", cell->cellnum);
-    p_gfx.drawTextBox(name, 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { screencoords.x + cellwidth / 2 - 10, screencoords.y - 85.0f, screencoords.x + 150.0f, screencoords.y - 40.0f });
+    std::wstring name = std::to_wstring(cell->cellnum);
+    p_gfx.drawTextBox(name.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { screencoords.x + cellwidth / 2 - 10, screencoords.y, screencoords.x + 150.0f, screencoords.y + 40.0f });
 }
 
 void GameBoard::BoardCell::assignCellNum(const int& num, BoardCell* cell) {

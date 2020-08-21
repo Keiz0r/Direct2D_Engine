@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx, m_log),
-    m_Sonic(m_gfx, {-470.0f, -400.0f}),
+    m_Sonic(m_gfx, {0.0f, 0.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx, m_log)
 {

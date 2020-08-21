@@ -34,3 +34,6 @@ Allocate all sprite resources in a separate class and link other classes to it. 
 This is done not to allocate same png multiple times for multiple same class objects
 
 camera class that does all the drawing
+{
+	all objects contain reference to graphics, sprites etc; only camera will have those (solved with static)
+}
