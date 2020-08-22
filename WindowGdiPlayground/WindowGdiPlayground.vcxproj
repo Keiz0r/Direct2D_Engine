@@ -163,7 +163,9 @@
     <ClCompile Include="FrameTimer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gameboard.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="GameObjects\Obstacle.cpp" />
+    <ClCompile Include="GameObjects\Obstacles\Barrel.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -184,7 +186,9 @@
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gameboard.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjects\GameObject.h" />
+    <ClInclude Include="GameObjects\Obstacle.h" />
+    <ClInclude Include="GameObjects\Obstacles\Barrel.h" />
     <ClInclude Include="Lists\Animations.h" />
     <ClInclude Include="Lists\LevelData.h" />
     <ClInclude Include="Lists\AssetsList.h" />

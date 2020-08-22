@@ -40,4 +40,7 @@ camera class that does all the drawing
 
 make graphics object static inline like log?
 
+Log class is pure global variables - thread unsafe! 
+command interface should be reworked.
+gameloop functions all are in 1 thread and should not cause problems
 modify log::puterror to make error file and log errors there

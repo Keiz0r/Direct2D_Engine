@@ -10,8 +10,13 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx)
 {
+    //load resources (should have a handler in level?)
+    GameObject::initialize(&m_gfx);
+    Barrel::loadSprite(GAMESPRITE(SPRITE_OBJECTS));
     Sound::openMP3();
     Sound::playOnRepeatMP3();
+
+    //launch cmd thread
     cmdln = std::thread([this](){this->commandInput(); });
     
 }
@@ -21,6 +26,8 @@ Game::~Game(){
     cmdRun = false;
     cmdCV.notify_all();
     cmdln.join();
+    //release resources (should be handled by level?)
+    Barrel::releaseSprite();
 }
 
 void Game::gameLoop(){
@@ -33,14 +40,12 @@ void Game::gameLoop(){
 
 void Game::updateGameState() {
     const float dt = ft.Mark();
-
     m_Sonic.update();
     clampCoordinates(m_Sonic);
 
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
-
 }
 
 void Game::composeFrame() {

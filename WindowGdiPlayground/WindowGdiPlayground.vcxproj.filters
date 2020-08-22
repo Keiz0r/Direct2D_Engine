@@ -22,6 +22,18 @@
     <Filter Include="Source Files\Backend">
       <UniqueIdentifier>{b889a8b9-03b9-47bc-8844-93d1d3bdd403}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{134934f4-a2af-4460-83ab-66c3f06e1920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{a38b4424-f679-43e5-ace9-db85c08f05fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Obstacles">
+      <UniqueIdentifier>{cdca73a8-1d55-47e1-ad23-499c7f8c194d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Obstacles">
+      <UniqueIdentifier>{82c87b42-9dad-49c0-9c89-7d0c2f5ea9c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowGdiPlayground.cpp">
@@ -75,8 +87,14 @@
     <ClCompile Include="Backend\Wic.cpp">
       <Filter>Source Files\Backend</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GameObjects\GameObject.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Obstacle.cpp">
+      <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjects\Obstacles\Barrel.cpp">
+      <Filter>Source Files\GameObjects\Obstacles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,8 +161,14 @@
     <ClInclude Include="Lists\AssetsList.h">
       <Filter>Header Files\Lists</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GameObjects\GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Obstacle.h">
+      <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Obstacles\Barrel.h">
+      <Filter>Header Files\GameObjects\Obstacles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

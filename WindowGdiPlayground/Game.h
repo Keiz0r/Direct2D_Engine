@@ -13,6 +13,8 @@
 #include "Obstacles.h"
 #include <condition_variable>
 
+#include "GameObjects/Obstacles/Barrel.h"
+
 //Prob needs an "INPUT" class with CMDthread managing
 
 class Game {
@@ -37,7 +39,6 @@ private:
 	GameLevel m_Level;
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;
-
 	bool cmdRun = true;
 	std::thread cmdln;
 	std::mutex cmdMutex;
