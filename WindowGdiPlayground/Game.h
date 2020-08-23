@@ -46,4 +46,5 @@ private:
 	std::wstring str_GameCommand;
 
 	float rotor = 0.0f;
+	D2D1_POINT_2F screenCenterCoordinates {0.0f, 0.0f};
 };

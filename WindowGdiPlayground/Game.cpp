@@ -10,9 +10,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx)
 {
-    //load resources (should have a handler in level?)
-    GameObject::initialize(&m_gfx);
-    Barrel::loadSprite(GAMESPRITE(SPRITE_OBJECTS));
+    GameObject::initialize(&m_gfx, &screenCenterCoordinates); //gfx in objects doesnt exist before this call
     Sound::openMP3();
     Sound::playOnRepeatMP3();
 
@@ -26,14 +24,14 @@ Game::~Game(){
     cmdRun = false;
     cmdCV.notify_all();
     cmdln.join();
-    //release resources (should be handled by level?)
-    Barrel::releaseSprite();
 }
 
 void Game::gameLoop(){
 	m_gfx.beginFrame();
     updateGameState();
 	composeFrame();
+    Barrel brl{ {-10.0f, 0.0f}, false };
+    brl.draw();
 	m_gfx.endFrame();
     cmdCV.notify_all();
 }
@@ -46,6 +44,8 @@ void Game::updateGameState() {
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
+
+    screenCenterCoordinates = m_Sonic.getPosition();
 }
 
 void Game::composeFrame() {

@@ -1,18 +1,29 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const D2D1_POINT_2F& position)
+GameObject::GameObject(const D2D1_POINT_2F& objectPosition)
 	:
-	position(position)
+	position(objectPosition)
 {
 }
 
 GameObject::~GameObject() {
 }
 
-void GameObject::initialize(Graphics* gfx) {
+void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar) {
 	if (s_pgfx == nullptr) {
 		s_pgfx = gfx;
+		centerCoordinates = screencenterVar;
 	}
+}
+
+void GameObject::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
+	if (sprite == nullptr) {
+		s_pgfx->loadD2DBitmap(name, 0, sprite);
+	}
+}
+
+void GameObject::releaseSprite(ID2D1Bitmap*& sprite) {
+	SafeRelease(&sprite);
 }
 
 void GameObject::setPosition(const D2D1_POINT_2F& pos) {
