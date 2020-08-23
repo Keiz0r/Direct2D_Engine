@@ -34,7 +34,7 @@ void Game::gameLoop(){
     m_gfx.DrawLine(0.0f, m_gfx.getScreenSize().height /2.0f, m_gfx.getScreenSize().width, m_gfx.getScreenSize().height / 2.0f, 1.0f);
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
     Barrel brl{ {1274.0f, 1274.0f}, 00.0f, false };
-    brl.setScalar(1.0f);
+    brl.setScalar(10.0f);
     m_Sonic.setScalar(1.0f);
     brl.draw();
 	m_gfx.endFrame();
