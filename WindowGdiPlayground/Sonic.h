@@ -10,7 +10,7 @@ public:
 	enum class Direction {
 		N, NE, E, SE, S, SW, W, NW
 	};
-	Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position);
+	Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position, const float& rotationAngle);
 	~Sonic();
 	void update();
 	void draw();	// TODO : add various animations depending on speed
@@ -36,6 +36,7 @@ private:
 	float maxVelocity = 6.0f;
 	bool speedUP = false;
 	float m_fScalar = 1.0f;
+	float rotationAngle = 0;
 	ID2D1Bitmap* m_pSprite;
 	bool facingRight = true;
 	Sonic::Action currentState = Sonic::Action::Idle;

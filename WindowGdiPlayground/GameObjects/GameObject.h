@@ -4,7 +4,7 @@
 
 class GameObject {
 public:
-	GameObject(const D2D1_POINT_2F& objectPosition, const float& rotationAngle);
+	GameObject(const D2D1_POINT_2F& objectPosition, const float& opacity, const float& rotationAngle);
 	virtual ~GameObject();
 	virtual void draw() = 0;
 	void setPosition(const D2D1_POINT_2F& pos);
@@ -18,9 +18,11 @@ protected:
 	inline static Graphics* s_pgfx = nullptr;
 	D2D1_POINT_2F position;
 	float m_fScalar = 1.0f;
-	float spriteWidth = 0;
-	float spriteHeight = 0;
-	float rotationAngle = 0;
+	float spriteWidth = 0.0f;
+	float spriteHeight = 0.0f;
+	float rotationAngle = 0.0f;
+	float opacity = 0.0f;
+	float visibilityRadius = 450.0f * 450.0f;
 	inline static D2D1_POINT_2F isometricCoefficients{ 0.0f, 0.0f };
 	inline static D2D1_POINT_2F* centerCoordinates = nullptr;
 };

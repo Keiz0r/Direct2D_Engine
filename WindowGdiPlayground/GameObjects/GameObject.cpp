@@ -1,8 +1,9 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float& rotationAngle)
+GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float& opacity, const float& rotationAngle)
 	:
 	position(objectPosition),
+	opacity(opacity),
 	rotationAngle(rotationAngle)
 {
 }

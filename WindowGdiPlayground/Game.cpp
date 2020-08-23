@@ -6,7 +6,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx),
-    m_Sonic(m_gfx, {1274.0f, 1274.0f}),
+    m_Sonic(m_gfx, {0.0f, 0.0f}, 0.0f),
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx)
 {
@@ -33,8 +33,8 @@ void Game::gameLoop(){
     //crosshair
     m_gfx.DrawLine(0.0f, m_gfx.getScreenSize().height /2.0f, m_gfx.getScreenSize().width, m_gfx.getScreenSize().height / 2.0f, 1.0f);
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
-    Barrel brl{ {1274.0f, 1274.0f}, 00.0f, false };
-    brl.setScalar(10.0f);
+    Barrel brl{ {500.0f, 500.0f}, 0.90f, 90.0f, false };
+    brl.setScalar(1.0f);
     m_Sonic.setScalar(1.0f);
     brl.draw();
 	m_gfx.endFrame();

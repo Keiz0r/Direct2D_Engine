@@ -1,9 +1,10 @@
 #include "Sonic.h"
 
-Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
+Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position, const float& rotationAngle)
 	:
 	m_pgfx(p_gfx),
 	m_pSprite(nullptr),
+	rotationAngle(rotationAngle),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
 	RunAnimation_N_W(SONIC_ANIMATION_RUN_N_W),
 	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),
@@ -247,9 +248,8 @@ void Sonic::setState(Sonic::Action action) {
 
 void Sonic::Animate(AnimationData& Animation) {
 	if (m_pSprite != nullptr) {
-		static float LegOffset = 30.0f / 2.0f;
+		static float LegOffset = Animation.Height / -4.0f;
 		D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
-		D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 
 		// frame switcher
 		if (timeFrameCounter > Animation.FrameTime && currentFrameNum < Animation.TotalFrames) {
@@ -265,13 +265,14 @@ void Sonic::Animate(AnimationData& Animation) {
 			// Apply necessary transformations
 			//for screen coords
 			if (ScreencenteredDrawing) {
-				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+				m_pgfx.transformSRTM(0.0f, LegOffset, rotationAngle, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
 				float drawrectstartX = (screensize.width - Animation.Width) / 2;
 				float drawrectstartY = (screensize.height - Animation.Height) / 2;
-				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY - LegOffset, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height - LegOffset }, 1.0f, Animation.frameCoords[currentFrameNum]);
+				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height}, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			else {
-				m_pgfx.transformTRSM(0.0f, 0.0f, 0.0f, imagecenter, m_fScalar, m_fScalar, !facingRight);
+				D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
+				m_pgfx.transformTRSM(0.0f, LegOffset * m_fScalar, rotationAngle, imagecenter, m_fScalar, m_fScalar, !facingRight);
 				m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			//	go back from mirrored sprites
