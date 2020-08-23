@@ -3,7 +3,7 @@
 Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position)
 	:
 	m_pgfx(p_gfx),
-	m_pSprite(NULL),
+	m_pSprite(nullptr),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
 	RunAnimation_N_W(SONIC_ANIMATION_RUN_N_W),
 	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),
@@ -246,8 +246,8 @@ void Sonic::setState(Sonic::Action action) {
 }
 
 void Sonic::Animate(AnimationData& Animation) {
-	if (m_pSprite != NULL) {
-		static float LegOffset = 30.0 / 2.0f;
+	if (m_pSprite != nullptr) {
+		static float LegOffset = 30.0f / 2.0f;
 		D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
 		D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
 

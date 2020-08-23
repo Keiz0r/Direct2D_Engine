@@ -55,10 +55,11 @@ D2D1_POINT_2F GameBoard::getWorldBorders_y() const {
     return borders_y;
 }
 
-void GameBoard::initialize(const wchar_t* name, Graphics* p_gfx) {
+void GameBoard::initialize(const wchar_t* name, Graphics* p_gfx, const D2D1_POINT_2F& isometricCoeffs) {
     if (m_pgfx == nullptr) {
         m_pgfx = p_gfx;
         m_pgfx->loadD2DBitmap(name, 0, m_pTilesSprite);
+        isometricCoefficients = isometricCoeffs;
     }
     else {
         Log::putError(L"WARNING: GameBoard reinitialization attempt");
@@ -137,9 +138,7 @@ void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawS
 }
 
 D2D1_POINT_2F GameBoard::toIsometric(const D2D1_POINT_2F& VectorInRegularSpace) const {
-    static const float scalex = 1.6f; // /1.41f //tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
-    static const float scaley = 0.8f; // /1.41f
-    D2D1_POINT_2F isometric{ (VectorInRegularSpace.x + VectorInRegularSpace.y) * scalex , (VectorInRegularSpace.x - VectorInRegularSpace.y) * scaley};
+    D2D1_POINT_2F isometric{(VectorInRegularSpace.x + VectorInRegularSpace.y) * isometricCoefficients.x , (VectorInRegularSpace.x - VectorInRegularSpace.y) * isometricCoefficients.y};
     return isometric;
 }
 

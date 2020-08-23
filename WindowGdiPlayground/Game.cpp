@@ -6,11 +6,11 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx),
-    m_Sonic(m_gfx, {0.0f, 0.0f}),
+    m_Sonic(m_gfx, {1274.0f, 1274.0f}),
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx)
 {
-    GameObject::initialize(&m_gfx, &screenCenterCoordinates); //gfx in objects doesnt exist before this call
+    GameObject::initialize(&m_gfx, &screenCenterCoordinates, isometricCoefficients); //gfx in objects doesnt exist before this call
     Sound::openMP3();
     Sound::playOnRepeatMP3();
 
@@ -30,7 +30,12 @@ void Game::gameLoop(){
 	m_gfx.beginFrame();
     updateGameState();
 	composeFrame();
-    Barrel brl{ {-10.0f, 0.0f}, false };
+    //crosshair
+    m_gfx.DrawLine(0.0f, m_gfx.getScreenSize().height /2.0f, m_gfx.getScreenSize().width, m_gfx.getScreenSize().height / 2.0f, 1.0f);
+    m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
+    Barrel brl{ {1274.0f, 1274.0f}, 00.0f, false };
+    brl.setScalar(1.0f);
+    m_Sonic.setScalar(1.0f);
     brl.draw();
 	m_gfx.endFrame();
     cmdCV.notify_all();
@@ -53,7 +58,7 @@ void Game::composeFrame() {
 
     {
         std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG
-        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { m_gfx.getScreenSize().width / 2.0f - 20.0f, m_gfx.getScreenSize().height / 2.0f - 60.0f,  m_gfx.getScreenSize().width / 2.0f + 180.0f, m_gfx.getScreenSize().height / 2.0f - 25.0f });  //DEBUG
+        m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { m_gfx.getScreenSize().width / 2.0f - 20.0f, m_gfx.getScreenSize().height / 2.0f - 80.0f,  m_gfx.getScreenSize().width / 2.0f + 180.0f, m_gfx.getScreenSize().height / 2.0f - 45.0f });  //DEBUG
         m_Sonic.draw();
     }
 

@@ -9,6 +9,7 @@ public:
     Wic();
     ~Wic();
     IWICFormatConverter* getConvertedBitmap(const wchar_t* filename, const int& frameNum);  // TODO : error checking
+    void cleanup();
 private:
     HRESULT initialize();
     HRESULT getFrame(const wchar_t* filename, const int& frameNum);

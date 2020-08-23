@@ -1,18 +1,20 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const D2D1_POINT_2F& objectPosition)
+GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float& rotationAngle)
 	:
-	position(objectPosition)
+	position(objectPosition),
+	rotationAngle(rotationAngle)
 {
 }
 
 GameObject::~GameObject() {
 }
 
-void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar) {
+void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs) {
 	if (s_pgfx == nullptr) {
 		s_pgfx = gfx;
 		centerCoordinates = screencenterVar;
+		isometricCoefficients = isometricCoeffs;
 	}
 }
 

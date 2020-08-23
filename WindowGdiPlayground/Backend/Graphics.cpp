@@ -80,6 +80,7 @@ void Graphics::transformTRSM(const float& Translatex, const float& Translatey, c
 
 HRESULT Graphics::loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap) {
     HRESULT hr = d2d.getRenderTarget()->CreateBitmapFromWicBitmap(Wic.getConvertedBitmap(filename, frameNum), &pOutBitmap);
+    Wic.cleanup();
     return hr;
 }
 

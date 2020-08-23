@@ -13,7 +13,7 @@ public:
 	D2D1_POINT_2F getWorldBorders_x() const;
 	D2D1_POINT_2F getWorldBorders_y() const;
 	void Draw(const D2D1_POINT_2F& position);
-	static void initialize(const wchar_t* name, Graphics* p_gfx);
+	static void initialize(const wchar_t* name, Graphics* p_gfx, const D2D1_POINT_2F& isometricCoeffs);
 private:
 	class BoardCell {
 		friend GameBoard;
@@ -51,4 +51,5 @@ private:
 	inline static uint8_t tileDrawingRadius_y = 9;
 	BoardCell* brdcells = nullptr;
 	inline static D2D1_POINT_2F drawnBoardShift { 0.0f, 0.0f };
+	inline static D2D1_POINT_2F isometricCoefficients{ 0.0f, 0.0f };
 };

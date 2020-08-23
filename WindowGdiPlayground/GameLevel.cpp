@@ -11,7 +11,7 @@ GameLevel::GameLevel(Graphics& p_gfx, const int& width, const int& height)
 
 	loadSprite(GAMESPRITE(SPRITE_BACKGROUND), m_pBackgroundSprite);
 
-	GameBoard::initialize(GAMESPRITE(SPRITE_WORLD_TILES), &m_pgfx);
+	GameBoard::initialize(GAMESPRITE(SPRITE_WORLD_TILES), &m_pgfx, {1.6f, 0.8f});
 }
 
 GameLevel::~GameLevel() {

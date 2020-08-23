@@ -25,17 +25,21 @@ Wic::~Wic(){
     SafeRelease(&m_pFormatConverter);
 }
 
-IWICFormatConverter* Wic::getConvertedBitmap(const wchar_t* filename, const int& frameNum) {
+IWICFormatConverter* Wic::getConvertedBitmap(const wchar_t* filename, const int& frameNum) {    
+    //always call cleanup after this function to avoid memory leak from Wic resources
     HRESULT hr = S_OK;
-    if (m_pFormatConverter != NULL) {
-        hr = m_pFormatConverter->Release();
-        hr = m_pImagingFactory->CreateFormatConverter(&m_pFormatConverter);
-    }
+    hr = m_pImagingFactory->CreateFormatConverter(&m_pFormatConverter);
     getFrame(filename, frameNum);
     if (FAILED(hr = m_pFormatConverter->Initialize(m_pFrame, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom))) {
         //outputdebug
     }
     return m_pFormatConverter;
+}
+
+void Wic::cleanup() {
+    SafeRelease(&m_pDecoder);
+    SafeRelease(&m_pFrame);
+    SafeRelease(&m_pFormatConverter);
 }
 
 HRESULT Wic::initialize() {

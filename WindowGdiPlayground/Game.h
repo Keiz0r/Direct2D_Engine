@@ -47,4 +47,5 @@ private:
 
 	float rotor = 0.0f;
 	D2D1_POINT_2F screenCenterCoordinates {0.0f, 0.0f};
+	const D2D1_POINT_2F isometricCoefficients {1.6f, 0.8f}; // /1.41f //tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
 };
