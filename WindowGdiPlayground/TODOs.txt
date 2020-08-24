@@ -1,6 +1,7 @@
 To implement height levels, make several layers of GameGrid.
 cells would probably need height value, and some value to identify if it needs to be drawn at all (if it is not visible cuz of upper layer existence)
 Question - transitions between height levels
+Can make use of several Gameboards. Clusters can represent puzzle pieces with some transitions. diablo style world generation
 
 Good time to implement UI, maybe a DEBUG UI, with coords and such, so it is not actually retarded to test
 draw UI in Photoshop? yeah, probably
@@ -8,8 +9,6 @@ draw UI in Photoshop? yeah, probably
 Learn shit - make graphics a library and compile separately - be a BIG BOI
 
 Finally implement a MOUSE FFS
-
-Make all objects as obstacles, don't draw trees as part of ground tiles, but separate objects
 
 Procedural generator class. Gets the defined [X Y] matrix of the world, and fills up cells with type, obstacles, heightlevels etc. Make it produce rivers and shit.
 Types of environment [forest/lavacave/Ice/Neon/Whatever]
@@ -28,10 +27,7 @@ GOOD IDEA - Contra clone in isometry!
 
 Player class, which has class [Avatar], and stuff like HP, Ability slots, etc.
 
-copy position-based drawing of sonic for other players/npcs
-
 Allocate all sprite resources in a separate class and link other classes to it. (and probably sounds later)
-This is done not to allocate same png multiple times for multiple same class objects
 
 camera class that does all the drawing
 {

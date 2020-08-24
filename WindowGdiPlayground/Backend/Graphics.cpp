@@ -84,7 +84,9 @@ void Graphics::transformSRTM(const float& Translatex, const float& Translatey, c
 }
 
 HRESULT Graphics::loadD2DBitmap(const wchar_t* filename, const int& frameNum, ID2D1Bitmap*& pOutBitmap) {
+    //create WIC bitmap and copy it to d2d bitmap
     HRESULT hr = d2d.getRenderTarget()->CreateBitmapFromWicBitmap(Wic.getConvertedBitmap(filename, frameNum), &pOutBitmap);
+    //release WIC bimap
     Wic.cleanup();
     return hr;
 }

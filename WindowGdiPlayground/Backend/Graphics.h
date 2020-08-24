@@ -3,7 +3,7 @@
 #include "Direct2D.h"
 #include "Wic.h"
 #include "DWrite.h"
-#include ".\Lists\AssetsList.h"
+#include "Lists/AssetsList.h"
 #include <type_traits>
 
 template<class Interface>

@@ -17,5 +17,5 @@ private:
     const HWND& m_hwnd;
     ID2D1Factory* m_pFactory;
     ID2D1HwndRenderTarget* m_pRenderTarget;
-    std::vector<ID2D1SolidColorBrush*> m_vSolidColorBrushVector;
+    std::vector<ID2D1SolidColorBrush*> m_vpSolidColorBrushVector;
 };

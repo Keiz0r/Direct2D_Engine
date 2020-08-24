@@ -25,7 +25,7 @@ Direct2D::Direct2D(const HWND& hwnd)
 Direct2D::~Direct2D() {
     SafeRelease(&m_pRenderTarget);
     SafeRelease(&m_pFactory);
-    for (std::vector<ID2D1SolidColorBrush*>::reverse_iterator i = m_vSolidColorBrushVector.rbegin(); i != m_vSolidColorBrushVector.rend(); i++) {
+    for (std::vector<ID2D1SolidColorBrush*>::reverse_iterator i = m_vpSolidColorBrushVector.rbegin(); i != m_vpSolidColorBrushVector.rend(); i++) {
         SafeRelease(&(*i));
     }
 }
@@ -48,7 +48,7 @@ HRESULT Direct2D::createBrush(const D2D1::ColorF& color) {
     if (FAILED(hr = m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(color), &Brush))){
         return hr;
     }
-    m_vSolidColorBrushVector.push_back(Brush);
+    m_vpSolidColorBrushVector.push_back(Brush);
     return hr;
 }
 
@@ -57,5 +57,5 @@ ID2D1HwndRenderTarget* Direct2D::getRenderTarget() const {
 }
 
 ID2D1SolidColorBrush* Direct2D::getSolidColorBrush(const int& color) const {
-    return m_vSolidColorBrushVector[color];
+    return m_vpSolidColorBrushVector[color];
 }

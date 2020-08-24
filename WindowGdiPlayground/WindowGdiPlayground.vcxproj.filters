@@ -170,8 +170,16 @@
     <ClInclude Include="GameObjects\Obstacles\Barrel.h">
       <Filter>Header Files\GameObjects\Obstacles</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOs.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CODENAME Charodey Vasiliy.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
