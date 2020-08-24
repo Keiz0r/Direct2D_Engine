@@ -31,6 +31,7 @@ void Game::gameLoop(){
     updateGameState();
 	composeFrame();
     //crosshair
+#ifdef KEIZOR_DEBUG
     m_gfx.DrawLine(0.0f, m_gfx.getScreenSize().height /2.0f, m_gfx.getScreenSize().width, m_gfx.getScreenSize().height / 2.0f, 1.0f);
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
     Barrel brl{ {500.0f, 500.0f}, 0.90f, 90.0f, false };
@@ -39,6 +40,7 @@ void Game::gameLoop(){
     m_Sonic.setScalar(1.0f);
     brl2.draw();
     brl.draw();
+#endif
 	m_gfx.endFrame();
     cmdCV.notify_all();
 }
