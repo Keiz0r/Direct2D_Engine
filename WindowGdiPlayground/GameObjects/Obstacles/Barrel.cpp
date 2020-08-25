@@ -13,7 +13,6 @@ Barrel::Barrel(const D2D1_POINT_2F& position, const float_t& opacity, const floa
 
 Barrel::~Barrel() {
 	objectcounter--;
-	s_pSprite;
 	if (objectcounter == 0) {
 		releaseSprite(s_pSprite);
 	}

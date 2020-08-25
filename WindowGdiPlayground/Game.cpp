@@ -6,7 +6,6 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
 	m_hwnd(hwnd),
 	m_gfx(hwnd),
     m_console(m_gfx),
-    m_Sonic(m_gfx, {0.0f, 0.0f}, 0.0f),
     m_Level(m_gfx, LEVEL_1_SIZE),
     m_obstacles(m_gfx)
 {
@@ -14,6 +13,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     Sound::openMP3();
     Sound::playOnRepeatMP3();
 
+    m_pSonic = std::make_unique<Sonic, const D2D1_POINT_2F&, const float_t&, const float_t&>({ 0.0f, 0.0f }, 1.0f, 0.0f);
     //launch cmd thread
     cmdln = std::thread([this](){this->commandInput(); });
     
@@ -37,7 +37,7 @@ void Game::gameLoop(){
     Barrel brl{ {500.0f, 500.0f}, 0.90f, 90.0f, false };
     Barrel brl2{ {501.0f, 510.0f}, 0.90f, 90.0f, false };
     brl.setScalar(1.0f);
-    m_Sonic.setScalar(1.0f);
+    m_pSonic->setScalar(1.0f);
     brl2.draw();
     brl.draw();
 #endif
@@ -47,23 +47,23 @@ void Game::gameLoop(){
 
 void Game::updateGameState() {
     const float_t dt = ft.Mark();
-    m_Sonic.update();
-    clampCoordinates(m_Sonic);
+    m_pSonic->update();
+    clampCoordinates(*m_pSonic);
 
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
 
-    screenCenterCoordinates = m_Sonic.getPosition();
+    screenCenterCoordinates = m_pSonic->getPosition();
 }
 
 void Game::composeFrame() {
-    m_Level.draw(m_Sonic.getPosition());
+    m_Level.draw(m_pSonic->getPosition());
 
     {
-        std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_Sonic.getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));  //DEBUG
+        std::wstring displaycoordsSONIC = std::to_wstring(static_cast<int>(m_pSonic->getPosition().x)) + L", " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().y));  //DEBUG
         m_gfx.drawTextBox(displaycoordsSONIC.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { m_gfx.getScreenSize().width / 2.0f - 20.0f, m_gfx.getScreenSize().height / 2.0f - 80.0f,  m_gfx.getScreenSize().width / 2.0f + 180.0f, m_gfx.getScreenSize().height / 2.0f - 45.0f });  //DEBUG
-        m_Sonic.draw();
+        m_pSonic->draw();
     }
 
     m_obstacles.draw();
@@ -91,7 +91,7 @@ void Game::execCommand(std::wstring& command) {
 //        CameraCenter.y += 1.0f;
 //    }
     if (command == L"$COORDS") {
-        std::wstring str = L"World: " + std::to_wstring(m_Sonic.getPosition().x) + L"; " + std::to_wstring(m_Sonic.getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_Sonic.getPosition().y));
+        std::wstring str = L"World: " + std::to_wstring(m_pSonic->getPosition().x) + L"; " + std::to_wstring(m_pSonic->getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().y));
         Log::putMessage(str.c_str());
     }
     Log::putMessage(command.c_str());
@@ -131,32 +131,32 @@ void Game::commandInput() {
 
             //  movements
             if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('W')) {
-                m_Sonic.speedUp(Sonic::Direction::N);
+                m_pSonic->speedUp(Sonic::Direction::N);
             }
             else if ((*m_kbd).keyIsPressed('D') && (*m_kbd).keyIsPressed('S')) {
-                m_Sonic.speedUp(Sonic::Direction::E);
+                m_pSonic->speedUp(Sonic::Direction::E);
             }
             else if((*m_kbd).keyIsPressed('D')) {
-                m_Sonic.speedUp(Sonic::Direction::NE);
+                m_pSonic->speedUp(Sonic::Direction::NE);
             }
             else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('W')) {
-                m_Sonic.speedUp(Sonic::Direction::W);
+                m_pSonic->speedUp(Sonic::Direction::W);
             }
             else if ((*m_kbd).keyIsPressed('A') && (*m_kbd).keyIsPressed('S')) {
-                m_Sonic.speedUp(Sonic::Direction::S);
+                m_pSonic->speedUp(Sonic::Direction::S);
             }
             else if ((*m_kbd).keyIsPressed('A')) {
-                m_Sonic.speedUp(Sonic::Direction::SW);
+                m_pSonic->speedUp(Sonic::Direction::SW);
             }
             else if ((*m_kbd).keyIsPressed('W')) {
-                m_Sonic.speedUp(Sonic::Direction::NW);
+                m_pSonic->speedUp(Sonic::Direction::NW);
             }
             else if ((*m_kbd).keyIsPressed('S')) {
-                m_Sonic.speedUp(Sonic::Direction::SE);
+                m_pSonic->speedUp(Sonic::Direction::SE);
             }
 
             if ((*m_kbd).keyIsPressed('R')) {
-                m_Sonic.blink(10);
+                m_pSonic->blink(10);
             }
 
             if ((*m_kbd).keyIsPressed(VK_OEM_3) && !consoleBlock) {   // for Tilde

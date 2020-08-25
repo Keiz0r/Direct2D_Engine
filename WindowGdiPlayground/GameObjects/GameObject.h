@@ -1,5 +1,5 @@
 #pragma once
-#include "Backend\Graphics.h"
+#include "Backend/Graphics.h"
 #include "Log.h"
 
 class GameObject {
@@ -18,6 +18,7 @@ protected:
 protected:
 	inline static Graphics* s_pgfx = nullptr;
 	D2D1_POINT_2F position;
+	bool facingRight = true;
 	float_t m_fScalar = 1.0f;
 	float_t spriteWidth = 0.0f;
 	float_t spriteHeight = 0.0f;

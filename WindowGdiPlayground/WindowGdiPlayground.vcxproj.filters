@@ -34,6 +34,12 @@
     <Filter Include="Source Files\GameObjects\Obstacles">
       <UniqueIdentifier>{82c87b42-9dad-49c0-9c89-7d0c2f5ea9c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects\Characters">
+      <UniqueIdentifier>{7e01002b-00ef-44fe-8702-24a64891cdca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects\Characters">
+      <UniqueIdentifier>{bfc8c78c-3881-4ab8-9865-bbf54ac5d70d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WindowGdiPlayground.cpp">
@@ -46,9 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mainWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sonic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FrameTimer.cpp">
@@ -96,6 +99,9 @@
     <ClCompile Include="GameObjects\Obstacles\Barrel.cpp">
       <Filter>Source Files\GameObjects\Obstacles</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Characters\Sonic.cpp">
+      <Filter>Source Files\GameObjects\Characters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -105,9 +111,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mainWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sonic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FrameTimer.h">
@@ -172,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Characters\Sonic.h">
+      <Filter>Header Files\GameObjects\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Lists\GameObjectsList.h">
+      <Filter>Header Files\Lists</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

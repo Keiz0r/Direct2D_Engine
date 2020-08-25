@@ -1,10 +1,8 @@
 #include "Sonic.h"
 
-Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position, const float& rotationAngle)
+Sonic::Sonic(const D2D1_POINT_2F& objectPosition, const float_t& opacity, const float_t& rotationAngle)
 	:
-	m_pgfx(p_gfx),
-	m_pSprite(nullptr),
-	rotationAngle(rotationAngle),
+	GameObject(objectPosition, opacity, rotationAngle),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
 	RunAnimation_N_W(SONIC_ANIMATION_RUN_N_W),
 	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),
@@ -12,12 +10,15 @@ Sonic::Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position, const float& rotati
 	RunAnimation_SE(SONIC_ANIMATION_RUN_SE),
 	RunAnimation_NW(SONIC_ANIMATION_RUN_NW)
 {
-	setPosition(position);
-	loadSprite(GAMESPRITE(SPRITE_SONIC), m_pSprite);
+	objectcounter++;
+	loadSprite(GAMESPRITE(SPRITE_SONIC), s_pSprite);
 }
 
 Sonic::~Sonic() {
-	SafeRelease(&m_pSprite);
+	objectcounter--;
+	if (objectcounter == 0) {
+		releaseSprite(s_pSprite);
+	}
 }
 
 void Sonic::update() {
@@ -162,16 +163,6 @@ void Sonic::draw() {
 
 }
 
-void Sonic::setPosition(const D2D1_POINT_2F& pos) {
-	position.x = pos.x;
-	position.y = pos.y;
-}
-
-void Sonic::setPosition(const float& x, const float& y) {
-	position.x = x;
-	position.y = y;
-}
-
 void Sonic::speedUp(Sonic::Direction direction) {
 	float diagonalAccel = acceleration / 1.41f;
 	//float diagonalAccel = sqrt((acceleration * acceleration) / 2);
@@ -215,14 +206,6 @@ void Sonic::move() {
 	position.y += velocity.y;
 }
 
-void Sonic::setScalar(const float& scalar) {
-	m_fScalar = scalar;
-}
-
-D2D1_POINT_2F Sonic::getPosition() const {
-	return position;
-}
-
 void Sonic::setMaxVelocity(const float& maxVel) {
 	maxVelocity = maxVel;
 }
@@ -247,9 +230,9 @@ void Sonic::setState(Sonic::Action action) {
 }
 
 void Sonic::Animate(AnimationData& Animation) {
-	if (m_pSprite != nullptr) {
+	if (s_pSprite != nullptr) {
 		static float LegOffset = Animation.Height / -4.0f;
-		D2D1_SIZE_F screensize = m_pgfx.getScreenSize();
+		D2D1_SIZE_F screensize = s_pgfx->getScreenSize();
 
 		// frame switcher
 		if (timeFrameCounter > Animation.FrameTime && currentFrameNum < Animation.TotalFrames) {
@@ -265,18 +248,18 @@ void Sonic::Animate(AnimationData& Animation) {
 			// Apply necessary transformations
 			//for screen coords
 			if (ScreencenteredDrawing) {
-				m_pgfx.transformSRTM(0.0f, LegOffset, rotationAngle, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+				s_pgfx->transformSRTM(0.0f, LegOffset, rotationAngle, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
 				float drawrectstartX = (screensize.width - Animation.Width) / 2;
 				float drawrectstartY = (screensize.height - Animation.Height) / 2;
-				m_pgfx.drawBitmap(m_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height}, 1.0f, Animation.frameCoords[currentFrameNum]);
+				s_pgfx->drawBitmap(s_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height}, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			else {
 				D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
-				m_pgfx.transformTRSM(0.0f, LegOffset * m_fScalar, rotationAngle, imagecenter, m_fScalar, m_fScalar, !facingRight);
-				m_pgfx.drawBitmap(m_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
+				s_pgfx->transformTRSM(0.0f, LegOffset * m_fScalar, rotationAngle, imagecenter, m_fScalar, m_fScalar, !facingRight);
+				s_pgfx->drawBitmap(s_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			//	go back from mirrored sprites
-			m_pgfx.restoreDefaultDrawingParameters();
+			s_pgfx->restoreDefaultDrawingParameters();
 		}
 		else {
 			m_blinkframes--;
@@ -284,15 +267,11 @@ void Sonic::Animate(AnimationData& Animation) {
 	}
 }
 
-void Sonic::loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite) {
-	m_pgfx.loadD2DBitmap(name, 0, sprite);
-}
-
 void Sonic::clampVelocity() {
 	float velVectorLength = velocity.x * velocity.x + velocity.y * velocity.y;
 	if (velVectorLength > maxVelocity * maxVelocity) {
 		//calc direction, make new vel vector with same direction, but max speed scalar
-		float length = sqrt(velVectorLength);
+		float length = sqrtf(velVectorLength);
 		D2D1_POINT_2F DirectionVector = { velocity.x / length, velocity.y / length };
 		velocity.x = DirectionVector.x * maxVelocity;
 		velocity.y = DirectionVector.y * maxVelocity;

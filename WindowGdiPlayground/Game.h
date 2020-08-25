@@ -2,7 +2,6 @@
 #include "Keyboard.h"
 #include "Backend\Graphics.h"
 #include "FrameTimer.h"
-#include "Sonic.h"
 #include "GameLevel.h"
 #include <string>
 #include "Backend\Sound.h"
@@ -12,8 +11,7 @@
 #include <memory>
 #include "Obstacles.h"
 #include <condition_variable>
-
-#include "GameObjects/Obstacles/Barrel.h"
+#include "Lists/GameObjectsList.h"
 
 //Prob needs an "INPUT" class with CMDthread managing
 
@@ -35,7 +33,7 @@ private:
 	Graphics m_gfx;
 	GameConsole m_console;	//copies log every frame. not the best solution probably, but solves invalid access
 	FrameTimer ft;
-	Sonic m_Sonic;
+	std::unique_ptr<Sonic> m_pSonic;
 	GameLevel m_Level;
 	unsigned int updObstacles = 0;	// mek it part  of obstacles after implemented only 1 cmd per frame
 	Obstacles m_obstacles;

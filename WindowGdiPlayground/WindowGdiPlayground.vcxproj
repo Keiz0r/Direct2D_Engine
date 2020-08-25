@@ -166,6 +166,7 @@
     <ClCompile Include="FrameTimer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gameboard.cpp" />
+    <ClCompile Include="GameObjects\Characters\Sonic.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
     <ClCompile Include="GameObjects\Obstacle.cpp" />
     <ClCompile Include="GameObjects\Obstacles\Barrel.cpp" />
@@ -174,7 +175,6 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="mainWindow.cpp" />
     <ClCompile Include="Obstacles.cpp" />
-    <ClCompile Include="Sonic.cpp" />
     <ClCompile Include="WindowGdiPlayground.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,10 +189,12 @@
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gameboard.h" />
+    <ClInclude Include="GameObjects\Characters\Sonic.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Obstacle.h" />
     <ClInclude Include="GameObjects\Obstacles\Barrel.h" />
     <ClInclude Include="Lists\Animations.h" />
+    <ClInclude Include="Lists\GameObjectsList.h" />
     <ClInclude Include="Lists\LevelData.h" />
     <ClInclude Include="Lists\AssetsList.h" />
     <ClInclude Include="Log.h" />
@@ -201,7 +203,6 @@
     <ClInclude Include="mainWindow.h" />
     <ClInclude Include="Obstacles.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Sonic.h" />
     <ClInclude Include="AnimationData.h" />
   </ItemGroup>
   <ItemGroup>
