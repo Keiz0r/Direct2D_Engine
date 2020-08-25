@@ -75,27 +75,25 @@ void Game::composeFrame() {
 void Game::LoadLevel(GameLevel& level) {
 }
 
-void Game::execCommand(std::wstring& command) {
+void Game::execCommand(std::wstring& command_str) {
     // Console input
+    //command defines as "$Wchars combination until space"
+    command_str += L" ";
+    size_t commandEnd = command_str.find(L" ");
+    std::wstring command = command_str.substr(0, commandEnd);
     // TODO: network input
-//    if (command == L"$MOVER") {
-//        CameraCenter.x+= 1.0f;
-//    }
-//    if (command == L"$MOVEL") {
-//        CameraCenter.x -= 1.0f;
-//    }
-//    if (command == L"$MOVEU") {
-//        CameraCenter.y -= 1.0f;
-//    }
-//    if (command == L"$MOVED") {
-//        CameraCenter.y += 1.0f;
-//    }
-    if (command == L"$COORDS") {
+    if (command == L"$TELEPORT") {
+        std::vector<int32_t> newPos = getArgs<int32_t>(command_str);
+        if (newPos.size() == 2) {
+            m_pSonic->setPosition(newPos[0], newPos[1]);
+        }
+    }
+    else if (command == L"$COORDS") {
         std::wstring str = L"World: " + std::to_wstring(m_pSonic->getPosition().x) + L"; " + std::to_wstring(m_pSonic->getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().y));
         Log::putMessage(str.c_str());
     }
-    Log::putMessage(command.c_str());
-    command = L"";
+    Log::putMessage(command_str.c_str());
+    command_str = L"";
 }
 
 void Game::clampCoordinates(Sonic& sonic) {
@@ -113,7 +111,6 @@ void Game::clampCoordinates(Sonic& sonic) {
     else if (sonic.getPosition().y < borders_y.x) {
         sonic.setPosition(sonic.getPosition().x, borders_y.x);
     }
-    
 }
 
 void Game::commandInput() {
@@ -194,7 +191,6 @@ void Game::commandInput() {
             }
         }
         
-
         auto timeout = std::chrono::system_clock::now() + std::chrono::milliseconds(100);
         cmdCV.wait_until(lk, timeout);
 
@@ -205,4 +201,37 @@ void Game::commandInput() {
             keyboardBlock -= 1;
         }
     }
+}
+
+template<typename T>
+inline std::vector<T> Game::getArgs(const std::wstring cmd) const
+{
+    std::basic_regex re(L"[-+]?[0-9]*\.?[0-9]+");   //should identify int or float
+    std::vector<T> args;
+    //TODO: put into recursive function getArgs
+    size_t commandEnd = cmd.find(L" ");
+    int8_t flip = 1;
+    //parse 1st arg
+    size_t posOfSpace = cmd.find_first_of(L" ", commandEnd + 1) - 1;
+    std::wstring arg = cmd.substr(commandEnd + 1, posOfSpace - commandEnd);
+    if (arg.substr(0, 1) == L"-") {
+        flip = -1;
+        arg.erase(0, 1);
+    }
+    if (std::all_of(arg.begin(), arg.end(), std::regex_match(arg, re))) {
+        args.push_back(std::stoi(arg) * flip);
+        //parse 2nd arg
+        flip = 1;
+        commandEnd = posOfSpace + 1;
+        posOfSpace = cmd.find_first_of(L" ", commandEnd + 1) - 1;
+        arg = cmd.substr(commandEnd + 1, posOfSpace - commandEnd);
+        if (arg.substr(0, 1) == L"-") {
+            flip = -1;
+            arg.erase(0, 1);
+        }
+        if (std::all_of(arg.begin(), arg.end(), std::regex_match(arg, re)) && cmd.length() == posOfSpace + 2) {
+            args.push_back(std::stoi(arg) * flip);
+        }
+    }
+    return args;
 }

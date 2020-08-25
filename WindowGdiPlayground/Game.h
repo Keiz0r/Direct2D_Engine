@@ -11,6 +11,7 @@
 #include <memory>
 #include "Obstacles.h"
 #include <condition_variable>
+#include <regex>
 #include "Lists/GameObjectsList.h"
 
 //Prob needs an "INPUT" class with CMDthread managing
@@ -27,6 +28,7 @@ private:
 	void LoadLevel(GameLevel& level);
 	void execCommand(std::wstring& command);
 	void clampCoordinates(Sonic& sonic);
+	template<typename T> std::vector<T> getArgs(const std::wstring cmd) const;
 private:
 	Keyboard* m_kbd;
 	HWND m_hwnd;
