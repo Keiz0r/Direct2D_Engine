@@ -46,7 +46,7 @@ void Game::gameLoop(){
 }
 
 void Game::updateGameState() {
-    const float dt = ft.Mark();
+    const float_t dt = ft.Mark();
     m_Sonic.update();
     clampCoordinates(m_Sonic);
 
@@ -119,8 +119,8 @@ void Game::clampCoordinates(Sonic& sonic) {
 void Game::commandInput() {
     //cmd should only send commands, no work here pls
     std::unique_lock<std::mutex> lk(cmdMutex);
-    unsigned short consoleBlock = 0;
-    unsigned short keyboardBlock = 0;
+    uint8_t consoleBlock = 0;
+    uint8_t keyboardBlock = 0;
     while (cmdRun) {
         if (!m_console.isActiveInput()) {
 

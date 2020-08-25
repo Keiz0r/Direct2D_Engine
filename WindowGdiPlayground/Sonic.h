@@ -13,7 +13,7 @@ public:
 	Sonic(Graphics& p_gfx, const D2D1_POINT_2F& position, const float& rotationAngle);
 	~Sonic();
 	void update();
-	void draw();	// TODO : add various animations depending on speed
+	void draw();
 	void setPosition(const D2D1_POINT_2F& pos);
 	void setPosition(const float& x, const float& y);
 	void speedUp(Direction direction);

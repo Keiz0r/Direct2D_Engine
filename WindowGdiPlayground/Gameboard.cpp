@@ -1,6 +1,6 @@
 #include "Gameboard.h"
 
-GameBoard::GameBoard(const int& width, const int& height)
+GameBoard::GameBoard(const uint32_t& width, const uint32_t& height)
 {
     boardWidth = width;
     boardHeight = height;
@@ -19,16 +19,15 @@ GameBoard::GameBoard(const int& width, const int& height)
 
 GameBoard::~GameBoard() {
     SafeRelease(&m_pTilesSprite);
-    delete[] brdcells;
 }
 
 void GameBoard::fillBoard() {
     //function to use parser from file, which describes said level
-    brdcells = new BoardCell[boardWidth * boardHeight];//reinterpret_cast<BoardCell*>(_alloca(sizeof(BoardCell) * boardWidth * boardHeight));
-    for (float j = 0.0f; j < static_cast<float>(boardHeight); j += 1.0f) {
-        for (float i = 0.0f; i < static_cast<float>(boardWidth); i += 1.0f) {
-            unsigned int index = static_cast<int>(i + (j * static_cast<float>(boardWidth)));
-            GameBoard::BoardCell::assignCellNum(static_cast<int>(i + (j * static_cast<float>(boardWidth))), &brdcells[index]);
+    brdcells = std::make_unique<BoardCell[]>(boardWidth * boardHeight);
+    for (size_t j = 0; j < boardHeight; j++) {
+        for (size_t i = 0; i < boardWidth; i++) {
+            uint32_t index = i + (j * boardWidth);
+            GameBoard::BoardCell::assignCellNum(index, &brdcells[index]);
             GameBoard::BoardCell::setTileType(GameBoard::BoardCell::tiletype::Grass, &brdcells[index]);
         }
     }
@@ -36,7 +35,7 @@ void GameBoard::fillBoard() {
     std::random_device seed;
     std::mt19937 rng(seed());
     std::uniform_int_distribution<std::mt19937::result_type> distribution(to_underlying(GameBoard::BoardCell::tiletype::White), to_underlying(GameBoard::BoardCell::tiletype::Count) - 1);
-    for (unsigned int i = 0; i < boardWidth * boardHeight; i++) {
+    for (size_t i = 0; i < boardWidth * boardHeight; i++) {
         GameBoard::BoardCell::setTileType(static_cast<GameBoard::BoardCell::tiletype>(distribution(rng)), &brdcells[i]);
     }
 }
@@ -86,14 +85,14 @@ unsigned int GameBoard::getCentralTileIndex(const D2D1_POINT_2F& position) const
     //here I account that 20x20 or any odd number of tiles has center of board in a cross. so in order to compensate do this - amountOfspaceInCellx / 2.0f
 }
 
-D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const unsigned int& centertile) const {
+D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const uint32_t& centertile) const {
     //calculate drawable indexes around central
     D2D1_POINT_2U drawStartEnd { centertile + tileDrawingRadius_y - boardHeight * tileDrawingRadius_x, centertile - tileDrawingRadius_y + boardHeight * tileDrawingRadius_x };
     //start topleft end bottom right (grid)
-    unsigned int availableTilesDownwards = centertile % boardHeight;
-    unsigned int availableTilesUpwards = boardHeight - availableTilesDownwards - 1;
-    unsigned int availableTilesLeftwards = centertile / boardHeight;
-    unsigned int availableTilesRightwards = boardWidth - availableTilesLeftwards - 1;
+    uint32_t availableTilesDownwards = centertile % boardHeight;
+    uint32_t availableTilesUpwards = boardHeight - availableTilesDownwards - 1;
+    uint32_t availableTilesLeftwards = centertile / boardHeight;
+    uint32_t availableTilesRightwards = boardWidth - availableTilesLeftwards - 1;
     if (availableTilesDownwards < tileDrawingRadius_y) {
         drawStartEnd.y += tileDrawingRadius_y - availableTilesDownwards;
     }
@@ -109,20 +108,20 @@ D2D1_POINT_2U GameBoard::clampTileDrawingRadius(const unsigned int& centertile) 
     return drawStartEnd;
 }
 
-void GameBoard::drawBoard(const unsigned int& center, const D2D1_POINT_2U& drawStartEnd, const D2D1_POINT_2F& centerDrawCoords) const {
+void GameBoard::drawBoard(const uint32_t& center, const D2D1_POINT_2U& drawStartEnd, const D2D1_POINT_2F& centerDrawCoords) const {
     if (m_pTilesSprite != NULL) {
         static D2D1_POINT_2F screenBasisVector{ (BoardCell::cellwidth / 2.0f), (BoardCell::cellheight / 2.0f) };
-        unsigned short int amountOfShifts_x = center / boardHeight - drawStartEnd.x / boardHeight;
-        unsigned short int amountOfShifts_y = drawStartEnd.x % boardHeight - center % boardHeight;
+        uint8_t amountOfShifts_x = center / boardHeight - drawStartEnd.x / boardHeight; //cell shifts
+        uint8_t amountOfShifts_y = drawStartEnd.x % boardHeight - center % boardHeight;
         D2D1_POINT_2F shiftedCoords{ centerDrawCoords.x + screenBasisVector.x * (amountOfShifts_y - amountOfShifts_x),
             centerDrawCoords.y - screenBasisVector.y * (amountOfShifts_x + amountOfShifts_y) };
         //drawing row top to bottom from leftmost
-        int columnDrawingIndex = drawStartEnd.x;
-        int columnHeight = drawStartEnd.x % boardHeight - drawStartEnd.y % boardHeight;
-        int i = 0;
-        int rowsToDraw = drawStartEnd.y / boardHeight - drawStartEnd.x / boardHeight;
+        uint32_t columnDrawingIndex = drawStartEnd.x;
+        uint32_t columnHeight = drawStartEnd.x % boardHeight - drawStartEnd.y % boardHeight;
+        int32_t i = 0;  //TODO: interesting visual effect if set to Uint (together with counter)
+        uint32_t rowsToDraw = drawStartEnd.y / boardHeight - drawStartEnd.x / boardHeight;
         while (i <= rowsToDraw) {
-            int counter = 0;
+            int32_t counter = 0;
             while (counter <= columnHeight) {
                 GameBoard::BoardCell::draw(*m_pgfx, m_pTilesSprite, { shiftedCoords.x + screenBasisVector.x * (i - counter),
                     shiftedCoords.y + screenBasisVector.y * (counter + i) }, &brdcells[columnDrawingIndex]);
@@ -151,7 +150,7 @@ void GameBoard::Draw(const D2D1_POINT_2F& position) {
     D2D1_POINT_2F indent = { (normalizedAbsPosition.x - amountOfspaceInCellx / 2.0f), normalizedAbsPosition.y - (amountOfspaceInCellx / 2.0f) };
     D2D1_POINT_2F isometricIndent = toIsometric(indent);
     D2D1_POINT_2F ScreenSpaceDrawCoords{ (baseindent.x - isometricIndent.x), (baseindent.y - isometricIndent.y) };
-    unsigned int centraltile = getCentralTileIndex(position);
+    uint32_t centraltile = getCentralTileIndex(position);
     
     D2D1_POINT_2U drawStartEnd = clampTileDrawingRadius(centraltile);
     drawBoard(centraltile, drawStartEnd, ScreenSpaceDrawCoords);
@@ -159,7 +158,7 @@ void GameBoard::Draw(const D2D1_POINT_2F& position) {
 
 void GameBoard::drawGeneratedTile() const {
     D2D1_SIZE_F screensize = m_pgfx->getScreenSize();
-    static float playerLegOffset = 30.0f / 2.0f;
+    static float_t playerLegOffset = 30.0f / 2.0f;
     D2D1_RECT_F testrect{ -25.0f, 25.0f, 25.0f, -25.0f };
     m_pgfx->transformTRSM(playerLegOffset, playerLegOffset, 45.0f, { screensize.width / 2.0f, screensize.height / 2.0f }, 3.2f / 2.0f, 1.6f / 2.0f, false);  //Scales are tied to (Board::cellwidth/amountofspacex)/(2*sqrt(2))
     m_pgfx->DrawRect({ screensize.width / 2.0f + testrect.left, screensize.height / 2.0f - testrect.top, screensize.width / 2.0f + testrect.right,screensize.height / 2.0f - testrect.bottom, }, true, Graphics::D2D_SOLID_COLORS::Black);
@@ -187,7 +186,7 @@ void GameBoard::BoardCell::ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2
     p_gfx.drawTextBox(name.c_str(), 0, Graphics::D2D_SOLID_COLORS::OrangeRed, { screencoords.x + cellwidth / 2 - 10, screencoords.y, screencoords.x + 150.0f, screencoords.y + 40.0f });
 }
 
-void GameBoard::BoardCell::assignCellNum(const int& num, BoardCell* cell) {
+void GameBoard::BoardCell::assignCellNum(const uint32_t& num, BoardCell* cell) {
     cell->cellnum = num;
 }
 

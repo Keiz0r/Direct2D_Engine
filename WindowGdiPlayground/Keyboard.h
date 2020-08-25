@@ -41,8 +41,8 @@ private:
 	template<typename T>
 	void trimBuffer(std::queue<T> buffer);
 private:
-	static constexpr unsigned int nKeys = 256u;
-	static constexpr unsigned int bufferSize = 4u;
+	static constexpr uint16_t nKeys = 256u;
+	static constexpr uint8_t bufferSize = 4u;
 	std::bitset<nKeys> keyStates;
 	std::queue<Event> keyBuffer;
 	std::queue<char> charBuffer;

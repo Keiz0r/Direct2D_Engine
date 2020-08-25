@@ -1,6 +1,6 @@
 #include "GameLevel.h"
 
-GameLevel::GameLevel(Graphics& p_gfx, const int& width, const int& height)
+GameLevel::GameLevel(Graphics& p_gfx, const uint32_t& width, const uint32_t& height)
 	:
 	m_pgfx(p_gfx),
 	m_board(width, height),
@@ -32,7 +32,7 @@ void GameLevel::draw(const D2D1_POINT_2F& position) {
 	m_board.Draw(position);
 }
 
-void GameLevel::rotateBckgnd(float& angle) {
+void GameLevel::rotateBckgnd(float_t& angle) {
 	bkgndRttnAngl = angle;
 }
 

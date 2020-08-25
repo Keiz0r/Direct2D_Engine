@@ -14,7 +14,7 @@ private:
 private:
 	Graphics& m_pgfx;
 	D2D1_POINT_2F position;
-	float m_fScalar = 1.0f;
+	float_t m_fScalar = 1.0f;
 	ID2D1Bitmap* m_pSprite;
 	bool initialised = false;
 };

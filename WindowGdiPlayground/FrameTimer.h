@@ -1,16 +1,17 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include <inttypes.h>
 
 class FrameTimer {
 public:
 	FrameTimer();
-	float Mark();
+	float_t Mark();
 	std::wstring getFPS();
 private:
 	std::chrono::steady_clock::time_point last;
-	float fps = 0.0f;
-	int framecounter = 0;
-	float timecounter = 0.0f;
+	float_t fps = 0.0f;
+	uint16_t framecounter = 0;
+	float_t timecounter = 0.0f;
 	std::wstring m_sdisplayfps = L"";
 };

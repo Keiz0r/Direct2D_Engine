@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float& opacity, const float& rotationAngle)
+GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float_t& opacity, const float_t& rotationAngle)
 	:
 	position(objectPosition),
 	opacity(opacity),
@@ -33,11 +33,16 @@ void GameObject::setPosition(const D2D1_POINT_2F& pos) {
 	position = pos;
 }
 
+void GameObject::setPosition(const float_t& x, const float_t& y) {
+	position.x = x;
+	position.y = y;
+}
+
 D2D1_POINT_2F GameObject::getPosition() const {
 	return position;
 }
 
-void GameObject::setScalar(const float& scalar) {
+void GameObject::setScalar(const float_t& scalar) {
 	m_fScalar = scalar;
 	if (scalar < 0.01f) {
 		Log::putError(L" Object scalar is 0 or negative");

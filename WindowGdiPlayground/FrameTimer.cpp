@@ -5,7 +5,7 @@ FrameTimer::FrameTimer()
 	last = std::chrono::steady_clock::now();
 }
 
-float FrameTimer::Mark()
+float_t FrameTimer::Mark()
 {
 	const auto old = last;
 	last = std::chrono::steady_clock::now();
