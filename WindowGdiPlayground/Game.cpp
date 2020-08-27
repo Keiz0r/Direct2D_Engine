@@ -76,23 +76,34 @@ void Game::LoadLevel(GameLevel& level) {
 }
 
 void Game::execCommand(std::wstring& command_str) {
+    // TODO:World of Regex
     // Console input
-    //command defines as "$Wchars combination until space"
-    command_str += L" ";
-    size_t commandEnd = command_str.find(L" ");
-    std::wstring command = command_str.substr(0, commandEnd);
-    // TODO: network input
-    if (command == L"$TELEPORT") {
-        std::vector<int32_t> newPos = getArgs<int32_t>(command_str);
-        if (newPos.size() == 2) {
-            m_pSonic->setPosition(newPos[0], newPos[1]);
+    static std::basic_regex re_isCmd(L"^\\$");
+    static std::basic_regex re_Teleport(L"^\\$TELEPORT");
+    static std::basic_regex re_Coords(L"^\\$COORDS");
+
+    if (!std::regex_search(command_str, re_isCmd)) {
+        //output entered string if it is not a command
+        Log::putMessage(command_str.c_str());
+    }
+    else {
+        command_str += L" ";    //TODO : further search for now needs ending space
+        // TODO: network input
+        if (std::regex_search(command_str, re_Teleport)) {
+            std::vector<int32_t> newPos = getArgs<int32_t>(command_str);
+            if (newPos.size() == 2) {
+                m_pSonic->setPosition(static_cast<float_t>(newPos[0]), static_cast<float_t>(newPos[1]));
+            }
+            else {
+                Log::putMessage(L"Wrong arguments for command <TELEPORT>");
+            }
+        }
+        else if (std::regex_search(command_str, re_Coords)) {
+            std::wstring str = L"World: " + std::to_wstring(m_pSonic->getPosition().x) + L"; " + std::to_wstring(m_pSonic->getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().y));
+            Log::putMessage(str.c_str());
         }
     }
-    else if (command == L"$COORDS") {
-        std::wstring str = L"World: " + std::to_wstring(m_pSonic->getPosition().x) + L"; " + std::to_wstring(m_pSonic->getPosition().y) + L"|| Cell: " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().x * 20)) + L"; " + std::to_wstring(static_cast<int>(m_pSonic->getPosition().y));
-        Log::putMessage(str.c_str());
-    }
-    Log::putMessage(command_str.c_str());
+    
     command_str = L"";
 }
 
@@ -204,9 +215,9 @@ void Game::commandInput() {
 }
 
 template<typename T>
-inline std::vector<T> Game::getArgs(const std::wstring cmd) const
+std::vector<T> Game::getArgs(const std::wstring cmd) const
 {
-    std::basic_regex re(L"[-+]?[0-9]*\.?[0-9]+");   //should identify int or float
+    std::basic_regex re(L"^[[:digit:]]+$|^[[:digit:]]+[\.,][[:digit:]]+$");   //more than 1 numeric OR more than 1 numeric;optional dot\comma;0 or more numerics
     std::vector<T> args;
     //TODO: put into recursive function getArgs
     size_t commandEnd = cmd.find(L" ");
@@ -218,7 +229,7 @@ inline std::vector<T> Game::getArgs(const std::wstring cmd) const
         flip = -1;
         arg.erase(0, 1);
     }
-    if (std::all_of(arg.begin(), arg.end(), std::regex_match(arg, re))) {
+    if (std::regex_match(arg, re)) {
         args.push_back(std::stoi(arg) * flip);
         //parse 2nd arg
         flip = 1;
@@ -229,7 +240,7 @@ inline std::vector<T> Game::getArgs(const std::wstring cmd) const
             flip = -1;
             arg.erase(0, 1);
         }
-        if (std::all_of(arg.begin(), arg.end(), std::regex_match(arg, re)) && cmd.length() == posOfSpace + 2) {
+        if (std::regex_match(arg, re)) {
             args.push_back(std::stoi(arg) * flip);
         }
     }
