@@ -176,6 +176,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="mainWindow.cpp" />
     <ClCompile Include="Obstacles.cpp" />
+    <ClCompile Include="Scripts.cpp" />
     <ClCompile Include="WindowGdiPlayground.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +207,7 @@
     <ClInclude Include="Obstacles.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="AnimationData.h" />
+    <ClInclude Include="Scripts.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TODOs.txt" />

@@ -105,6 +105,9 @@
     <ClCompile Include="GameObjects\Obstacles\Tree.cpp">
       <Filter>Source Files\GameObjects\Obstacles</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="GameObjects\Obstacles\Tree.h">
       <Filter>Header Files\GameObjects\Obstacles</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

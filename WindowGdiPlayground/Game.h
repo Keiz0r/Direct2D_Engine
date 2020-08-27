@@ -10,9 +10,11 @@
 #include <thread>
 #include <memory>
 #include "Obstacles.h"
-#include <condition_variable>
 #include <regex>
 #include "Lists/GameObjectsList.h"
+#include <mutex>
+#include <condition_variable>
+#include "Scripts.h"
 
 //Prob needs an "INPUT" class with CMDthread managing
 

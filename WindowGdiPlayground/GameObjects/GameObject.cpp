@@ -14,6 +14,8 @@ GameObject::~GameObject() {
 void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs) {
 	if (s_pgfx == nullptr) {
 		s_pgfx = gfx;
+	}
+	if (centerCoordinates == nullptr) {
 		centerCoordinates = screencenterVar;
 		isometricCoefficients = isometricCoeffs;
 	}
@@ -51,4 +53,12 @@ void GameObject::setScalar(const float_t& scalar) {
 	if (scalar < 0.01f) {
 		Log::putError(L" Object scalar is 0 or negative");
 	}
+}
+
+void GameObject::setOpacity(const float_t& opac) {
+	opacity = opac;
+}
+
+void GameObject::runScript(void(*script)(D2D1_POINT_2F&, const float_t&), const float_t& scale) {
+	script(position, scale);
 }

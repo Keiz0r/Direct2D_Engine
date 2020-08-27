@@ -36,27 +36,37 @@ void Game::gameLoop(){
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
     static float_t blow = 0.0f;
     static bool flag = false;
-    Barrel brl{ {blow, blow}, 0.90f, blow * 3, false };
-    Barrel brl2{ {501.0f, 510.0f}, 0.90f, 90.0f, false };
-    brl.setScalar(1.0f);
+    static Barrel* brl = new Barrel{ {0.0f, 0.0f}, 0.90f, blow * 1, false };
+    static Barrel* brl2 = new Barrel{ {84.0f, 25.0f}, 0.90f, blow * 1, false };
+    Barrel brl3{ {0.0f, -blow}, 0.90f, blow * 1, false };
+    Barrel brl4{ {-blow, 0.0f}, 0.90f, blow * 1, false };
+    brl->runScript(Scripts::patrol, 2.0f);
+    brl2->runScript(Scripts::patrol, 5.0f);
+    brl->setScalar(3.0f);
+    brl2->setScalar(3.0f);
+    brl3.setScalar(3.0f);
+    brl4.setScalar(3.0f);
     m_pSonic->setScalar(1.0f);
-    brl2.draw();
-    brl.draw();
-    m_pSonic->setRotationAngle(blow);
+    brl2->draw();
+    brl->draw();
+    brl3.draw();
+    brl4.draw();
+    brl->setRotationAngle(blow);
+    brl2->setRotationAngle(blow);
     if (blow > 1274) {
         flag = true;
     }
     if (blow < -1225)
         flag = false;
     if (flag) {
-        blow -= 3.0f;
+        blow -= 1.0f;
     }
     else {
-        blow += 3.0f;
+        blow += 1.0f;
     }
 #endif
 	m_gfx.endFrame();
-    cmdCV.notify_all();
+    cmdCV.notify_all(); //update cmd
 }
 
 void Game::updateGameState() {
@@ -82,7 +92,8 @@ void Game::composeFrame() {
 
     m_obstacles.draw();
 
-    m_gfx.drawTextBox(ft.getFPS().c_str(), 1, Graphics::D2D_SOLID_COLORS::OrangeRed, { 10.0f, 680.0f, 200.0f, 720.0f});
+    //  FPS
+    m_gfx.drawTextBox(std::to_wstring(ft.getFPS()).c_str(), 1, Graphics::D2D_SOLID_COLORS::OrangeRed, { 10.0f, 680.0f, 200.0f, 720.0f});
     m_console.draw();
 }
 
