@@ -10,6 +10,7 @@ public:
 	void setPosition(const D2D1_POINT_2F& pos);
 	void setPosition(const float_t& x, const float_t& y);
 	D2D1_POINT_2F getPosition() const;
+	void setRotationAngle(const float_t& Rangle);
 	void setScalar(const float_t& scalar);
 	static void initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs);
 protected:

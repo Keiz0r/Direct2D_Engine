@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObjects/Obstacle.h"
 
-class Barrel : public Obstacle {
+class Tree : public Obstacle {
 public:
-	Barrel(const D2D1_POINT_2F& position, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable);
-	~Barrel();
+	Tree(const D2D1_POINT_2F& position, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable);
+	~Tree();
 	void draw() override;
 private:
 	inline static float_t LegOffset = 0;

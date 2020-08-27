@@ -170,6 +170,7 @@
     <ClCompile Include="GameObjects\GameObject.cpp" />
     <ClCompile Include="GameObjects\Obstacle.cpp" />
     <ClCompile Include="GameObjects\Obstacles\Barrel.cpp" />
+    <ClCompile Include="GameObjects\Obstacles\Tree.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="GameLevel.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="GameObjects\GameObject.h" />
     <ClInclude Include="GameObjects\Obstacle.h" />
     <ClInclude Include="GameObjects\Obstacles\Barrel.h" />
+    <ClInclude Include="GameObjects\Obstacles\Tree.h" />
     <ClInclude Include="Lists\Animations.h" />
     <ClInclude Include="Lists\GameObjectsList.h" />
     <ClInclude Include="Lists\LevelData.h" />

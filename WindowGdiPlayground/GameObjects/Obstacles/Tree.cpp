@@ -1,6 +1,6 @@
-#include "GameObjects/Obstacles/Barrel.h"
+#include "GameObjects/Obstacles/Tree.h"
 
-Barrel::Barrel(const D2D1_POINT_2F& position, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable)
+Tree::Tree(const D2D1_POINT_2F& position, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable)
 	:
 	Obstacle(position, opacity, rotationAngle, is_destrucable)
 {
@@ -10,11 +10,11 @@ Barrel::Barrel(const D2D1_POINT_2F& position, const float_t& opacity, const floa
 	objectcounter++;
 }
 
-Barrel::~Barrel() {
+Tree::~Tree() {
 	objectcounter--;
 }
 
-void Barrel::draw() {
+void Tree::draw() {
 	if (s_pSprite != nullptr) {
 		static float_t halfwidth = spriteWidth / 2.0f;
 		static float_t halfheight = spriteHeight / 2.0f;

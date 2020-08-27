@@ -34,12 +34,26 @@ void Game::gameLoop(){
 #ifdef KEIZOR_DEBUG
     m_gfx.DrawLine(0.0f, m_gfx.getScreenSize().height /2.0f, m_gfx.getScreenSize().width, m_gfx.getScreenSize().height / 2.0f, 1.0f);
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
-    Barrel brl{ {500.0f, 500.0f}, 0.90f, 90.0f, false };
+    static float_t blow = 0.0f;
+    static bool flag = false;
+    Barrel brl{ {blow, blow}, 0.90f, blow * 3, false };
     Barrel brl2{ {501.0f, 510.0f}, 0.90f, 90.0f, false };
     brl.setScalar(1.0f);
     m_pSonic->setScalar(1.0f);
     brl2.draw();
     brl.draw();
+    m_pSonic->setRotationAngle(blow);
+    if (blow > 1274) {
+        flag = true;
+    }
+    if (blow < -1225)
+        flag = false;
+    if (flag) {
+        blow -= 3.0f;
+    }
+    else {
+        blow += 3.0f;
+    }
 #endif
 	m_gfx.endFrame();
     cmdCV.notify_all();

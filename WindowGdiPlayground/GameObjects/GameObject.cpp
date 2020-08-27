@@ -42,6 +42,10 @@ D2D1_POINT_2F GameObject::getPosition() const {
 	return position;
 }
 
+void GameObject::setRotationAngle(const float_t& Rangle) {
+	rotationAngle = Rangle;
+}
+
 void GameObject::setScalar(const float_t& scalar) {
 	m_fScalar = scalar;
 	if (scalar < 0.01f) {

@@ -102,6 +102,9 @@
     <ClCompile Include="GameObjects\Characters\Sonic.cpp">
       <Filter>Source Files\GameObjects\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjects\Obstacles\Tree.cpp">
+      <Filter>Source Files\GameObjects\Obstacles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Lists\GameObjectsList.h">
       <Filter>Header Files\Lists</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjects\Obstacles\Tree.h">
+      <Filter>Header Files\GameObjects\Obstacles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
