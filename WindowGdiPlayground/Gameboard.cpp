@@ -168,12 +168,12 @@ void GameBoard::drawGeneratedTile() const {
 
 void GameBoard::BoardCell::draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords, BoardCell* cell) {
     // draws cell unit on screen using screen's coordinates  From Top-left corner
-    if (cell->doubleTextureHeight > 1.1f) {
-        p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y - cellheight, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, cell->TextureCoords);
-    }
-    else {
+    //if (cell->doubleTextureHeight > 1.1f) {
+    //    p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y - cellheight, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, cell->TextureCoords);
+    //}
+    //else {
         p_gfx.drawBitmap(pTilesSprite, { screencoords.x, screencoords.y, screencoords.x + cellwidth, screencoords.y + cellheight }, 1.0f, cell->TextureCoords);
-    }
+    //}
     
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x + cellwidth, coords.y, borderThickness);
  //   p_gfx.DrawLine(coords.x, coords.y, coords.x, coords.y - cellheight, borderThickness);
@@ -190,7 +190,7 @@ void GameBoard::BoardCell::assignCellNum(const uint32_t& num, BoardCell* cell) {
     cell->cellnum = num;
 }
 
-void GameBoard::BoardCell::setTileType(tiletype type, BoardCell* cell){
+void GameBoard::BoardCell::setTileType(tiletype type, BoardCell* cell) {
     cell->tileType = type;
     switch (type) {
     case GameBoard::BoardCell::tiletype::White:
@@ -214,9 +214,9 @@ void GameBoard::BoardCell::setTileType(tiletype type, BoardCell* cell){
     case GameBoard::BoardCell::tiletype::Water2:
         cell->TextureCoords = { 319.0f, 100.0f, 480.0f, 190.0f };
         break;
-    case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
-        cell->TextureCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
-        cell->doubleTextureHeight = 2.0f;
-        break;
+    //case GameBoard::BoardCell::tiletype::Tree1_DoubleH:
+    //    cell->TextureCoords = { 0.0f, 210.0f, 159.0f, 391.0f };
+    //    cell->doubleTextureHeight = 2.0f;
+    //    break;
     }
 }

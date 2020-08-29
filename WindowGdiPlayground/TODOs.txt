@@ -47,3 +47,5 @@ modify log::puterror to make error file and log errors there
 
 barrel draw has magin numbers instead of animation data.
 animationdata structure for idle objects?
+
+TODO: RNG for whole project. now it doubles in "Tree" and "GameBoard"

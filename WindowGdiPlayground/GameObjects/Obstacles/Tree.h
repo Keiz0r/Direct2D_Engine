@@ -11,9 +11,10 @@ public:
 	};
 	void draw() override;
 private:
+	void randomizeTree();
 	inline static ID2D1Bitmap* s_pSprite[14] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
 	D2D1_SIZE_U spriteSize = { 0, 0 };
-	inline static float_t LegOffset = 0;
+	D2D1_POINT_2F spriteOffset = {0.0f, 0.0f};
 	inline static uint32_t objectcounter = 0;
 	Treetype type = Treetype::Regular;
 };

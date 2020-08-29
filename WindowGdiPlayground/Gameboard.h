@@ -19,7 +19,7 @@ private:
 		friend GameBoard;
 	public:
 		enum class tiletype {
-			White, Contour_Black, Black, ContourI_Black, Grass, Water1, Water2, Tree1_DoubleH, Count
+			White, Contour_Black, Black, ContourI_Black, Grass, Water1, Water2, Count
 		};
 		static void draw(const Graphics& p_gfx, ID2D1Bitmap* pTilesSprite, const D2D1_POINT_2F& screencoords, BoardCell* cell);
 		static void ShowCellNum(const Graphics& p_gfx, const D2D1_POINT_2F& screencoords, BoardCell* cell);
@@ -29,7 +29,7 @@ private:
 		uint32_t cellnum = 0;
 		tiletype tileType = tiletype::White;
 		D2D1_RECT_F TextureCoords {0.0f, 0.0f, 0.0f, 0.0f};
-		float_t doubleTextureHeight = 1.0f;
+		//float_t doubleTextureHeight = 1.0f;
 		static constexpr float cellwidth = 160.0f;// / 1.41f;		//in pixels
 		static constexpr float cellheight = 80.0f;// / 1.41f;
 	};

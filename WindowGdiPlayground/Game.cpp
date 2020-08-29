@@ -38,16 +38,18 @@ void Game::gameLoop(){
     static bool flag = false;
     static Barrel* brl = new Barrel{ {0.0f, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     static Barrel* brl2 = new Barrel{ {84.0f, 25.0f}, 3.0f, 0.90f, blow * 1, false };
-    static Tree* tree = new Tree{ {0.0f, 0.0f}, 1.0f, 0.8f, 0.0f, false };
-//    static Tree* tree1 = new Tree{ {163.0f, 88.0f}, 0.7f, 1.0f, 0.0f, false };
-//    static Tree* tree2 = new Tree{ {-83.0f, -150.0f}, 0.3f, 1.0f, 0.0f, false };
+
+    static Tree* tree = new Tree{ {0.0f, 0.0f}, 1.0f, 1.0f, 0.0f, false };
+    static Tree* tree1 = new Tree{ {150.0f, 100.0f}, 0.7f, 1.0f, 0.0f, false };
+    static Tree* tree2 = new Tree{ {-100.0f, -150.0f}, 0.5f, 1.0f, 0.0f, false };
+
     Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
     Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     brl->runScript(Scripts::patrol, 2.0f);
     brl2->runScript(Scripts::patrol, 5.0f);
     tree->draw();
-//    tree1->draw();
-//    tree2->draw();
+    tree1->draw();
+    tree2->draw();
     brl2->draw();
     brl->draw();
     brl3.draw();
@@ -93,7 +95,7 @@ void Game::composeFrame() {
     m_obstacles.draw();
 
     //  FPS
-    m_gfx.drawTextBox(std::to_wstring(ft.getFPS()).c_str(), 1, Graphics::D2D_SOLID_COLORS::OrangeRed, { 10.0f, 680.0f, 200.0f, 720.0f});
+    m_gfx.drawTextBox((L"Fps: " + std::to_wstring(ft.getFPS())).c_str(), 1, Graphics::D2D_SOLID_COLORS::OrangeRed, { 10.0f, 680.0f, 250.0f, 720.0f});
     m_console.draw();
 }
 
