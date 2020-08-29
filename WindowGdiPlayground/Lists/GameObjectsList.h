@@ -1,3 +1,7 @@
 #pragma once
-#include "GameObjects/Obstacles/Barrel.h"
+//Characters:
 #include "GameObjects/Characters/Sonic.h"
+
+//Obstacles:
+#include "GameObjects/Obstacles/Barrel.h"
+#include "GameObjects/Obstacles/Tree.h"

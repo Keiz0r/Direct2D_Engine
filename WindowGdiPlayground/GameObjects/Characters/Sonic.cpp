@@ -1,8 +1,8 @@
 #include "Sonic.h"
 
-Sonic::Sonic(const D2D1_POINT_2F& objectPosition, const float_t& opacity, const float_t& rotationAngle)
+Sonic::Sonic(const D2D1_POINT_2F& objectPosition, const float_t& scale, const float_t& opacity, const float_t& rotationAngle)
 	:
-	GameObject(objectPosition, opacity, rotationAngle),
+	GameObject(objectPosition, scale, opacity, rotationAngle),
 	IdleAnimation(SONIC_ANIMATION_IDLE),
 	RunAnimation_N_W(SONIC_ANIMATION_RUN_N_W),
 	RunAnimation_SW_NE(SONIC_ANIMATION_RUN_SW_NE),

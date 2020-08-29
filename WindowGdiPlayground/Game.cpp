@@ -13,7 +13,7 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     Sound::openMP3();
     Sound::playOnRepeatMP3();
 
-    m_pSonic = std::make_unique<Sonic, const D2D1_POINT_2F&, const float_t&, const float_t&>({ 0.0f, 0.0f }, 1.0f, 0.0f);
+    m_pSonic = std::make_unique<Sonic, const D2D1_POINT_2F&, const float_t&, const float_t&, const float_t&>({ 0.0f, 0.0f }, 1.0f, 1.0f, 0.0f);
     //launch cmd thread
     cmdln = std::thread([this](){this->commandInput(); });
     
@@ -36,17 +36,18 @@ void Game::gameLoop(){
     m_gfx.DrawLine(m_gfx.getScreenSize().width /2.0f, 0.0f, m_gfx.getScreenSize().width /2.0f, m_gfx.getScreenSize().height, 1.0f);
     static float_t blow = 0.0f;
     static bool flag = false;
-    static Barrel* brl = new Barrel{ {0.0f, 0.0f}, 0.90f, blow * 1, false };
-    static Barrel* brl2 = new Barrel{ {84.0f, 25.0f}, 0.90f, blow * 1, false };
-    Barrel brl3{ {0.0f, -blow}, 0.90f, blow * 1, false };
-    Barrel brl4{ {-blow, 0.0f}, 0.90f, blow * 1, false };
+    static Barrel* brl = new Barrel{ {0.0f, 0.0f}, 3.0f, 0.90f, blow * 1, false };
+    static Barrel* brl2 = new Barrel{ {84.0f, 25.0f}, 3.0f, 0.90f, blow * 1, false };
+    static Tree* tree = new Tree{ {0.0f, 0.0f}, 1.0f, 1.0f, 0.0f, false };
+    static Tree* tree1 = new Tree{ {63.0f, 0.0f}, 1.0f, 1.0f, 0.0f, false };
+    static Tree* tree2 = new Tree{ {-83.0f, -150.0f}, 1.0f, 1.0f, 0.0f, false };
+    Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
+    Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     brl->runScript(Scripts::patrol, 2.0f);
     brl2->runScript(Scripts::patrol, 5.0f);
-    brl->setScalar(3.0f);
-    brl2->setScalar(3.0f);
-    brl3.setScalar(3.0f);
-    brl4.setScalar(3.0f);
-    m_pSonic->setScalar(1.0f);
+    tree->draw();
+    tree1->draw();
+    tree2->draw();
     brl2->draw();
     brl->draw();
     brl3.draw();

@@ -11,7 +11,7 @@ public:
 	enum class Direction {
 		N, NE, E, SE, S, SW, W, NW
 	};
-	Sonic(const D2D1_POINT_2F& objectPosition, const float_t& opacity, const float_t& rotationAngle);
+	Sonic(const D2D1_POINT_2F& objectPosition, const float_t& scale, const float_t& opacity, const float_t& rotationAngle);
 	~Sonic();
 	void update();
 	void draw();

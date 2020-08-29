@@ -5,7 +5,7 @@
 
 class GameObject {
 public:
-	GameObject(const D2D1_POINT_2F& objectPosition, const float_t& opacity, const float_t& rotationAngle);
+	GameObject(const D2D1_POINT_2F& objectPosition, const float_t& scale, const float_t& opacity, const float_t& rotationAngle);
 	virtual ~GameObject();
 	virtual void draw() = 0;
 	void setPosition(const D2D1_POINT_2F& pos);
@@ -25,8 +25,6 @@ protected:
 	D2D1_POINT_2F position;
 	bool facingRight = true;
 	float_t m_fScalar = 1.0f;
-	float_t spriteWidth = 0.0f;
-	float_t spriteHeight = 0.0f;
 	float_t rotationAngle = 0.0f;
 	float_t opacity = 0.0f;
 	inline static float_t visibilityRadius = 450.0f * 450.0f;

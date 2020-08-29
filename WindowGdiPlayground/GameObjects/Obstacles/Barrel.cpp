@@ -1,23 +1,27 @@
 #include "GameObjects/Obstacles/Barrel.h"
 
-Barrel::Barrel(const D2D1_POINT_2F& position, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable)
+Barrel::Barrel(const D2D1_POINT_2F& position, const float_t& scale, const float_t& opacity, const float_t& rotationAngle, const bool& is_destrucable)
 	:
-	Obstacle(position, opacity, rotationAngle, is_destrucable)
+	Obstacle(position, scale, opacity, rotationAngle, is_destrucable)
 {
-	spriteWidth = 19.0f;
-	spriteHeight = 21.0f;
-	LegOffset = spriteHeight / -2.0f;
 	objectcounter++;
+	loadSprite(GAMESPRITE(SPRITE_OBJECTS), s_pSprite);
+//	spriteSize = s_pSprite->GetPixelSize();
+	spriteSize = {19,21};
+	LegOffset = spriteSize.height / -2.0f;
 }
 
 Barrel::~Barrel() {
 	objectcounter--;
+	if (objectcounter == 0) {
+		releaseSprite(s_pSprite);
+	}
 }
 
 void Barrel::draw() {
 	if (s_pSprite != nullptr) {
-		static float_t halfwidth = spriteWidth / 2.0f;
-		static float_t halfheight = spriteHeight / 2.0f;
+		static float_t halfwidth = spriteSize.width / 2.0f;
+		static float_t halfheight = spriteSize.height / 2.0f;
 		static D2D1_POINT_2F screenCenter{ s_pgfx->getScreenSize().width / 2.0f, s_pgfx->getScreenSize().height / 2.0f };
 		D2D1_POINT_2F shift = { screenCenter.x - (centerCoordinates->x + centerCoordinates->y - position.x - position.y) * 1.6f , screenCenter.y - (centerCoordinates->x - centerCoordinates->y - position.x + position.y) * 0.8f };
 		//no draw if beyond screen
