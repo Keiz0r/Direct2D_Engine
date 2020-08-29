@@ -38,9 +38,9 @@ void Game::gameLoop(){
     static bool flag = false;
     static Barrel* brl = new Barrel{ {0.0f, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     static Barrel* brl2 = new Barrel{ {84.0f, 25.0f}, 3.0f, 0.90f, blow * 1, false };
-    static Tree* tree = new Tree{ {0.0f, 0.0f}, 1.0f, 1.0f, 0.0f, false };
-    static Tree* tree1 = new Tree{ {63.0f, 0.0f}, 1.0f, 1.0f, 0.0f, false };
-    static Tree* tree2 = new Tree{ {-83.0f, -150.0f}, 1.0f, 1.0f, 0.0f, false };
+    static Tree* tree = new Tree{ {0.0f, 0.0f}, 0.4f, 1.0f, 0.0f, false };
+    static Tree* tree1 = new Tree{ {163.0f, 88.0f}, 0.7f, 1.0f, 0.0f, false };
+    static Tree* tree2 = new Tree{ {-83.0f, -150.0f}, 0.3f, 1.0f, 0.0f, false };
     Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
     Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     brl->runScript(Scripts::patrol, 2.0f);

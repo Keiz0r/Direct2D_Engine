@@ -215,6 +215,9 @@
   <ItemGroup>
     <ResourceCompile Include="CODENAME Charodey Vasiliy.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Assets\Icon.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
