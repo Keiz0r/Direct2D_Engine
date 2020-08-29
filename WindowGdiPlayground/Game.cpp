@@ -73,7 +73,6 @@ void Game::updateGameState() {
     const float_t dt = ft.Mark();
     m_pSonic->update();
     clampCoordinates(*m_pSonic);
-
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);

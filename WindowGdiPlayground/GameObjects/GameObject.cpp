@@ -58,7 +58,3 @@ void GameObject::setScalar(const float_t& scalar) {
 void GameObject::setOpacity(const float_t& opac) {
 	opacity = opac;
 }
-
-void GameObject::runScript(void(*script)(D2D1_POINT_2F&, const float_t&), const float_t& scale) {
-	script(position, scale);
-}

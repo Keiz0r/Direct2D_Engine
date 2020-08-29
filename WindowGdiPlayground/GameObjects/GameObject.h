@@ -14,7 +14,7 @@ public:
 	void setRotationAngle(const float_t& Rangle);
 	void setScalar(const float_t& scalar);
 	void setOpacity(const float_t& opac);
-	void runScript(void(*script)(D2D1_POINT_2F&, const float_t&), const float_t& scale);	//TODO: implment scripts and reference here. script is a function pointer
+	template<typename Func, typename Param> void runScript(Func, const Param& scale);	//TODO: implment scripts and reference here. script is a function pointer
 	static void initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs);
 protected:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
@@ -33,3 +33,8 @@ protected:
 	inline static D2D1_POINT_2F isometricCoefficients{ 0.0f, 0.0f };
 	inline static D2D1_POINT_2F* centerCoordinates = nullptr;
 };
+
+template<typename Func, typename Param>
+inline void GameObject::runScript(Func f, const Param& scale) {
+	f(position, scale);
+}

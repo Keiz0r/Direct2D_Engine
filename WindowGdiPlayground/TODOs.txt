@@ -24,6 +24,10 @@ Abilities should be droppable and Slottable and Upgradeable
 Certain Avatars have certain starting(maybe unique?) abilities. Make it essential to mechanics, to promote co-op
 Don't bother with complicated Loot System. way too much for this game. Maybe no loot at all, and focus on abilties
 GOOD IDEA - Contra clone in isometry!
+Weapons / abilities - different staves. should be droppable by enemies etc.
+Main sprite should have a couple basis cast animations with staff, which should be drawn correnspondingly, but in it's own drawcall. 
+Animations of main sprite like - hold staff vertically with one hand and perform a cast with another hand. (maybe some particle effect aswell)
+and something like shooting with staff, while holding it with both hands. 
 
 Player class, which has class [Avatar], and stuff like HP, Ability slots, etc.
 
