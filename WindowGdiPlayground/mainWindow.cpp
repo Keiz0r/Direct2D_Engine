@@ -25,9 +25,9 @@ void mainWindow::initialize(){
     wc.lpszMenuName = NULL;
     wc.hCursor = LoadCursor(NULL, IDI_APPLICATION);
     wc.lpszClassName = mainWindowClassName;
-    wc.hIcon = static_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(MAIN_ICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR));
-    DWORD s = GetLastError();
+    wc.hIcon = reinterpret_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(MAIN_ICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR));
     wc.hIconSm = reinterpret_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(MAIN_ICON), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
+
     RegisterClassEx(&wc);
     
     // Create the window.

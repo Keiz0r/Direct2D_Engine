@@ -21,13 +21,12 @@ protected:
 	void releaseSprite(ID2D1Bitmap*& sprite);
 protected:
 	inline static Graphics* s_pgfx = nullptr;
-	inline static std::condition_variable* scriptCV = nullptr;
 	D2D1_POINT_2F position;
 	bool facingRight = true;
 	float_t m_fScalar = 1.0f;
 	float_t rotationAngle = 0.0f;
 	float_t opacity = 0.0f;
-	inline static float_t visibilityRadius = 450.0f * 450.0f;
+	inline static float_t visibilityRadius = 900.0f * 900.0f;
 	inline static D2D1_POINT_2F isometricCoefficients{ 0.0f, 0.0f };
 	inline static D2D1_POINT_2F* centerCoordinates = nullptr;
 };
