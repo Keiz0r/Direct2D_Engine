@@ -1,6 +1,10 @@
 #include "Scripts.h"
 
 void Scripts::patrol(GameObject* obj, const float_t& scale) {
+
+//	static D2D1_POINT_2F* initial_pos = new D2D1_POINT_2F;	//I should adress static variables as pointers, so they don't collide. question - adressing for each object. make objectID?
+//	*initial_pos = obj->getPosition();						//I should adress static variables as pointers, so they don't collide. question - adressing for each object. make objectID?
+
 	static D2D1_POINT_2F initial_pos = obj->getPosition();	//TODO: these static are static for every function call, so common for any object
 	static bool flag_posX = true;
 	static bool flag_posY = true;
