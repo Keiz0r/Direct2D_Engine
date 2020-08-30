@@ -18,7 +18,6 @@ public:
 	void speedUp(Direction direction);
 	void move();
 	void setMaxVelocity(const float& maxVel);
-	void blink(const unsigned int& frames);
 private:
 	void setDirection(Direction direction);
 	void setState(Action action);
@@ -36,7 +35,6 @@ private:
 	bool directionChanged = false;
 	unsigned short int timeFrameCounter = 0u;
 	unsigned short int currentFrameNum = 0u;
-	unsigned short int m_blinkframes = 0;
 	AnimationData IdleAnimation;
 	AnimationData RunAnimation_N_W;
 	AnimationData RunAnimation_SW_NE;

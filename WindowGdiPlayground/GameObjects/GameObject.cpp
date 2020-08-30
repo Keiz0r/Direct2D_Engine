@@ -4,8 +4,8 @@ GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float_t& scale
 	:
 	position(objectPosition),
 	m_fScalar(scale),
-	opacity(opacity),
-	rotationAngle(rotationAngle)
+	m_opacity(opacity),
+	m_rotationAngle(rotationAngle)
 {
 }
 
@@ -46,7 +46,7 @@ D2D1_POINT_2F GameObject::getPosition() const {
 }
 
 void GameObject::setRotationAngle(const float_t& Rangle) {
-	rotationAngle = Rangle;
+	m_rotationAngle = Rangle;
 }
 
 void GameObject::setScalar(const float_t& scalar) {
@@ -57,5 +57,9 @@ void GameObject::setScalar(const float_t& scalar) {
 }
 
 void GameObject::setOpacity(const float_t& opac) {
-	opacity = opac;
+	m_opacity = opac;
+}
+
+void GameObject::blink(const unsigned int& frames) {
+	m_blinkframes = frames;
 }

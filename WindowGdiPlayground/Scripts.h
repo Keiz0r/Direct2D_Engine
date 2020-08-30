@@ -1,7 +1,7 @@
 #pragma once
 #include "Backend/Graphics.h"
-
+#include "GameObjects/GameObject.h"
 
 namespace Scripts {
-	void patrol(D2D1_POINT_2F& pos, const float_t& scale);
+	void patrol(GameObject* obj, const float_t& scale);
 }

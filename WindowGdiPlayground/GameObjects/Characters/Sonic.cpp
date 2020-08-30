@@ -210,10 +210,6 @@ void Sonic::setMaxVelocity(const float& maxVel) {
 	maxVelocity = maxVel;
 }
 
-void Sonic::blink(const unsigned int& frames) {
-	m_blinkframes = frames;
-}
-
 void Sonic::setDirection(Direction direction) {
 	if (currentDirection != direction) {
 		currentDirection = direction;
@@ -248,14 +244,14 @@ void Sonic::Animate(AnimationData& Animation) {
 			// Apply necessary transformations
 			//for screen coords
 			if (ScreencenteredDrawing) {
-				s_pgfx->transformSRTM(0.0f, LegOffset, rotationAngle, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
+				s_pgfx->transformSRTM(0.0f, LegOffset, m_rotationAngle, { screensize.width / 2.0f, screensize.height / 2.0f }, m_fScalar, m_fScalar, !facingRight);
 				float drawrectstartX = (screensize.width - Animation.Width) / 2;
 				float drawrectstartY = (screensize.height - Animation.Height) / 2;
 				s_pgfx->drawBitmap(s_pSprite, { drawrectstartX, drawrectstartY, drawrectstartX + Animation.Width, drawrectstartY + Animation.Height}, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			else {
 				D2D1_POINT_2F imagecenter{ position.x + (Animation.Width / 2), position.y + (Animation.Height / 2) };
-				s_pgfx->transformTRSM(0.0f, LegOffset * m_fScalar, rotationAngle, imagecenter, m_fScalar, m_fScalar, !facingRight);
+				s_pgfx->transformTRSM(0.0f, LegOffset * m_fScalar, m_rotationAngle, imagecenter, m_fScalar, m_fScalar, !facingRight);
 				s_pgfx->drawBitmap(s_pSprite, { position.x, position.y, position.x + Animation.Width, position.y + Animation.Height }, 1.0f, Animation.frameCoords[currentFrameNum]);
 			}
 			//	go back from mirrored sprites
