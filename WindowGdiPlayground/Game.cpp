@@ -46,9 +46,11 @@ void Game::gameLoop(){
     Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
     Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     static bool test = false;
+//    Scripts::patrol pat(*brl,2);
+//    pat();
     if (!test) {
-        brl->attachScript(Scripts::patrol, 2.0f);
-        brl2->attachScript(Scripts::patrol, 2.0f);
+        brl->attachScript(Scripts::patrol(*brl, 2.0f));
+        brl2->attachScript(Scripts::patrol(*brl2, 5.0f));
         test = true;
     }
     brl->runScript();

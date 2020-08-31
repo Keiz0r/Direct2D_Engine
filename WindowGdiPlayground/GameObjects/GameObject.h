@@ -16,7 +16,7 @@ public:
 	void setOpacity(const float_t& opac);
 	void blink(const unsigned int& frames);
 	void runScript();
-	template<typename Func, typename Param> void attachScript(Func f, const Param& scale);
+	template<class script> void attachScript(script&& functor);
 	static void initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs);
 protected:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
@@ -35,7 +35,7 @@ protected:
 	inline static D2D1_POINT_2F* centerCoordinates = nullptr;
 };
 
-template<typename Func, typename Param>
-inline void GameObject::attachScript(Func f, const Param& scale) {
-	p_script = std::bind(f, this, scale);
+template<class script>
+inline void GameObject::attachScript(script&& functor) {
+	p_script = static_cast<std::function<void()>>(std::bind(static_cast<script&&>(functor)));
 }
