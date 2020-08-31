@@ -17,6 +17,7 @@ public:
 	void blink(const unsigned int& frames);
 	void runScript();
 	template<class script> void attachScript(script&& functor);
+	void detachScript();
 	static void initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs);
 protected:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);

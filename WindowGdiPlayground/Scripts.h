@@ -3,7 +3,6 @@
 #include "GameObjects/GameObject.h"
 
 namespace Scripts {
-//	void patrol(GameObject* obj, const float_t& scale);
 	class patrol {
 	public:
 		patrol(GameObject& obj, const float_t& scale);

@@ -12,6 +12,10 @@ GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float_t& scale
 GameObject::~GameObject() {
 }
 
+void GameObject::detachScript() {
+	p_script = nullptr;
+}
+
 void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs) {
 	if (s_pgfx == nullptr) {
 		s_pgfx = gfx;
@@ -67,5 +71,8 @@ void GameObject::blink(const unsigned int& frames) {
 void GameObject::runScript() {
 	if (p_script != nullptr) {
 		p_script();
+	}
+	else {
+		Log::putError(L"ERROR: Trying to run unattached script");
 	}
 }

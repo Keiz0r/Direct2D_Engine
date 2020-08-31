@@ -46,8 +46,7 @@ void Game::gameLoop(){
     Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
     Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     static bool test = false;
-//    Scripts::patrol pat(*brl,2);
-//    pat();
+    static bool tst2 = true;
     if (!test) {
         brl->attachScript(Scripts::patrol(*brl, 2.0f));
         brl2->attachScript(Scripts::patrol(*brl2, 5.0f));
@@ -55,6 +54,14 @@ void Game::gameLoop(){
     }
     brl->runScript();
     brl2->runScript();
+    if (tst2 && blow > 210) {
+        brl->detachScript();
+        tst2 = false;
+    }
+    if (!tst2 && blow < -100) {
+        brl->attachScript(Scripts::patrol(*brl, 5.0f));
+        tst2 = true;
+    }
     tree->draw();
     tree1->draw();
     tree2->draw();
@@ -70,10 +77,10 @@ void Game::gameLoop(){
     if (blow < -1225)
         flag = false;
     if (flag) {
-        blow -= 1.0f;
+        blow -= 10.0f;
     }
     else {
-        blow += 1.0f;
+        blow += 10.0f;
     }
 #endif
 	m_gfx.endFrame();
