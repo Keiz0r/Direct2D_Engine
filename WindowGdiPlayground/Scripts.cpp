@@ -38,14 +38,13 @@ void Scripts::patrol::operator()() {
 	else if (current_pos.x < initial_pos.x - range) {
 		flag_posX = true;
 	}
-
+	uint8_t* bf = &blinkframes;
 	if (flag_posX) {
 		obj.setPosition(current_pos.x += 1.0f * scale, current_pos.y);
 	}
 	else {
 		obj.setPosition(current_pos.x -= 1.0f * scale, current_pos.y);
 	}
-
 	if (blinkframes <= 0) {
 		obj.blink(10);
 		blinkframes = 44;

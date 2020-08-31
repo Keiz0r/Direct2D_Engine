@@ -13,7 +13,8 @@ GameObject::~GameObject() {
 }
 
 void GameObject::detachScript() {
-	p_script = nullptr;
+	//if called from inside script, call return immediately in order not to read/write to freed memory
+	p_script = nullptr;	// calls script's destructor immediately
 }
 
 void GameObject::initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs) {
