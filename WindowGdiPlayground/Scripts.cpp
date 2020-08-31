@@ -25,10 +25,10 @@ void Scripts::patrol(GameObject* obj, const float_t& scale) {
 		obj->setPosition(current_pos.x -= 1.0f * scale, current_pos.y);
 	}
 
-	static uint8_t blinkframes = 300;
+	static uint8_t blinkframes = 255;
 	if (blinkframes <= 0) {
 		obj->blink(10);
-		blinkframes = 300;
+		blinkframes = 255;
 	}
 	else {
 		blinkframes--;

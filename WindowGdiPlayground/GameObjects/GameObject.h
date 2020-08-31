@@ -1,6 +1,7 @@
 #pragma once
 #include "Backend/Graphics.h"
 #include "Log.h"
+#include <functional>
 
 class GameObject {
 public:
@@ -14,13 +15,15 @@ public:
 	void setScalar(const float_t& scalar);
 	void setOpacity(const float_t& opac);
 	void blink(const unsigned int& frames);
-	template<typename Func, typename Param> void runScript(Func, const Param& scale);	//TODO: implment scripts and reference here. script is a function pointer
+	void runScript();
+	template<typename Func, typename Param> void attachScript(Func f, const Param& scale);
 	static void initialize(Graphics* gfx, D2D1_POINT_2F* screencenterVar, const D2D1_POINT_2F& isometricCoeffs);
 protected:
 	void loadSprite(const wchar_t* name, ID2D1Bitmap*& sprite);
 	void releaseSprite(ID2D1Bitmap*& sprite);
 protected:
 	inline static Graphics* s_pgfx = nullptr;
+	std::function<void()> p_script = nullptr;
 	D2D1_POINT_2F position;
 	bool facingRight = true;
 	float_t m_fScalar = 1.0f;
@@ -33,6 +36,6 @@ protected:
 };
 
 template<typename Func, typename Param>
-inline void GameObject::runScript(Func f, const Param& scale) {
-	f(this, scale);
+inline void GameObject::attachScript(Func f, const Param& scale) {
+	p_script = std::bind(f, this, scale);
 }

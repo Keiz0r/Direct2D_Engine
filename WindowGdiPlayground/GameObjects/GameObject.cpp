@@ -63,3 +63,9 @@ void GameObject::setOpacity(const float_t& opac) {
 void GameObject::blink(const unsigned int& frames) {
 	m_blinkframes = frames;
 }
+
+void GameObject::runScript() {
+	if (p_script != nullptr) {
+		p_script();
+	}
+}

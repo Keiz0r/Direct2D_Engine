@@ -45,8 +45,14 @@ void Game::gameLoop(){
 
     Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
     Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
-   brl->runScript(Scripts::patrol, 2.0f);
-   brl2->runScript(Scripts::patrol, 2.0f);
+    static bool test = false;
+    if (!test) {
+        brl->attachScript(Scripts::patrol, 2.0f);
+        brl2->attachScript(Scripts::patrol, 2.0f);
+        test = true;
+    }
+    brl->runScript();
+    brl2->runScript();
     tree->draw();
     tree1->draw();
     tree2->draw();
