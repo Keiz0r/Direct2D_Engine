@@ -43,23 +43,25 @@ void Game::gameLoop(){
     static Tree* tree1 = new Tree{ {150.0f, 100.0f}, 0.7f, 1.0f, 0.0f, false };
     static Tree* tree2 = new Tree{ {-100.0f, -150.0f}, 0.5f, 1.0f, 0.0f, false }; 
 
-    Barrel brl3{ {0.0f, -blow}, 3.0f, 0.90f, blow * 1, false };
-    Barrel brl4{ {-blow, 0.0f}, 3.0f, 0.90f, blow * 1, false };
     static bool test = false;
     static bool tst2 = true;
     if (!test) {
         brl->attachScript(Scripts::patrol(*brl, 2.0f));
         brl2->attachScript(Scripts::patrol(*brl2, 5.0f));
+        tree1->attachScript(Scripts::patrol(*tree1, 1.0f));
         test = true;
     }
     brl->runScript();
     brl2->runScript();
+    tree1->runScript();
     if (tst2 && blow > 210) {
         brl->detachScript();
+        tree1->attachScript(Scripts::patrol(*tree1, 1.0f));
         tst2 = false;
     }
     if (!tst2 && blow < -100) {
         brl->attachScript(Scripts::patrol(*brl, 5.0f));
+        tree1->attachScript(Scripts::patrol(*tree1, -2.0f));
         tst2 = true;
     }
     tree->draw();
@@ -67,8 +69,6 @@ void Game::gameLoop(){
     tree2->draw();
     brl2->draw();
     brl->draw();
-    brl3.draw();
-    brl4.draw();
     brl->setRotationAngle(blow);
     brl2->setRotationAngle(blow);
     if (blow > 1274) {
@@ -91,7 +91,7 @@ void Game::gameLoop(){
 void Game::updateGameState() {
     const float_t dt = ft.Mark();
     m_pSonic->update();
-    clampCoordinates(*m_pSonic);
+    clampCoordinates(*m_pSonic);    //TODO: for_each of objectManager<>
     m_Level.rotateBckgnd(rotor);
     rotor += 0.1f;
     m_obstacles.update(updObstacles);
@@ -270,23 +270,30 @@ std::vector<T> Game::getArgs(const std::wstring cmd) const
     size_t commandEnd = cmd.find(L" ");
     int8_t flip = 1;
     //parse 1st arg
-    size_t posOfSpace = cmd.find_first_of(L" ", commandEnd + 1) - 1;
-    std::wstring arg = cmd.substr(commandEnd + 1, posOfSpace - commandEnd);
-    if (arg.substr(0, 1) == L"-") {
-        flip = -1;
-        arg.erase(0, 1);
-    }
-    if (std::regex_match(arg, re)) {
-        args.push_back(std::stoi(arg) * flip);
-        //parse 2nd arg
+    size_t posOfSpace = 0;
+    std::wstring arg;
+    auto getArg = [&]() {
         flip = 1;
-        commandEnd = posOfSpace + 1;
         posOfSpace = cmd.find_first_of(L" ", commandEnd + 1) - 1;
         arg = cmd.substr(commandEnd + 1, posOfSpace - commandEnd);
+        if (arg.length() > 9) {
+            arg = L"";
+            return;
+        }
         if (arg.substr(0, 1) == L"-") {
             flip = -1;
             arg.erase(0, 1);
         }
+        return;
+    };
+
+
+    getArg();
+    if (std::regex_match(arg, re)) {
+        args.push_back(std::stoi(arg) * flip);
+        //parse 2nd arg
+        commandEnd = posOfSpace + 1;
+        getArg();
         if (std::regex_match(arg, re)) {
             args.push_back(std::stoi(arg) * flip);
         }
