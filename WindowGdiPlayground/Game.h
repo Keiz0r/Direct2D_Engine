@@ -29,7 +29,7 @@ private:
 	void composeFrame();
 	void LoadLevel(GameLevel& level);
 	void execCommand(std::wstring& command);
-	void clampCoordinates(Sonic& sonic);
+	void clampCoordinates(GameObject& entity);
 	template<typename T> std::vector<T> getArgs(const std::wstring cmd) const;
 private:
 	Keyboard* m_kbd;

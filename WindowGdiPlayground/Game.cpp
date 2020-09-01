@@ -77,11 +77,12 @@ void Game::gameLoop(){
     if (blow < -1225)
         flag = false;
     if (flag) {
-        blow -= 10.0f;
+        blow -= 100.0f;
     }
     else {
-        blow += 10.0f;
+        blow += 100.0f;
     }
+    clampCoordinates(*brl);
 #endif
 	m_gfx.endFrame();
     cmdCV.notify_all(); //update cmd
@@ -148,20 +149,25 @@ void Game::execCommand(std::wstring& command_str) {
     command_str = L"";
 }
 
-void Game::clampCoordinates(Sonic& sonic) {
+void Game::clampCoordinates(GameObject& entity) {
     D2D1_POINT_2F borders_x = m_Level.h_Board()->getWorldBorders_x();
     D2D1_POINT_2F borders_y = m_Level.h_Board()->getWorldBorders_y();
-    if (sonic.getPosition().x > borders_x.y) {
-        sonic.setPosition(borders_x.y, sonic.getPosition().y);
+    D2D1_POINT_2F current_pos = entity.getPosition();
+    if (current_pos.x > borders_x.y) {
+        entity.setPosition(borders_x.y, current_pos.y);
+        current_pos = {borders_x.y, current_pos.y};
     }
-    else if (sonic.getPosition().x < borders_x.x) {
-        sonic.setPosition(borders_x.x, sonic.getPosition().y);
+    else if (current_pos.x < borders_x.x) {
+        entity.setPosition(borders_x.x, current_pos.y);
+        current_pos = {borders_x.x, current_pos.y};
     }
-    if (sonic.getPosition().y > borders_y.y) {
-        sonic.setPosition(sonic.getPosition().x, borders_y.y);
+    if (current_pos.y > borders_y.y) {
+        entity.setPosition(current_pos.x, borders_y.y);
+        current_pos = {current_pos.x, borders_y.y};
     }
-    else if (sonic.getPosition().y < borders_y.x) {
-        sonic.setPosition(sonic.getPosition().x, borders_y.x);
+    else if (current_pos.y < borders_y.x) {
+        entity.setPosition(current_pos.x, borders_y.x);
+        current_pos = {current_pos.x, borders_y.x};
     }
 }
 
