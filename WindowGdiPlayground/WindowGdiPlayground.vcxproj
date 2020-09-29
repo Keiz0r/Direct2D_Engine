@@ -168,6 +168,7 @@
     <ClCompile Include="Gameboard.cpp" />
     <ClCompile Include="GameObjects\Characters\Sonic.cpp" />
     <ClCompile Include="GameObjects\GameObject.cpp" />
+    <ClCompile Include="GameObjects\ObjectManager.cpp" />
     <ClCompile Include="GameObjects\Obstacle.cpp" />
     <ClCompile Include="GameObjects\Obstacles\Barrel.cpp" />
     <ClCompile Include="GameObjects\Obstacles\Tree.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Gameboard.h" />
     <ClInclude Include="GameObjects\Characters\Sonic.h" />
     <ClInclude Include="GameObjects\GameObject.h" />
+    <ClInclude Include="GameObjects\ObjectManager.h" />
     <ClInclude Include="GameObjects\Obstacle.h" />
     <ClInclude Include="GameObjects\Obstacles\Barrel.h" />
     <ClInclude Include="GameObjects\Obstacles\Tree.h" />
