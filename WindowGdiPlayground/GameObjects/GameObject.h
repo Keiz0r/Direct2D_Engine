@@ -34,8 +34,7 @@ protected:
 	inline static float_t visibilityRadius = 900.0f * 900.0f;
 	inline static D2D1_POINT_2F isometricCoefficients{ 0.0f, 0.0f };
 	inline static D2D1_POINT_2F* centerCoordinates = nullptr;
-	int32_t ID = 0;
-	static inline int32_t IDcounter = 0;
+	uint32_t ID = 0;
 };
 
 template<class script>
@@ -44,6 +43,6 @@ inline void GameObject::attachScript(script&& functor) {
 	if (p_script != nullptr) {
 		Log::putMessage((L"Object ID <" + std::to_wstring(ID) + L"> swaps script").c_str());
 	}
-#endif
-	p_script = static_cast<std::function<void()>>(std::bind(std::move(functor)));
+#endif* 
+	p_script = static_cast<std::function<void()>>(std::bind(std::move(functor)));	//	std::_Binder<std::_Unforced, script> is the type
 }

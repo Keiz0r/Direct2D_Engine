@@ -15,6 +15,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "Scripts.h"
+#include "GameObjects/ObjectManager.h"
 
 //Prob needs an "INPUT" class with CMDthread managing
 

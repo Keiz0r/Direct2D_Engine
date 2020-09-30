@@ -2,36 +2,42 @@
 #include <vector>
 #include "Lists/GameObjectsList.h"
 #include "Scripts.h"
+#include <memory>
 //gameboard probably going to gameobjects folder and gameobjectslist
-template<typename T>
+
+//template<typename T>
 class ObjectManager {
-	void Init(int count); // allocs items (max 64k), then Clear()
+public:
+	ObjectManager(const int& count);
+	~ObjectManager();
 	void Dispose();       // frees items
 	void Clear();         // resets data members, (runs destructors* on outstanding items, *optional)
 
-	T& Alloc();           // alloc (memclear* and/or construct*, *optional) an item from freeList or items[maxUsed++], sets id to (nextKey++ << 16) | index
-	void Free(T&);       // puts entry on free list (uses id to store next)
+	void Alloc();           // alloc (memclear* and/or construct*, *optional) an item from freeList or items[maxUsed++], sets id to (nextKey++ << 16) | index
+	void Free(GameObject&);       // puts entry on free list (uses id to store next)
 
-	int GetID(T&);       // accessor to the id part if Item
+	int GetID(GameObject&);       // accessor to the id part if Item
 
-	T& Get(id);            // return item[id & 0xFFFF]; 
-	T* TryToGet(id);      // validates id, then returns item, returns null if invalid.  for cases like AI references and others where 'the thing might have been deleted out from under me'
+	GameObject& Get(uint32_t ID);            // return item[id & 0xFFFF]; 
+	GameObject* TryToGet(uint32_t ID);      // validates id, then returns item, returns null if invalid.  for cases like AI references and others where 'the thing might have been deleted out from under me'
 
-	bool Next(T*&);      // return next item where id & 0xFFFF0000 != 0 (ie items not on free list)
+	bool Next(GameObject*&);      // return next item where id & 0xFFFF0000 != 0 (ie items not on free list)
 
 	struct Item {
-		T item;
-		int id;             // (key << 16 | index) for alloced entries, (0 | nextFreeIndex) for free list entries
+		std::unique_ptr<GameObject> obj;
+		uint32_t id;             // (key << 16 | index) for alloced entries, (0 | nextFreeIndex) for free list entries
 	};
+private:
+	void Init(const int& count); // allocs items (max 64k), then Clear()
+private:
+	std::unique_ptr<Item[]> items;
+	static constexpr uint16_t maxSize = UINT16_MAX;          // total size
+	uint16_t maxUsed = 0;          // highest index ever alloced
+	uint16_t count = 0;            // num alloced items
+	uint16_t nextKey = 1;          // [1..2^16] (don't let == 0)
+	uint16_t freeHead = 0;         // index of first free entry
 
-	Item* items;
-	uint64_t maxSize;          // total size
-	uint64_t maxUsed;          // highest index ever alloced
-	uint64_t count;            // num alloced items
-	uint64_t nextKey;          // [1..2^16] (don't let == 0)
-	uint64_t freeHead;         // index of first free entry
-
-	//prefer go from id->T & as soon as possible, then stay in T& land as much as possible(ie function params etc)
+	//prefer go from id->T& as soon as possible, then stay in T& land as much as possible(ie function params etc)
 	//and only use ids when required for storage
 
 	//objects will have collision radius, so going through will not be possibble

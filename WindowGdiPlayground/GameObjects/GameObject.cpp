@@ -7,6 +7,7 @@ GameObject::GameObject(const D2D1_POINT_2F& objectPosition, const float_t& scale
 	m_opacity(opacity),
 	m_rotationAngle(rotationAngle)
 {
+	static uint32_t IDcounter = 0;
 	ID = IDcounter;
 	IDcounter++;
 }
