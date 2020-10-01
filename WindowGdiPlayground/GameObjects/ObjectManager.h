@@ -3,6 +3,7 @@
 #include "Lists/GameObjectsList.h"
 #include "Scripts.h"
 #include <memory>
+#include <algorithm>
 //gameboard probably going to gameobjects folder and gameobjectslist
 
 //template<typename T>

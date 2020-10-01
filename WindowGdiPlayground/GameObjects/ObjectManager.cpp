@@ -7,6 +7,8 @@
 //}
 
 ObjectManager::ObjectManager(const int& count) {
+	std::vector<size_t> sizes{ sizeof(Sonic), sizeof(Barrel), sizeof(Tree) };
+	static size_t objsize = *std::max_element(sizes.begin(), sizes.end());
 	Init(count);
 }
 
