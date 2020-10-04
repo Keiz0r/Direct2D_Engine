@@ -13,8 +13,8 @@ Game::Game(const HWND &hwnd, Keyboard& kbd)
     Sound::openMP3();
     Sound::playOnRepeatMP3();
     ObjectManager objm(10);
-    objm.Alloc();
-    m_pSonic = std::make_unique<Sonic, const D2D1_POINT_2F&, const float_t&, const float_t&, const float_t&>({ 0.0f, 0.0f }, 1.0f, 1.0f, 0.0f);
+    objm.addObj<Tree, const D2D1_POINT_2F&>({ 0.0f, 0.0f }, 1.0f, 1.0f, 0.0f, false);
+    m_pSonic = std::make_unique<Sonic, const D2D1_POINT_2F&>({ 0.0f, 0.0f }, 1.0f, 1.0f, 0.0f);
     //launch cmd thread
     cmdln = std::thread([this](){this->commandInput(); });
 }

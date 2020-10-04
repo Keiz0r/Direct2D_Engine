@@ -1,4 +1,6 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include "windows.h"
 #include "Direct2D.h"
 #include "Wic.h"
